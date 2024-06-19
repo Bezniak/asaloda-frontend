@@ -1,11 +1,12 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './navbar.css';
-import {NavLink} from "react-router-dom";
-import {ROUTES} from "../../config/routes.js";
+import { NavLink } from "react-router-dom";
+import { ROUTES } from "../../config/routes.js";
 
 const Navbar = () => {
     const [isProgramDropdownVisible, setProgramDropdownVisible] = useState(false);
     const [isPartnershipDropdownVisible, setPartnershipProgramDropdownVisible] = useState(false);
+    const [isMobileMenuVisible, setMobileMenuVisible] = useState(false);
     const dropdownRef = useRef(null);
 
     const toggleProgramDropdown = () => {
@@ -14,11 +15,14 @@ const Navbar = () => {
     const togglePartnershipDropdown = () => {
         setPartnershipProgramDropdownVisible(!isPartnershipDropdownVisible)
     };
+    const toggleMobileMenu = () => {
+        setMobileMenuVisible(!isMobileMenuVisible);
+    };
 
     const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setProgramDropdownVisible(false);
-            setPartnershipProgramDropdownVisible(false)
+            setPartnershipProgramDropdownVisible(false);
         }
     };
 
@@ -34,29 +38,35 @@ const Navbar = () => {
             <nav className="mt-2 bg-white border-gray-200 dark:bg-gray-900">
                 <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl p-4">
                     <NavLink to={ROUTES.HOME}>
-                        <img src="/logoWhite.svg" className="logo-image" alt="Flowbite Logo"/>
+                        <img
+                            src="/logoWhite.svg"
+                            alt="Flowbite Logo"
+                            className="w-24 sm:w-32 md:w-40 lg:w-48"
+                        />
                     </NavLink>
-                    <a href="tel:375297714179" className="text-lg text-gray-500 dark:text-white">
+                    <a
+                        href="tel:375297714179"
+                        className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-500 dark:text-white"
+                    >
                         +375(29)771-41-79
                     </a>
                 </div>
             </nav>
 
-
             <nav className="bg-white border-gray-200 dark:border-gray-600 dark:bg-gray-900">
                 <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
                     <button data-collapse-toggle="mega-menu-full" type="button"
-                            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                            aria-controls="mega-menu-full" aria-expanded="false">
+                            className="ml-4 inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                            aria-controls="mega-menu-full" aria-expanded={isMobileMenuVisible} onClick={toggleMobileMenu}>
                         <span className="sr-only">Open main menu</span>
                         <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                              viewBox="0 0 17 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M1 1h15M1 7h15M1 13h15"/>
+                                  d="M1 1h15M1 7h15M1 13h15" />
                         </svg>
                     </button>
                     <div id="mega-menu-full"
-                         className="items-center justify-between font-medium hidden w-full md:flex md:w-auto md:order-1">
+                         className={`${isMobileMenuVisible ? 'block' : 'hidden'} items-center justify-between font-medium w-full md:flex md:w-auto md:order-1`}>
                         <ul className="flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                             <li>
                                 <button id="mega-menu-full-dropdown-button"
@@ -70,7 +80,7 @@ const Navbar = () => {
                                         fill="none" viewBox="0 0 10 6"
                                     >
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                              stroke-width="2" d="m1 1 4 4 4-4"/>
+                                              stroke-width="2" d="m1 1 4 4 4-4" />
                                     </svg>
                                 </button>
                             </li>
@@ -128,7 +138,7 @@ const Navbar = () => {
                                         fill="none" viewBox="0 0 10 6"
                                     >
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                              stroke-width="2" d="m1 1 4 4 4-4"/>
+                                              stroke-width="2" d="m1 1 4 4 4-4" />
                                     </svg>
                                 </button>
                             </li>
@@ -238,7 +248,6 @@ const Navbar = () => {
                     </div>
                 )}
 
-
                 {isPartnershipDropdownVisible && (
                     <div id="mega-menu-full-dropdown" ref={dropdownRef}
                          className="mt-1 border-gray-200 shadow-sm bg-gray-50 md:bg-white border-y dark:bg-gray-800 dark:border-gray-600">
@@ -293,7 +302,6 @@ const Navbar = () => {
                         </div>
                     </div>
                 )}
-
 
             </nav>
         </div>
