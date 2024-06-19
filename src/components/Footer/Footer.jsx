@@ -125,12 +125,12 @@ const Footer = () => {
                         <ul className="text-gray-400 text-lg">
                             <li className="mb-4">
                                 <a href="#" className="">
-                                    <img src="../../../public/app-apstore.svg" alt="app-apstore"/>
+                                    <img src="/app-apstore.svg" alt="app-apstore"/>
                                 </a>
                             </li>
                             <li className="mb-4">
                                 <a href="#" className="">
-                                    <img src="../../../public/app-google.svg" alt="app-google"/>
+                                    <img src="/app-google.svg" alt="app-google"/>
                                 </a>
                             </li>
                         </ul>
