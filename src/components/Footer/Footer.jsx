@@ -17,12 +17,6 @@ const Footer = () => {
                             className="w-24 sm:w-32 md:w-40 lg:w-48"
                         />
                     </NavLink>
-                    <p className='text-start text-gray-400 pt-2'>Программы: &nbsp;
-                        <NavLink to='#'>на неделю</NavLink>, &nbsp;
-                        <NavLink to='#'>на месяц</NavLink>,&nbsp;
-                        <NavLink to='#'>готовая еда на семью</NavLink>,&nbsp;
-                        <NavLink to='#'>готовая домашняя еда.</NavLink>
-                    </p>
                 </div>
                 <div className='flex-1 text-right'>
                     <p className='text-end text-gray-400 mb-3 mt-5'>
@@ -109,9 +103,6 @@ const Footer = () => {
                             </li>
                             <li className="mb-4">
                                 <a href="#" className="">Контакты</a>
-                            </li>
-                            <li className="mb-4">
-                                <a href="#" className="">Тренерам</a>
                             </li>
                             <li className="mb-4">
                                 <a href="#" className="">Политика конфиденциальности</a>

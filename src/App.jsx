@@ -16,13 +16,13 @@ import Footer from "./components/Footer/Footer.jsx";
 
 const Layout = () => {
     return (
-        <>
-            <div className='md:container md:mx-auto'>
-                <Navbar/>
+        <div className="d-flex flex-column min-vh-100">
+            <Navbar/>
+            <div className="flex-grow-1">
                 <Outlet/>
             </div>
             <Footer/>
-        </>
+        </div>
     )
 }
 
