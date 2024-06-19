@@ -5,16 +5,13 @@ import { ROUTES } from "../../config/routes.js";
 
 const Navbar = () => {
     const [isProgramDropdownVisible, setProgramDropdownVisible] = useState(false);
-    const [isPartnershipDropdownVisible, setPartnershipProgramDropdownVisible] = useState(false);
     const [isMobileMenuVisible, setMobileMenuVisible] = useState(false);
     const dropdownRef = useRef(null);
 
     const toggleProgramDropdown = () => {
         setProgramDropdownVisible(!isProgramDropdownVisible);
     };
-    const togglePartnershipDropdown = () => {
-        setPartnershipProgramDropdownVisible(!isPartnershipDropdownVisible)
-    };
+
     const toggleMobileMenu = () => {
         setMobileMenuVisible(!isMobileMenuVisible);
     };
@@ -22,7 +19,6 @@ const Navbar = () => {
     const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setProgramDropdownVisible(false);
-            setPartnershipProgramDropdownVisible(false);
         }
     };
 
@@ -46,9 +42,9 @@ const Navbar = () => {
                     </NavLink>
                     <a
                         href="tel:375297714179"
-                        className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-500 dark:text-white"
+                        className="text-base sm:text-lg md:text-xl lg:text-2xl dark:text-white"
                     >
-                        +375(29)771-41-79
+                        +375 (29) 771-41-79
                     </a>
                 </div>
             </nav>
@@ -66,7 +62,7 @@ const Navbar = () => {
                         </svg>
                     </button>
                     <div id="mega-menu-full"
-                         className={`${isMobileMenuVisible ? 'block' : 'hidden'} items-center justify-between font-medium w-full md:flex md:w-auto md:order-1`}>
+                         className={`${isMobileMenuVisible ? 'block' : 'hidden'} items-center justify-between font-medium w-full md:flex md:w-auto md:order-1 mb-16`}>
                         <ul className="flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                             <li>
                                 <button id="mega-menu-full-dropdown-button"
@@ -127,20 +123,11 @@ const Navbar = () => {
                                 </NavLink>
                             </li>
                             <li>
-                                <button id="mega-menu-full-dropdown-button"
-                                        onClick={togglePartnershipDropdown}
-                                        className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-green-500 md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-green-500 md:dark:hover:bg-transparent dark:border-gray-700"
+                                <NavLink to={ROUTES.PARTNERSHIP}
+                                         className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
                                 >
                                     Сотрудничество
-                                    <svg
-                                        className="w-2.5 h-2.5 ms-2.5" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none" viewBox="0 0 10 6"
-                                    >
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                              stroke-width="2" d="m1 1 4 4 4-4" />
-                                    </svg>
-                                </button>
+                                </NavLink>
                             </li>
                         </ul>
                     </div>
@@ -247,62 +234,6 @@ const Navbar = () => {
                         </div>
                     </div>
                 )}
-
-                {isPartnershipDropdownVisible && (
-                    <div id="mega-menu-full-dropdown" ref={dropdownRef}
-                         className="mt-1 border-gray-200 shadow-sm bg-gray-50 md:bg-white border-y dark:bg-gray-800 dark:border-gray-600">
-                        <div
-                            className="grid max-w-screen-xl px-4 py-5 mx-auto text-gray-900 dark:text-white sm:grid-cols-2 md:px-6">
-                            <ul>
-                                <li>
-                                    <a href="#"
-                                       className="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <div className="font-semibold">Online Stores</div>
-                                        <span className="text-sm text-gray-500 dark:text-gray-400">Connect with third-party tools that you're already using.</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                       className="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <div className="font-semibold">Segmentation</div>
-                                        <span className="text-sm text-gray-500 dark:text-gray-400">Connect with third-party tools that you're already using.</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                       className="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <div className="font-semibold">Marketing CRM</div>
-                                        <span className="text-sm text-gray-500 dark:text-gray-400">Connect with third-party tools that you're already using.</span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <ul>
-                                <li>
-                                    <a href="#"
-                                       className="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <div className="font-semibold">Online Stores</div>
-                                        <span className="text-sm text-gray-500 dark:text-gray-400">Connect with third-party tools that you're already using.</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                       className="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <div className="font-semibold">Segmentation</div>
-                                        <span className="text-sm text-gray-500 dark:text-gray-400">Connect with third-party tools that you're already using.</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                       className="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <div className="font-semibold">Marketing CRM</div>
-                                        <span className="text-sm text-gray-500 dark:text-gray-400">Connect with third-party tools that you're already using.</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                )}
-
             </nav>
         </div>
     );
