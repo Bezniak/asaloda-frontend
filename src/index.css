@@ -23,6 +23,7 @@
     --oringe: #FF7B27;
     --turquoise: #1dcfc6;
     --blue: #0065BD;
+    --dark-blue: #00196f;
     --pink: #FF6889;
     --khaki: #768668;
     --purple: #6D35B3;
@@ -40,7 +41,6 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    margin: 0 auto;
     font-family: "Noto Serif", serif;
     text-align: center;
 }

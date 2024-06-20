@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './navbar.css';
 import { NavLink } from "react-router-dom";
 import { ROUTES } from "../../config/routes.js";
 
