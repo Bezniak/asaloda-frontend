@@ -62,10 +62,10 @@ const Navbar = () => {
                         </svg>
                     </button>
                     <div id="mega-menu-full"
-                         className={`${isMobileMenuVisible ? 'block' : 'hidden'} items-center justify-between font-medium w-full md:flex md:w-auto md:order-1 mb-16`}>
+                         className={`${isMobileMenuVisible ? 'block' : 'hidden'} items-center justify-between font-medium w-full md:flex md:w-auto md:order-1 mb-10`}>
                         <ul className="flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                             <li>
-                                <button id="mega-menu-full-dropdown-button"
+                                <NavLink to={''} id="mega-menu-full-dropdown-button"
                                         onClick={toggleProgramDropdown}
                                         className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-green-500 md:dark:hover:bg-transparent dark:border-gray-700"
                                 >
@@ -78,7 +78,7 @@ const Navbar = () => {
                                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
                                               strokeWidth="2" d="m1 1 4 4 4-4"/>
                                     </svg>
-                                </button>
+                                </NavLink>
                             </li>
                             <li>
                                 <NavLink to={ROUTES.DISCOUNTS}
@@ -141,7 +141,7 @@ const Navbar = () => {
                             <ul>
                                 <li>
                                     <a href="#"
-                                       className="block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                                       className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <div className="font-semibold">
                                             Ультра легкость
                                         </div>
@@ -152,7 +152,7 @@ const Navbar = () => {
                                 </li>
                                 <li>
                                     <a href="#"
-                                       className="block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                                       className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <div className="font-semibold">
                                             Легкость
                                         </div>
@@ -163,7 +163,7 @@ const Navbar = () => {
                                 </li>
                                 <li>
                                     <a href="#"
-                                       className="block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                                       className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <div className="font-semibold">
                                             Баланс
                                         </div>
@@ -174,7 +174,7 @@ const Navbar = () => {
                                 </li>
                                 <li>
                                     <a href="#"
-                                       className="block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                                       className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <div className="font-semibold">
                                             Актив баланс
                                         </div>
@@ -185,7 +185,7 @@ const Navbar = () => {
                                 </li>
                                 <li>
                                     <a href="#"
-                                       className="block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                                       className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <div className="font-semibold">
                                             Динамика
                                         </div>
@@ -196,7 +196,7 @@ const Navbar = () => {
                                 </li>
                                 <li>
                                     <a href="#"
-                                       className="block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                                       className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <div className="font-semibold">
                                             Динамика Макси
                                         </div>
@@ -209,7 +209,7 @@ const Navbar = () => {
                             <ul>
                                 <li>
                                     <a href="#"
-                                       className="block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                                       className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <div className="font-semibold">
                                             Ужины
                                         </div>
@@ -221,7 +221,7 @@ const Navbar = () => {
                                 <hr/>
                                 <li>
                                     <a href="#"
-                                       className="block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                                       className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <div className="font-semibold">
                                             Напитки
                                         </div>
