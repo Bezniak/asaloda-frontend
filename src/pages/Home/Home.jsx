@@ -19,8 +19,9 @@ const Home = () => {
                             smallPhoto1={'/food1.png'}
                             smallPhoto2={'/food1.png'}
                             smallPhoto3={'/food1.png'}
-                            bgColor={'#00196f'}
+                            bgColor={'white'}
                             bigPhoto={'/food2.jpg'}
+                            colorText={'black'}
             />
             <MainPhotoBlock title={'Питание для'}
                             subTitle={'набора массы'}
