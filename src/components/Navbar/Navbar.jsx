@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { NavLink } from "react-router-dom";
-import { ROUTES } from "../../config/routes.js";
+import React, {useEffect, useRef, useState} from 'react';
+import {NavLink} from "react-router-dom";
+import {ROUTES} from "../../config/routes.js";
 
 const Navbar = () => {
     const [isProgramDropdownVisible, setProgramDropdownVisible] = useState(false);
@@ -51,13 +51,14 @@ const Navbar = () => {
             <nav className="bg-white border-gray-200 dark:border-gray-600 dark:bg-gray-900">
                 <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
                     <button data-collapse-toggle="mega-menu-full" type="button"
-                            className="ml-4 inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                            aria-controls="mega-menu-full" aria-expanded={isMobileMenuVisible} onClick={toggleMobileMenu}>
+                            className="ml-4 inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 mb-5"
+                            aria-controls="mega-menu-full" aria-expanded={isMobileMenuVisible}
+                            onClick={toggleMobileMenu}>
                         <span className="sr-only">Open main menu</span>
                         <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                              viewBox="0 0 17 14">
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                  d="M1 1h15M1 7h15M1 13h15" />
+                                  d="M1 1h15M1 7h15M1 13h15"/>
                         </svg>
                     </button>
                     <div id="mega-menu-full"
@@ -66,7 +67,7 @@ const Navbar = () => {
                             <li>
                                 <button id="mega-menu-full-dropdown-button"
                                         onClick={toggleProgramDropdown}
-                                        className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-green-500 md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-green-500 md:dark:hover:bg-transparent dark:border-gray-700"
+                                        className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-green-500 md:dark:hover:bg-transparent dark:border-gray-700"
                                 >
                                     Программы
                                     <svg
@@ -75,7 +76,7 @@ const Navbar = () => {
                                         fill="none" viewBox="0 0 10 6"
                                     >
                                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
-                                              strokeWidth="2" d="m1 1 4 4 4-4" />
+                                              strokeWidth="2" d="m1 1 4 4 4-4"/>
                                     </svg>
                                 </button>
                             </li>
@@ -136,11 +137,11 @@ const Navbar = () => {
                     <div id="mega-menu-full-dropdown" ref={dropdownRef}
                          className="mt-1 border-gray-200 shadow-sm bg-gray-50 md:bg-white border-y dark:bg-gray-800 dark:border-gray-600">
                         <div
-                            className="grid max-w-screen-xl px-4 py-5 mx-auto text-gray-900 dark:text-white sm:grid-cols-2 md:px-6">
+                            className="grid max-w-screen-xl px-4 py-1 mx-auto text-gray-900 dark:text-white sm:grid-cols-2 md:px-6">
                             <ul>
                                 <li>
                                     <a href="#"
-                                       className="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                                       className="block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <div className="font-semibold">
                                             Ультра легкость
                                         </div>
@@ -151,7 +152,7 @@ const Navbar = () => {
                                 </li>
                                 <li>
                                     <a href="#"
-                                       className="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                                       className="block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <div className="font-semibold">
                                             Легкость
                                         </div>
@@ -162,7 +163,7 @@ const Navbar = () => {
                                 </li>
                                 <li>
                                     <a href="#"
-                                       className="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                                       className="block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <div className="font-semibold">
                                             Баланс
                                         </div>
@@ -173,7 +174,7 @@ const Navbar = () => {
                                 </li>
                                 <li>
                                     <a href="#"
-                                       className="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                                       className="block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <div className="font-semibold">
                                             Актив баланс
                                         </div>
@@ -184,7 +185,7 @@ const Navbar = () => {
                                 </li>
                                 <li>
                                     <a href="#"
-                                       className="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                                       className="block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <div className="font-semibold">
                                             Динамика
                                         </div>
@@ -195,7 +196,7 @@ const Navbar = () => {
                                 </li>
                                 <li>
                                     <a href="#"
-                                       className="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                                       className="block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <div className="font-semibold">
                                             Динамика Макси
                                         </div>
@@ -208,7 +209,7 @@ const Navbar = () => {
                             <ul>
                                 <li>
                                     <a href="#"
-                                       className="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                                       className="block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <div className="font-semibold">
                                             Ужины
                                         </div>
@@ -220,7 +221,7 @@ const Navbar = () => {
                                 <hr/>
                                 <li>
                                     <a href="#"
-                                       className="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                                       className="block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                                         <div className="font-semibold">
                                             Напитки
                                         </div>

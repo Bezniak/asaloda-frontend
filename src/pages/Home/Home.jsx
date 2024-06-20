@@ -1,7 +1,11 @@
 import React from 'react';
 import MainPhotoBlock from "../../components/MainPhotoBlock/MainPhotoBlock.jsx";
+import Button from "../../components/Button/Button.jsx";
 
 const Home = () => {
+
+    const button = <Button content={'Выбрать программу'}/>
+
     return (
         <div>
             <MainPhotoBlock title={'Худей легко.'}
@@ -12,6 +16,7 @@ const Home = () => {
                             smallPhoto3={'/food1.png'}
                             bgColor={'#7ECA1D'}
                             bigPhoto={'/food2.jpg'}
+                            button={button}
             />
             <MainPhotoBlock title={'Здоровое питание'}
                             subTitle={'на каждый день'}
@@ -22,6 +27,7 @@ const Home = () => {
                             bgColor={'white'}
                             bigPhoto={'/food2.jpg'}
                             colorText={'black'}
+                            button={<Button content={'Выбрать программу'} borderColor={'black'}/>}
             />
             <MainPhotoBlock title={'Питание для'}
                             subTitle={'набора массы'}
@@ -31,6 +37,7 @@ const Home = () => {
                             smallPhoto3={'/food1.png'}
                             bgColor={'#FF7B27'}
                             bigPhoto={'/food2.jpg'}
+                            button={button}
             />
         </div>
     );
