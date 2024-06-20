@@ -13,7 +13,7 @@ const MainPhotoBlock = ({
                             button
                         }) => {
     return (
-        <div className='flex items-center justify-center py-16 md:py-32 p-6' style={{backgroundColor: bgColor}}>
+        <div className='flex items-center justify-center py-16 md:py-32 p-6 mt-14' style={{backgroundColor: bgColor}}>
             <div className="flex flex-col gap-5 items-center md:flex-row md:max-w-5xl w-full">
                 <div className="flex flex-col justify-center p-4 w-full md:w-1/2 text-center md:text-left">
                     <h1 className="mb-5 text-4xl md:text-5xl font-bold text-white text-left" style={{color: colorText}}>
