@@ -3,7 +3,7 @@ import HealthyFood from "./HealthyFood.jsx";
 
 const HealthyFoodContainer = () => {
     return (
-        <div className='w-[80%] mx-auto mt-20 mb-20 flex flex-col md:flex-row items-stretch justify-between gap-10'>
+        <div className='w-full max-w-7xl mx-auto mt-10 mb-10 flex flex-col md:flex-row items-stretch justify-between gap-10 px-4'>
             <HealthyFood img={'/icon1.svg'} title={'На здоровье!'}
                          description={'Без консервантов, усилителей вкуса и химии'}
                          additionalInfoClick={'Всегда свежее, качественное и вкусное питание из натуральных продуктов - залог отличного самочувствия и крепкого здоровья.'}
