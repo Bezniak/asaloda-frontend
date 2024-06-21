@@ -1,6 +1,7 @@
 import React from 'react';
 import MainPhotoBlockContainer from "../../components/MainPhotoBlockContainer/MainPhotoBlockContainer.jsx";
 import HealthyFoodContainer from "../../components/HealthyFoodContainer/HealthyFoodContainer.jsx";
+import Ration from "../../components/Ration/Ration.jsx";
 
 const Home = () => {
 
@@ -9,6 +10,7 @@ const Home = () => {
         <div>
             <MainPhotoBlockContainer/>
             <HealthyFoodContainer/>
+            <Ration/>
         </div>
     );
 };
