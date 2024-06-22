@@ -15,8 +15,8 @@ const HowItWorksContainer = () => {
                          description={'Регулярная курьерская доставка ПП наборов готовой еды'}
                          isButtonShow={false}
             />
-            <HowItWorks img={'/winning-cup-icon.svg'} title={'Выберите тариф'}
-                         description={'Мы составляем меню каждую неделю, считаем БЖУ, выбираем только свежие продукты'}
+            <HowItWorks img={'/winning-cup-icon.svg'} title={'Вы питаетесь правильно!'}
+                         description={'Каждый день без лишних усилий, потери времени на кухне и в магазине за покупкой продуктов'}
                          isButtonShow={false}
             />
         </div>
