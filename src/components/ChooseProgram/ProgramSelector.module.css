@@ -1,0 +1,53 @@
+.customImg1 {
+    fill: #1dcfc6; /* cyan-300 */
+}
+
+.button:hover .customImg1 {
+    fill: white;
+}
+
+.button:hover p {
+    color: white;
+}
+
+.customImg2 {
+    fill: var(--dark-blue); /* white */
+}
+
+.button:hover .customImg2 {
+    fill: #e5e7eb; /* gray-200 */
+}
+
+.customImg3 {
+    fill: deeppink;
+}
+
+.button:hover .customImg3 {
+    fill: white;
+}
+
+.customImg4 {
+    fill: #837E44;
+}
+
+.button:hover .customImg4 {
+    fill: white;
+}
+
+.customImg5 {
+    fill: #F97316;
+}
+
+.button:hover .customImg5 {
+    fill: white;
+}
+
+.customImg6 {
+    fill: #6a28d1;
+}
+
+.button:hover .customImg6 {
+    fill: white;
+}
+
+
