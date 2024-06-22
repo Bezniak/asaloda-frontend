@@ -12,9 +12,9 @@ const ProgramSelector = () => {
 
     return (
         <div>
-            <div className="w-full pt-28 pb-28 max-w-7xl mx-auto mt-10 mb-10 md:mt-32 md:mb-32 flex row-auto gap-5">
+            <div className="w-full pt-28 pb-28 max-w-7xl mx-auto mt-10 mb-10 md:mt-32 md:mb-32 flex flex-wrap gap-5 justify-center items-center">
                 <button onClick={() => handleProgramClick('weight-loss')}
-                        className={classNames('w-56 h-56 rounded bg-cyan-50 hover:bg-cyan-500 p-3 transition flex flex-col justify-around', styles.button)}
+                        className={classNames('w-48 h-48 rounded bg-cyan-50 hover:bg-cyan-500 p-3 transition flex flex-col justify-around', styles.button)}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" shapeRendering="geometricPrecision"
                          textRendering="geometricPrecision" imageRendering="optimizeQuality" fillRule="evenodd"
@@ -26,14 +26,14 @@ const ProgramSelector = () => {
                               className={classNames(styles.customImg1, 'w-1/3 h-auto')}
                         />
                     </svg>
-                    <p className='text-teal-400 hover:text-white transition text-base'>
+                    <p className='text-teal-400 hover:text-white transition text-base text-left'>
                         Снижение веса
                     </p>
                 </button>
 
 
                 <button onClick={() => handleProgramClick('maintain-form')}
-                        className={classNames('w-56 h-56 rounded bg-blue-50 hover:bg-blue-700 p-3 transition flex flex-col justify-around', styles.button)}
+                        className={classNames('w-48 h-48 rounded bg-blue-50 hover:bg-blue-700 p-3 transition flex flex-col justify-around', styles.button)}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" shapeRendering="geometricPrecision"
                          textRendering="geometricPrecision" imageRendering="optimizeQuality" fillRule="evenodd"
@@ -45,14 +45,14 @@ const ProgramSelector = () => {
                               className={classNames(styles.customImg2, 'w-1/3 h-auto')}
                         />
                     </svg>
-                    <p className='transition text-blue-950 text-base'>
+                    <p className='transition text-blue-950 text-base text-left'>
                         Поддержание формы
                     </p>
                 </button>
 
 
                 <button onClick={() => handleProgramClick('mass-gain')}
-                        className={classNames('w-56 h-56 rounded bg-pink-50 hover:bg-pink-600 p-3 transition flex flex-col justify-around', styles.button)}
+                        className={classNames('w-48 h-48 rounded bg-pink-50 hover:bg-pink-600 p-3 transition flex flex-col justify-around', styles.button)}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 101.17 122.88"
                          className={classNames(styles.customImg3, 'w-1/4 h-auto')}>
@@ -95,28 +95,28 @@ const ProgramSelector = () => {
                             />
                         </g>
                     </svg>
-                    <p className='transition text-pink-500 text-base'>
+                    <p className='transition text-pink-500 text-base text-left'>
                         Набор массы
                     </p>
                 </button>
 
 
                 <button onClick={() => handleProgramClick('meat-free')}
-                        className={classNames('w-56 h-56 rounded bg-khaki-200 hover:bg-khaki-900 p-3 transition flex flex-col justify-around', styles.button)}
+                        className={classNames('w-48 h-48 rounded bg-khaki-200 hover:bg-khaki-900 p-3 transition flex flex-col justify-around', styles.button)}
                 >
                     <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 85.46"
                          className={classNames(styles.customImg4, 'w-1/3 h-auto')}>
                         <path className="cls-1"
                               d="M119.24,30.85a9.56,9.56,0,0,1,1.7,1.5A6.67,6.67,0,0,1,122.88,37v7.84a6.62,6.62,0,0,1-6.63,6.63H111.9l-3.79,28.68a5.94,5.94,0,0,1-1.68,3.68,5.3,5.3,0,0,1-3.82,1.59H20.27a5.3,5.3,0,0,1-3.82-1.59,5.94,5.94,0,0,1-1.68-3.68L11,51.51H6.63A6.62,6.62,0,0,1,0,44.88V37a6.67,6.67,0,0,1,1.94-4.69c1.2-1.2,1.79-1.94,3.61-1.94H8a15.85,15.85,0,0,1,.21-1.72,16.7,16.7,0,0,1,2-5.53A15.52,15.52,0,0,1,12.62,20a13.59,13.59,0,0,1,3.24-2.41,12.76,12.76,0,0,1,3.71-1.29c.28,0,.57-.09.87-.12h0q.42,0,.87-.06l2.34.12.1,0a13.8,13.8,0,0,1,1.94.43h0a17.29,17.29,0,0,1,2,.75,9.57,9.57,0,0,1,1.07.52c.15-1,.36-2.17.49-2.61a6.37,6.37,0,0,0-.5-.55,7,7,0,0,0-.56-.52l-.49.27-.55.26h0a9.09,9.09,0,0,1-2.24.67,10,10,0,0,1-2.33.11l-.61,0a10.09,10.09,0,0,1-1.34-.21,10.45,10.45,0,0,1-3.44-1.54,11.42,11.42,0,0,1-2.78-2.7,13.07,13.07,0,0,1-.88-1.35,12.16,12.16,0,0,1-.74-1.49.82.82,0,0,1,0-.65.86.86,0,0,1,.45-.47l.08,0c.42-.16.83-.3,1.24-.43s.81-.24,1.22-.34.84-.2,1.27-.27a11.22,11.22,0,0,1,1.28-.17,13.3,13.3,0,0,1,3.9.17,9.78,9.78,0,0,1,3.28,1.29A8.22,8.22,0,0,1,28,9.67a9.42,9.42,0,0,1,1.35,3.24h0l.71.66a6.79,6.79,0,0,1,.43-.74c.16-.25.34-.5.52-.73a8.59,8.59,0,0,1,2.17-1.92A11.3,11.3,0,0,1,35.85,9a.88.88,0,0,1,.64.07.86.86,0,0,1,.34,1.16.8.8,0,0,1-.51.4,9.34,9.34,0,0,0-2.25,1,6.87,6.87,0,0,0-2.45,2.56,7.64,7.64,0,0,0-.53,1.19l-.07.18a13.15,13.15,0,0,0-.34,1.55c-.09.46-.17,1-.24,1.4l0,0a.33.33,0,0,1,.1.06,18.29,18.29,0,0,1,4.83,1,13.81,13.81,0,0,1,4.09,2.28h0a12.25,12.25,0,0,1,2.62,3h0a12.23,12.23,0,0,1,.62,1.12,10.11,10.11,0,0,1,.79-3.58,7.58,7.58,0,0,1,2.71-3.24,8.67,8.67,0,0,1,4.23-1.5,9.1,9.1,0,0,1-3-4.85,9.42,9.42,0,0,1,3.16.13,16.7,16.7,0,0,1,4.32,1.57.72.72,0,0,0,.92-1.07,7.67,7.67,0,0,1-1.6-3.7,5.4,5.4,0,0,1,.6-3A4.35,4.35,0,0,1,57.25,8a14.76,14.76,0,0,1,2.82,4.39h0a.74.74,0,0,0,.48.4.72.72,0,0,0,.89-.51A10,10,0,0,1,63.62,8a5.18,5.18,0,0,1,2.73-1.6,6.74,6.74,0,0,1,.34,2.86h0a14,14,0,0,1-1.19,4.46h0a.69.69,0,0,0,.1.74.72.72,0,0,0,1,.11,7.52,7.52,0,0,1,3.23-1.49,11,11,0,0,1,3.48-.1,8.12,8.12,0,0,1-2.7,4.68A10,10,0,0,1,74.24,19a6.39,6.39,0,0,1,.77.5,7.89,7.89,0,0,1,.7.57q.33.32.6.63a8.44,8.44,0,0,1,.52.7,8.06,8.06,0,0,1,.39.71,16,16,0,0,1,2.47-5.92,12.29,12.29,0,0,1,6.79-5,13.85,13.85,0,0,1,8,.28,13.19,13.19,0,0,0,2.81.52,16.83,16.83,0,0,1,.17-2.13l0,0,.09-.5a10.52,10.52,0,0,1-6.25,1.37h0c-5.09-.62-7.55-4.85-9.55-9l2.73-.29C91.38.42,92.31,0,93.07,0c.75,0,1.36.46,1.52,1.46L96.1,7.24c.24,1.42.24,2.4-.57,2.68h-.08c-.52.19-1.25-.09-2.09-.51-.23-.11-.46-.23-.71-.33-1.25-.53-2.88-.89-4.17-.89,1.4,2.42,3.29,4.85,6,5.29a10.13,10.13,0,0,0,5.25-.55,2.7,2.7,0,0,1,2.22.07,2.66,2.66,0,0,1,1.25,1.62l.09.35c.55,2.27.9,3.77,1.26,5.32.48,2,.91,3.84,1.73,5.57l.21.44.19.32c.55-.61,1.16-1.21,1.8-1.76A11.78,11.78,0,0,1,116.34,22,12.94,12.94,0,0,1,119.24,30.85ZM73.54,35a13.94,13.94,0,0,1-3.07-3.24c-1.39,1.1-3.06,2.46-3.57,4.18-1.18,3.94.73,8.33,1.49,12.42,2.49,12.85,1.4,13.12,3.78,25.57H91.71c.87-2.92,1.86-7.62,2.65-11.11,1.09-4.72,1.79-8.37,2.36-11.26,1.06-5.08,1.83-8.67.22-13.88A16.47,16.47,0,0,1,91.55,35a15.29,15.29,0,0,1-2.67-3.53A23.29,23.29,0,0,1,73.54,35Zm-9.17,1.24a2.12,2.12,0,0,1,0-.36h0v0A1.25,1.25,0,0,1,64,36.64c.42.24.85.48,1.28.71a4.82,4.82,0,0,0,.91.38,6.33,6.33,0,0,0,1,.28,6.19,6.19,0,0,0,1.92-.14c.63-.13,1.25-.26,1.87-.4l0,0,.43-.09,0,0a14.7,14.7,0,0,0,2.39-.87h0a8.86,8.86,0,0,0,1.57-1,3.5,3.5,0,0,0,.72-.63l0,0,.18-.18,0,0a.83.83,0,0,0,.11-.18.84.84,0,0,0-.34-1,.81.81,0,0,0-1,.34,1.57,1.57,0,0,1-.17.21h0l-.12.14-.23.24h0a3.88,3.88,0,0,1-.59.49,7.16,7.16,0,0,1-.93.48h0a13.1,13.1,0,0,1-1.77.54h0c-.63.14-1.25.29-1.87.44a7.49,7.49,0,0,1-2.75.17,6.57,6.57,0,0,1-.72-.23c-.44-.18-.88-.39-1.31-.6h0a1.31,1.31,0,0,1-.54-.49,1.22,1.22,0,0,1-.21-.65h0a1.38,1.38,0,0,1,.08-.6ZM26.24,35a15.16,15.16,0,0,1-5.42,1.6c-1.7,7.35,0,15.56,2.13,23.41.85,3.13,2.11,8.4,3,11.54H48c1.93-8.73,1.14-8.8,3.09-17.55,1.49-6.85,3.63-14.54-2.35-19.26-4.92-3.91-10.87-4.13-16.18-.74A15.32,15.32,0,0,1,26.24,35ZM12.7,45.91c.7,6,2.66,11.53,3.6,17.53h6.25C21.36,59,19.17,50.63,17.72,45.91ZM94.56,43.15c.54,2.77.73,5.57,1.4,8.34,1,3.84,1.73,8.45,3.22,12.11,1.06-4.52.34-8.39-1.18-12.55a.81.81,0,0,0-1.51.59C96.5,54.21,95,49.52,94.56,43.15ZM102,42.89c1.43,3.81,1.76,7.56,2.23,11.41.31,2.64,1,5.14,1.37,7.79.08.57,1,3.5,1.16,4.49h6.14c.2-.71,1-4,1.15-4.72.77-3.63,1.53-7.27,1.5-11,0-.39,0-.78,0-1.16a7.09,7.09,0,0,0-.56-2.78c-1.47.73-2.75,2.54-4.53,2.56A.81.81,0,0,0,102,42.89ZM28.44,56.92c-1.69-4.4-3.17-9.15-4.38-13.75-.83-.16-1.64-.33-2.45-.53a.81.81,0,0,0-.35,1.57c1.25.28,2.51.52,3.78.75,1.12,4.32,2.51,8.55,3.81,12.79a1.64,1.64,0,0,0,.32.64c1.48,2.26,1.63,5.37,2.25,7.93h6.25C36.52,61.79,32.44,58.32,28.44,56.92ZM9.46,55.91a.81.81,0,1,0,0-1.63c-.42,0-.83,0-1.24,0H7.11a.81.81,0,1,0,0,1.63H8.22C8.63,55.91,9,55.91,9.46,55.91Z"/>
                     </svg>
-                    <p className='transition text-khaki-900 text-base'>
+                    <p className='transition text-khaki-900 text-base text-left'>
                         Питание без мяса
                     </p>
                 </button>
 
 
                 <button onClick={() => handleProgramClick('detox')}
-                        className={classNames('w-56 h-56 rounded bg-orange-100 hover:bg-orange-400 p-3 transition flex flex-col justify-around', styles.button)}
+                        className={classNames('w-48 h-48 rounded bg-orange-100 hover:bg-orange-400 p-3 transition flex flex-col justify-around', styles.button)}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 92.65 122.88"
                          className={classNames(styles.customImg5, 'w-1/4 h-auto')}>
@@ -150,14 +150,14 @@ const ProgramSelector = () => {
 
                         />
                     </svg>
-                    <p className='transition text-orange-400 text-base'>
+                    <p className='transition text-orange-400 text-base text-left'>
                         Очищение организма
                     </p>
                 </button>
 
 
                 <button onClick={() => handleProgramClick('office')}
-                        className={classNames('w-56 h-56 rounded bg-purple-100 hover:bg-purple-500 p-3 transition flex flex-col justify-around', styles.button)}
+                        className={classNames('w-48 h-48 rounded bg-purple-100 hover:bg-purple-500 p-3 transition flex flex-col justify-around', styles.button)}
 
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 100.54"
@@ -170,7 +170,7 @@ const ProgramSelector = () => {
                             />
                         </g>
                     </svg>
-                    <p className="transition text-purple-800 text-base">
+                    <p className="transition text-purple-800 text-base text-left">
                         Питание в офис
                     </p>
                 </button>
