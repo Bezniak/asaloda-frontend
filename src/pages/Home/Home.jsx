@@ -3,6 +3,7 @@ import MainPhotoBlockContainer from "../../components/MainPhotoBlockContainer/Ma
 import HealthyFoodContainer from "../../components/HealthyFoodContainer/HealthyFoodContainer.jsx";
 import Ration from "../../components/Ration/Ration.jsx";
 import ProgramSelector from "../../components/ChooseProgram/ProgramSelector.jsx";
+import HowItWorksContainer from "../../components/HowItWorks/HowItWorksContainer.jsx";
 
 const Home = () => {
 
@@ -13,6 +14,7 @@ const Home = () => {
             <HealthyFoodContainer/>
             <Ration/>
             <ProgramSelector/>
+            <HowItWorksContainer/>
         </div>
     );
 };
