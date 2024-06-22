@@ -2,6 +2,7 @@ import {useState} from "react";
 import classNames from 'classnames';
 import ProgramDetails from "./ProgramDetails.jsx";
 import styles from './ProgramSelector.module.css';
+import Button from "../Button/Button.jsx";
 
 const ProgramSelector = () => {
     const [selectedProgram, setSelectedProgram] = useState(null);
@@ -11,8 +12,12 @@ const ProgramSelector = () => {
     };
 
     return (
-        <div>
-            <div className="w-full pt-28 pb-28 max-w-7xl mx-auto mt-10 mb-10 md:mt-32 md:mb-32 flex flex-wrap gap-5 justify-center items-center">
+        <div className='w-full pb-10 max-w-7xl mx-auto mt-10 mb-10 md:mt-32 md:mb-32'>
+            <div className='mb-16 flex justify-between items-center'>
+                <h2 className='text-4xl font-bold'>Выберите программу</h2>
+                <Button content={'Подобрать программу'} borderColor={'gray'} color={'#7ECA1D'}/>
+            </div>
+            <div className="flex flex-wrap gap-5 justify-center items-center">
                 <button onClick={() => handleProgramClick('weight-loss')}
                         className={classNames('w-48 h-48 rounded bg-cyan-50 hover:bg-cyan-500 p-3 transition flex flex-col justify-around', styles.button)}
                 >
@@ -174,8 +179,6 @@ const ProgramSelector = () => {
                         Питание в офис
                     </p>
                 </button>
-
-
             </div>
             <ProgramDetails selectedProgram={selectedProgram}/>
         </div>

@@ -26,7 +26,7 @@ const MainPhotoBlock = ({
                     <p className="mb-6 font-normal text-white text-left" style={{color: colorText}}>
                         {description}
                     </p>
-                    <div className="flex justify-center md:justify-start space-x-4 mb-6">
+                    <div className="flex justify-center md:justify-start space-x-4 mb-10">
                         <img
                             className="object-cover rounded-lg h-24 w-24 md:h-36 md:w-36"
                             src={smallPhoto1} alt="photo1"

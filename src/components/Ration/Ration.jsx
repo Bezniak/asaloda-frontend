@@ -4,7 +4,7 @@ import Button from "../Button/Button.jsx";
 const Ration = () => {
     return (
         <div
-            className="relative w-full pt-28 pb-28 max-w-7xl mx-auto mt-10 mb-10 md:mt-32 md:mb-32 flex flex-col md:flex-row items-center justify-center bg-gradient-to-r from-[#ECFBFF] to-[#F5FFE5] rounded-lg shadow-lg p-6">
+            className="relative w-full max-w-7xl mx-auto md:mt-32 md:mb-32 flex flex-col md:flex-row items-center justify-center bg-gradient-to-r from-[#ECFBFF] to-[#F5FFE5] rounded-lg shadow-lg p-6">
             <img
                 src="/containerFood.jpg"
                 alt="meal"
