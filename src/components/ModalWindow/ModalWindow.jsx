@@ -2,7 +2,7 @@ import React from 'react';
 import Button from "../Button/Button.jsx";
 import { LuCircle } from "react-icons/lu";
 
-const ModalWindow = ({ onClose, modalTitle, modalDescription, img, listTitle, list }) => {
+const ModalWindow = ({ onClose, modalTitle, modalDescription, img, listTitle, list, buttonContent }) => {
     return (
         <div className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center px-4">
             <div className="fixed inset-0 bg-black opacity-70"></div>
@@ -10,8 +10,7 @@ const ModalWindow = ({ onClose, modalTitle, modalDescription, img, listTitle, li
                 {img &&
                     <img className="rounded-t-lg w-full max-h-64 object-cover" src={img} alt={'img'} />
                 }
-
-                <div className="flex items-center justify-between p-3">
+                <div className="flex items-center justify-between p-5">
                     <h3 className="text-xl font-bold text-gray-900 text-left">
                         {modalTitle}
                     </h3>
@@ -32,7 +31,7 @@ const ModalWindow = ({ onClose, modalTitle, modalDescription, img, listTitle, li
                         <span className="sr-only">Close modal</span>
                     </button>
                 </div>
-                <div className="space-y-4 p-3">
+                <div className="space-y-4 px-5">
                     <p className="text-base leading-relaxed text-dark text-left">
                         {modalDescription}
                     </p>
@@ -47,7 +46,7 @@ const ModalWindow = ({ onClose, modalTitle, modalDescription, img, listTitle, li
                     </ul>
                 )}
                 <div className="flex justify-center mt-4 pb-5">
-                    <Button content={'Понятно'} onClick={onClose} borderColor={'lightgray'} color={'#7ECA1D'} />
+                    <Button content={buttonContent} onClick={onClose} borderColor={'lightgray'} color={'#7ECA1D'} />
                 </div>
             </div>
         </div>

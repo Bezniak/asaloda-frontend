@@ -27,7 +27,8 @@ const HealthyFood = ({img, title, description, modalTitle, modalDescription, isB
     }, [showModal]);
 
     return (
-        <div className="flex flex-col justify-between p-3 w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div
+            className="flex flex-col justify-between p-3 w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
             <div className='flex justify-center'>
                 <img className="rounded-t-lg w-24 sm:w-32 md:w-40 lg:w-28" src={img} alt="imgName"/>
             </div>
@@ -41,10 +42,16 @@ const HealthyFood = ({img, title, description, modalTitle, modalDescription, isB
             </div>
             {isButtonShow && (
                 <>
-                    <div className="px-3 py-2 text-base text-gray-400 md:hover:text-[var(--green)] hover:cursor-pointer transition" onClick={openModal}>
+                    <div
+                        className="px-3 py-2 text-base text-gray-400 md:hover:text-[var(--green)] hover:cursor-pointer transition"
+                        onClick={openModal}>
                         Подробнее
                     </div>
-                    {showModal && <ModalWindow onClose={closeModal} modalTitle={modalTitle} modalDescription={modalDescription} />}
+                    {showModal &&
+                        <ModalWindow onClose={closeModal} modalTitle={modalTitle} modalDescription={modalDescription}
+                                     buttonContent={'Понятно'}
+                        />
+                    }
                 </>
             )}
         </div>

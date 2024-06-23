@@ -47,6 +47,7 @@ const Discounts = ({ img, title, modalTitle, modalDescription, listTitle, list})
                         img={img}
                         listTitle={listTitle}
                         list={list}
+                        buttonContent={'Понятно'}
                     />
                 )}
             </div>
