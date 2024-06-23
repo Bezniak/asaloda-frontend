@@ -4,6 +4,7 @@ import HealthyFoodContainer from "../../components/HealthyFoodContainer/HealthyF
 import Ration from "../../components/Ration/Ration.jsx";
 import ProgramSelector from "../../components/ChooseProgram/ProgramSelector.jsx";
 import HowItWorksContainer from "../../components/HowItWorks/HowItWorksContainer.jsx";
+import WhyAsalodaFood from "../../components/WhyAsalodaFood/WhyAsalodaFood.jsx";
 
 const Home = () => {
 
@@ -15,6 +16,7 @@ const Home = () => {
             <Ration/>
             <ProgramSelector/>
             <HowItWorksContainer/>
+            <WhyAsalodaFood/>
         </div>
     );
 };

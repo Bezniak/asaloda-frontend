@@ -125,7 +125,6 @@ const ProgramSelector = () => {
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 92.65 122.88"
                          className={classNames(styles.customImg5, 'w-1/4 h-auto')}>
-                        >
                         <path fillRule="evenodd"
                               d="M28.47,64.8c1.53,6.58,8.21,11.42,5.83,17.22c-0.84,2.04-2.62,3.57-5.83,3.57c-3.19,0-4.98-1.52-5.82-3.54
                                  C20.23,76.23,26.94,71.4,28.47,64.8L28.47,64.8z M11.57,0h9.1h8.23h8.23h8.15c0.85,0,1.55,0.69,1.55,1.55v12.08
