@@ -5,6 +5,7 @@ import Ration from "../../components/Ration/Ration.jsx";
 import ProgramSelector from "../../components/ChooseProgram/ProgramSelector.jsx";
 import HowItWorksContainer from "../../components/HowItWorks/HowItWorksContainer.jsx";
 import WhyAsalodaFood from "../../components/WhyAsalodaFood/WhyAsalodaFood.jsx";
+import DiscountsContainer from "../../components/Discounts/DiscountsContainer.jsx";
 
 const Home = () => {
 
@@ -17,6 +18,7 @@ const Home = () => {
             <ProgramSelector/>
             <HowItWorksContainer/>
             <WhyAsalodaFood/>
+            <DiscountsContainer/>
         </div>
     );
 };
