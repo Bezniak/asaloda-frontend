@@ -1,18 +1,18 @@
 import React from 'react';
 import Button from "../Button/Button.jsx";
-import {LuCircle} from "react-icons/lu";
+import { LuCircle } from "react-icons/lu";
 
-const ModalWindow = ({onClose, modalTitle, modalDescription, img, listTitle, list}) => {
+const ModalWindow = ({ onClose, modalTitle, modalDescription, img, listTitle, list }) => {
     return (
         <div className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center px-4">
             <div className="fixed inset-0 bg-black opacity-70"></div>
-            <div className="relative w-full max-w-md bg-white rounded-lg shadow-lg mx-4 max-h-full overflow-y-auto">
+            <div className="relative w-full max-w-lg bg-white rounded-lg shadow-lg mx-4 max-h-full overflow-hidden">
                 {img &&
-                    <img className="rounded-t-lg w-full" src={img} alt={'img'}/>
+                    <img className="rounded-t-lg w-full max-h-64 object-cover" src={img} alt={'img'} />
                 }
 
-                <div className="flex items-center justify-between mb-4 p-3">
-                    <h3 className="text-xl font-bold text-gray-900 mt-5 text-left">
+                <div className="flex items-center justify-between p-3">
+                    <h3 className="text-xl font-bold text-gray-900 text-left">
                         {modalTitle}
                     </h3>
                     <button
@@ -38,16 +38,16 @@ const ModalWindow = ({onClose, modalTitle, modalDescription, img, listTitle, lis
                     </p>
                 </div>
                 {list && (
-                    <ul className="list-disc p-3">
+                    <ul className="list-disc p-3 space-y-2">
                         <li className="font-bold">{listTitle}</li>
                         {list.map((item, index) => (
-                            <li key={index} className='text-sm'><LuCircle className='text-green-600 inline'/> {item}
+                            <li key={index} className='text-sm'><LuCircle className='text-green-600 inline' /> {item}
                             </li>
                         ))}
                     </ul>
                 )}
                 <div className="flex justify-center mt-4 pb-5">
-                    <Button content={'Понятно'} onClick={onClose} borderColor={'lightgray'} color={'#7ECA1D'}/>
+                    <Button content={'Понятно'} onClick={onClose} borderColor={'lightgray'} color={'#7ECA1D'} />
                 </div>
             </div>
         </div>
