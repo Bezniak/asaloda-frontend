@@ -6,7 +6,7 @@ import FaqDetails from "./FAQDetails.jsx";
 
 const FaqContainer = () => {
 
-    const [selectedQuestion, setSelectedQuestion] = useState(null);
+    const [selectedQuestion, setSelectedQuestion] = useState('diet_nutrition');
     const {data, loading, error} = useFetchAllData(`/faqs?filters[category_name][$eq]=${selectedQuestion}`);
     const handleProgramClick = (program) => {
         setSelectedQuestion(program);
