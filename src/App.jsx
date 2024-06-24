@@ -4,7 +4,6 @@ import {createBrowserRouter, Outlet, RouterProvider} from "react-router-dom";
 import {ROUTES} from "./config/routes.js";
 import NotFound from "./components/NotFound/NotFound.jsx";
 import Home from "./pages/Home/Home.jsx";
-import Discounts from "./components/Discounts/Discounts.jsx";
 import Reviews from "./components/Reviews/Reviews.jsx";
 import Delivery from "./components/Delivery/Delivery.jsx";
 import Payment from "./components/Payment/Payment.jsx";
@@ -13,6 +12,7 @@ import AboutUs from "./components/AboutUs/AboutUs.jsx";
 import Partnership from "./components/Partnership/Partnership.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import Navbar from "./components/Navbar/Navbar.jsx";
+import DiscountsContainer from "./components/Discounts/DiscountsContainer.jsx";
 
 const Layout = () => {
     return (
@@ -42,7 +42,7 @@ const router = createBrowserRouter([
             },
             {
                 path: ROUTES.DISCOUNTS,
-                element: <Discounts/>
+                element: <DiscountsContainer/>
             },
             {
                 path: ROUTES.REVIEWS,
