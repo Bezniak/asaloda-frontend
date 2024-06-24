@@ -3,8 +3,8 @@ import Discounts from "./Discounts.jsx";
 
 const DiscountsContainer = () => {
     return (
-        <div className='w-full max-w-7xl mx-auto md:mt-20 md:mb-20 '>
-            <h1 className='text-5xl font-bold mb-10 md:text-left'>Акции</h1>
+        <div className='w-full max-w-7xl mx-auto md:mt-20 md:mb-20 xs:mb-10'>
+            <h1 className='text-5xl font-bold md:mb-10 md:text-left xs:text-3xl xs:mb-5 xs:text-center'>Акции</h1>
             <div
                 className='flex flex-col md:flex-row items-stretch justify-between gap-10 px-4'
             >
