@@ -7,6 +7,7 @@ import HowItWorksContainer from "../../components/HowItWorks/HowItWorksContainer
 import WhyAsalodaFood from "../../components/WhyAsalodaFood/WhyAsalodaFood.jsx";
 import DiscountsContainer from "../../components/Discounts/DiscountsContainer.jsx";
 import WhichProgramToChoose from "../../components/WhichProgramToChoose/WhichProgramToChoose.jsx";
+import FaqContainer from "../../components/FAQ/FAQContainer.jsx";
 
 const Home = () => {
 
@@ -21,6 +22,7 @@ const Home = () => {
             <WhyAsalodaFood/>
             <DiscountsContainer/>
             <WhichProgramToChoose/>
+            <FaqContainer/>
         </div>
     );
 };

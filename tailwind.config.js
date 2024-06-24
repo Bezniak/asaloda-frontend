@@ -39,6 +39,8 @@ export default {
           '800': '#A09A52',
           '900': '#837E44',
         },
+        customGreen: '#7ECA1D',
+        lightGreen: '#f3f8ed'
       },
     },
   },
