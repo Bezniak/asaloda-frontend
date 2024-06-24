@@ -22,7 +22,7 @@ const Faq = ({handleProgramClick}) => {
                 </button>
 
 
-                <button onClick={() => handleProgramClick('diet_nutrition')}
+                <button onClick={() => handleProgramClick('order_payment')}
                         className={classNames('w-48 h-48 rounded bg-lightGreen hover:bg-customGreen p-3 transition flex flex-col justify-around group', styles.button)}
                 >
                     <GiWallet
@@ -33,7 +33,7 @@ const Faq = ({handleProgramClick}) => {
                 </button>
 
 
-                <button onClick={() => handleProgramClick('diet_nutrition')}
+                <button onClick={() => handleProgramClick('delivery')}
                         className={classNames('w-48 h-48 rounded bg-lightGreen hover:bg-customGreen p-3 transition flex flex-col justify-around group', styles.button)}
                 >
                     <VscPackage
@@ -43,7 +43,7 @@ const Faq = ({handleProgramClick}) => {
                     </p>
                 </button>
 
-                <button onClick={() => handleProgramClick('diet_nutrition')}
+                <button onClick={() => handleProgramClick('cooking')}
                         className={classNames('w-48 h-48 rounded bg-lightGreen hover:bg-customGreen p-3 transition flex flex-col justify-around group', styles.button)}
                 >
                     <PiCookingPot
@@ -53,7 +53,7 @@ const Faq = ({handleProgramClick}) => {
                     </p>
                 </button>
 
-                <button onClick={() => handleProgramClick('diet_nutrition')}
+                <button onClick={() => handleProgramClick('subscription')}
                         className={classNames('w-48 h-48 rounded bg-lightGreen hover:bg-customGreen p-3 transition flex flex-col justify-around group', styles.button)}
                 >
                     <BsJournalBookmarkFill

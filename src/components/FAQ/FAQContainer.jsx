@@ -1,24 +1,19 @@
 import React, {useState} from 'react';
-import useFetch from "../../api/useFetch.js";
 import {Preloader} from "../Preloader/Preloader.jsx";
-import classNames from "classnames";
-import styles from "../ChooseProgram/ProgramSelector.module.css";
 import FAQ from "./FAQ.jsx";
+import useFetchAllData from "../../api/useFetchAllData.js";
+import FaqDetails from "./FAQDetails.jsx";
 
 const FaqContainer = () => {
 
     const [selectedQuestion, setSelectedQuestion] = useState(null);
-
-    const {data, loading, error} = useFetch('/faqs');
-
-    console.log(data)
-
+    const {data, loading, error} = useFetchAllData(`/faqs?filters[category_name][$eq]=${selectedQuestion}`);
     const handleProgramClick = (program) => {
         setSelectedQuestion(program);
     };
 
-    if (loading) return <Preloader/>
 
+    if (loading) return <Preloader/>;
 
     return (
         <div className='w-full max-w-7xl mx-auto mt-10 mb-10'>
@@ -26,6 +21,7 @@ const FaqContainer = () => {
                 Часто задаваемые вопросы
             </h1>
             <FAQ handleProgramClick={handleProgramClick}/>
+            <FaqDetails data={data} loading={loading} error={error}/>
         </div>
     );
 };
