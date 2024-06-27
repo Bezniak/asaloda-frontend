@@ -17,7 +17,7 @@ const Slider = ({ slides }) => {
         >
             {slides.map((slide, index) => (
                 <SwiperSlide key={index}>
-                    <div style={{ backgroundColor: slide.bgColor, minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
+                    <div style={{ backgroundColor: slide.bgColor, minHeight: '80vh', display: 'flex', alignItems: 'center' }}>
                         <div className="flex flex-col gap-5 items-center md:flex-row md:max-w-5xl w-full mx-auto p-4">
                             <div className="flex flex-col md:justify-center w-full md:w-1/2 text-center md:text-left">
                                 <h1 className="mb-5 text-4xl md:text-5xl font-bold text-white md:text-left xs:text-center"
