@@ -12,7 +12,7 @@ const Footer = () => {
                 <div className='flex-1'>
                     <NavLink to={ROUTES.HOME}>
                         <img
-                            src="/logoForDarkMode.svg"
+                            src="/whiteLogo.svg"
                             alt="Flowbite Logo"
                             className="w-24 sm:w-32 md:w-40 lg:w-48"
                         />

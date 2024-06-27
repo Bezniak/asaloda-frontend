@@ -26,7 +26,8 @@ const MainPhotoBlockContainer = () => {
                             bgColor={'white'}
                             bigPhoto={'/food2.jpg'}
                             colorText={'black'}
-                            button={<Button content={'Выбрать программу'} borderColor={'lightgray'}/>}
+                            button={<Button content={'Выбрать программу'} borderColor={'lightgray'}/>
+            }
             />
             <MainPhotoBlock title={'Питание для'}
                             subTitle={'набора массы'}

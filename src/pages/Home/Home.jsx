@@ -8,13 +8,15 @@ import WhyAsalodaFood from "../../components/WhyAsalodaFood/WhyAsalodaFood.jsx";
 import DiscountsContainer from "../../components/Discounts/DiscountsContainer.jsx";
 import WhichProgramToChoose from "../../components/WhichProgramToChoose/WhichProgramToChoose.jsx";
 import FaqContainer from "../../components/FAQ/FAQContainer.jsx";
+import SliderContainer from "../../components/Slider/SliderContainer.jsx";
 
 const Home = () => {
 
 
     return (
         <div>
-            <MainPhotoBlockContainer/>
+            <SliderContainer/>
+            {/*<MainPhotoBlockContainer/>*/}
             <HealthyFoodContainer/>
             <Ration/>
             <ProgramSelector/>
