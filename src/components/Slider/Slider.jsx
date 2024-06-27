@@ -42,7 +42,7 @@ const Slider = ({ slides }) => {
                                 </div>
                                 <div>{slide.button}</div>
                             </div>
-                            <div className="flex justify-center items-center w-full md:w-1/2 mt-8 md:mt-0">
+                            <div className="flex justify-center items-center w-full md:w-1/2">
                                 <img className="object-cover rounded-lg w-3/4 md:w-full md:h-auto" src={slide.bigPhoto}
                                      alt="bigPhoto"/>
                             </div>
