@@ -54,7 +54,7 @@ const WhichProgramToChoose = () => {
 
     return (
         <div
-            className="flex flex-col items-center justify-center w-full max-w-7xl mx-auto md:mt-32 md:mb-32 xs:mt-12 xs:mb-12">
+            className="flex flex-col items-center justify-center w-full max-w-7xl mx-auto md:mt-32 md:mb-20 xs:mt-12 xs:mb-12">
             <div className="flex w-full flex-col md:flex-row">
                 <div className="flex-1 w-full md:w-1/2 p-4 flex justify-center">
                     <img className="object-cover w-full max-w-md rounded-lg"

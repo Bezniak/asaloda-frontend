@@ -13,8 +13,8 @@ const ProgramSelector = () => {
 
     return (
         <div className='w-full pb-10 max-w-7xl mx-auto mt-10 mb-10 md:mt-32 md:mb-32'>
-            <div className='p-3 mb-16 flex md:justify-between items-center flex-wrap xs:justify-center'>
-                <h2 className='text-4xl font-bold xs:mb-8'>Выберите программу</h2>
+            <div className='mb-16 flex md:justify-between items-center flex-wrap xs:justify-center'>
+                <h2 className='text-5xl font-bold md:text-left'>Выберите программу</h2>
                 <Button content={'Подобрать программу'} borderColor={'gray'} color={'#7ECA1D'}/>
             </div>
             <div className="flex flex-wrap gap-5 justify-center items-center">

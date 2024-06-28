@@ -15,8 +15,8 @@ const Slider = ({ slides }) => {
             modules={[Navigation, Pagination]}
             className="mySwiper"
         >
-            {slides.map((slide, index) => (
-                <SwiperSlide key={index}>
+            {slides.map((slide) => (
+                <SwiperSlide key={slide.id}>
                     <div style={{ backgroundColor: slide.bgColor, minHeight: '90vh', display: 'flex', alignItems: 'center' }}>
                         <div className="flex flex-col gap-5 items-center md:flex-row md:max-w-5xl w-full mx-auto p-4">
                             <div className="flex flex-col md:justify-center w-full md:w-1/2 text-center md:text-left">

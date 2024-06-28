@@ -5,7 +5,7 @@ import {ROUTES} from "./config/routes.js";
 import NotFound from "./components/NotFound/NotFound.jsx";
 import Home from "./pages/Home/Home.jsx";
 import Reviews from "./components/Reviews/Reviews.jsx";
-import Delivery from "./components/Delivery/Delivery.jsx";
+import Delivery from "./components/Delivery/Map.jsx";
 import Payment from "./components/Payment/Payment.jsx";
 import AboutUs from "./components/AboutUs/AboutUs.jsx";
 import Partnership from "./components/Partnership/Partnership.jsx";

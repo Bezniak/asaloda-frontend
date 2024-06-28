@@ -5,6 +5,7 @@ import Slider from "./Slider.jsx";
 const SliderContainer = () => {
     const slides = [
         {
+            id: 1,
             title: 'Худей легко',
             subTitle: 'Худей со вкусом',
             description: 'Программы диетического питания от 1000 Ккал для желающих сбросить вес',
@@ -17,6 +18,7 @@ const SliderContainer = () => {
             button: <Button content={'Выбрать программу'} />
         },
         {
+            id: 2,
             title: 'Здоровое питание',
             subTitle: 'на каждый день',
             description: 'Доставка сбалансированных рационов питания в Гродно',
@@ -29,6 +31,7 @@ const SliderContainer = () => {
             button: <Button content={'Выбрать программу'} borderColor={'lightgray'} />
         },
         {
+            id: 3,
             title: 'Питание для',
             subTitle: 'набора массы',
             description: 'Программа питания с повышенной калорийностью и высоким содержанием белка',

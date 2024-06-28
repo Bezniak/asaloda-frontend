@@ -16,7 +16,7 @@ const FaqContainer = () => {
     if (loading) return <Preloader/>;
 
     return (
-        <div className='w-full max-w-7xl mx-auto mt-10 mb-10'>
+        <div className='w-full max-w-7xl mx-auto md:mt-10 md:mb-20 xs:mt-10 xs:mb-10'>
             <h1 className='mb-5 text-4xl md:text-5xl font-bold md:text-left xs:text-center'>
                 Часто задаваемые вопросы
             </h1>

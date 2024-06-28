@@ -1,5 +1,4 @@
 import React from 'react';
-import MainPhotoBlockContainer from "../../components/MainPhotoBlockContainer/MainPhotoBlockContainer.jsx";
 import HealthyFoodContainer from "../../components/HealthyFoodContainer/HealthyFoodContainer.jsx";
 import Ration from "../../components/Ration/Ration.jsx";
 import ProgramSelector from "../../components/ChooseProgram/ProgramSelector.jsx";
@@ -9,6 +8,7 @@ import DiscountsContainer from "../../components/Discounts/DiscountsContainer.js
 import WhichProgramToChoose from "../../components/WhichProgramToChoose/WhichProgramToChoose.jsx";
 import FaqContainer from "../../components/FAQ/FAQContainer.jsx";
 import SliderContainer from "../../components/Slider/SliderContainer.jsx";
+import Delivery from "../../components/Delivery/Delivery.jsx";
 
 const Home = () => {
 
@@ -16,7 +16,6 @@ const Home = () => {
     return (
         <div>
             <SliderContainer/>
-            {/*<MainPhotoBlockContainer/>*/}
             <HealthyFoodContainer/>
             <Ration/>
             <ProgramSelector/>
@@ -25,6 +24,7 @@ const Home = () => {
             <DiscountsContainer/>
             <WhichProgramToChoose/>
             <FaqContainer/>
+            <Delivery/>
         </div>
     );
 };
