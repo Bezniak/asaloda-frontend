@@ -1,23 +1,28 @@
 import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import {Swiper, SwiperSlide} from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { Navigation, Pagination } from 'swiper/modules';
+import {Navigation, Pagination} from 'swiper/modules';
 import './slider.css'
 
-const Slider = ({ slides }) => {
+const Slider = ({slides}) => {
     return (
         <Swiper
             dir="rtl"
             navigation={true}
-            pagination={{ clickable: true }}
+            pagination={{clickable: true}}
             modules={[Navigation, Pagination]}
             className="mySwiper"
         >
             {slides.map((slide) => (
                 <SwiperSlide key={slide.id}>
-                    <div style={{ backgroundColor: slide.bgColor, minHeight: '90vh', display: 'flex', alignItems: 'center' }}>
+                    <div style={{
+                        backgroundColor: slide.bgColor,
+                        minHeight: '90vh',
+                        display: 'flex',
+                        alignItems: 'center'
+                    }}>
                         <div className="flex flex-col gap-5 items-center md:flex-row md:max-w-5xl w-full mx-auto p-4">
                             <div className="flex flex-col md:justify-center w-full md:w-1/2 text-center md:text-left">
                                 <h1 className="mb-5 text-4xl md:text-5xl font-bold text-white md:text-left xs:text-center"

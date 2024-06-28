@@ -15,7 +15,7 @@ const SliderContainer = () => {
             bgColor: '#7ECA1D',
             bigPhoto: '/food2.jpg',
             colorText: 'black',
-            button: <Button content={'Выбрать программу'} />
+            button: <Button content={'Выбрать программу'}/>
         },
         {
             id: 2,

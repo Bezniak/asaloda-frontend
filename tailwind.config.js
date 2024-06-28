@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {
+      height: {
+        '10vh': '10vh',
+      },
       screens: {
         'xs': '320px',
         // => @media (min-width: 320) { ... }
