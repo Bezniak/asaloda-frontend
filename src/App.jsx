@@ -11,7 +11,7 @@ import Footer from "./components/Footer/Footer.jsx";
 import Navbar from "./components/Navbar/Navbar.jsx";
 import DiscountsContainer from "./components/Discounts/DiscountsContainer.jsx";
 import FaqContainer from "./components/FAQ/FAQContainer.jsx";
-import Delivery from "./components/Delivery/Delivery.jsx";
+import PaymentDeliveryContainer from "./components/PaymentDelivery/PaymentDeliveryContainer.jsx";
 
 const Layout = () => {
     return (
@@ -49,7 +49,7 @@ const router = createBrowserRouter([
             },
             {
                 path: ROUTES.PAYMENT_DELIVERY,
-                element: <Delivery/>
+                element: <PaymentDeliveryContainer/>
             },
             {
                 path: ROUTES.FAQ,

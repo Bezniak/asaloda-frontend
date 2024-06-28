@@ -8,7 +8,7 @@ import DiscountsContainer from "../../components/Discounts/DiscountsContainer.js
 import WhichProgramToChoose from "../../components/WhichProgramToChoose/WhichProgramToChoose.jsx";
 import FaqContainer from "../../components/FAQ/FAQContainer.jsx";
 import SliderContainer from "../../components/Slider/SliderContainer.jsx";
-import Delivery from "../../components/Delivery/Delivery.jsx";
+import PaymentDeliveryContainer from "../../components/PaymentDelivery/PaymentDeliveryContainer.jsx";
 
 const Home = () => {
 
@@ -24,7 +24,7 @@ const Home = () => {
             <DiscountsContainer/>
             <WhichProgramToChoose/>
             <FaqContainer/>
-            <Delivery/>
+            <PaymentDeliveryContainer/>
         </div>
     );
 };

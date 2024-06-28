@@ -4,15 +4,13 @@ import Map from "./Map.jsx";
 import Button from "../Button/Button.jsx";
 
 const Delivery = () => {
-
     const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleText = () => {
         setIsExpanded(!isExpanded);
     };
-
     return (
-        <div className='w-full max-w-7xl mx-auto md:mt-10 md:mb-10 xs:mb-10 p-3'>
+        <>
             <div className='flex md:flex-row xs:flex-col'>
                 <div className='flex-1 md:pr-20'>
                     <h2 className='text-5xl font-bold mb-10 md:text-left'>Доставка</h2>
@@ -77,7 +75,7 @@ const Delivery = () => {
                             borderColor={'#7ECA1D'}/>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 
