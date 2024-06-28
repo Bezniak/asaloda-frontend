@@ -13,7 +13,7 @@ const Delivery = () => {
         <>
             <div className='flex md:flex-row xs:flex-col'>
                 <div className='flex-1 md:pr-20'>
-                    <h2 className='text-5xl font-bold mb-10 md:text-left'>Доставка</h2>
+                    <h2 className='text-4xl font-bold mb-10 text-left'>Доставка</h2>
                     <p className='text-left mt-10 mb-10 text-gray-400 text-base'>
                         Мы осуществляем доставку ПП еды регулярно (раз в два дня). Каждое утро или вечер — выбор за Вами
                     </p>

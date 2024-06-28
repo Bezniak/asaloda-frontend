@@ -1,6 +1,10 @@
+.gradient-border-wrapper {
+    border-radius: 10px; /* Adjust as needed */
+    overflow: hidden; /* Ensures child elements adhere to border radius */
+}
+
 .gradient-border {
-    border-width: 8px;
+    border-width: 10px;
     border-style: solid;
     border-image: linear-gradient(to right, #99caff, #ffddc1) 1;
-    border-radius: 20px; /* Explicitly set the border radius */
 }
