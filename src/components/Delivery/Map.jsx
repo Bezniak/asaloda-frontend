@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 
 const Map = () => {
     useEffect(() => {
@@ -7,11 +7,19 @@ const Map = () => {
         script.charset = 'utf-8';
         script.async = true;
         script.src = 'https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A59f35aa3703d13997e08ce5dd9f8824fbd1c23662862406c08f61d522c4c881f&amp;width=1170&amp;height=720&amp;lang=ru_RU&amp;scroll=true';
-        document.getElementById('yandex-map-container').appendChild(script);
 
-        // Очистка при размонтировании
+        // Append the script to the container element
+        const container = document.getElementById('yandex-map-container');
+        if (container) {
+            container.appendChild(script);
+        }
+
+        // Cleanup function
         return () => {
-            document.getElementById('yandex-map-container').removeChild(script);
+            // Check if script is still a child of container before removing
+            if (container && container.contains(script)) {
+                container.removeChild(script);
+            }
         };
     }, []);
 

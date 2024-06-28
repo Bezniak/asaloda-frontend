@@ -5,14 +5,13 @@ import {ROUTES} from "./config/routes.js";
 import NotFound from "./components/NotFound/NotFound.jsx";
 import Home from "./pages/Home/Home.jsx";
 import Reviews from "./components/Reviews/Reviews.jsx";
-import Delivery from "./components/Delivery/Map.jsx";
-import Payment from "./components/Payment/Payment.jsx";
 import AboutUs from "./components/AboutUs/AboutUs.jsx";
 import Partnership from "./components/Partnership/Partnership.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import Navbar from "./components/Navbar/Navbar.jsx";
 import DiscountsContainer from "./components/Discounts/DiscountsContainer.jsx";
 import FaqContainer from "./components/FAQ/FAQContainer.jsx";
+import Delivery from "./components/Delivery/Delivery.jsx";
 
 const Layout = () => {
     return (
@@ -49,12 +48,8 @@ const router = createBrowserRouter([
                 element: <Reviews/>
             },
             {
-                path: ROUTES.DELIVERY,
+                path: ROUTES.PAYMENT_DELIVERY,
                 element: <Delivery/>
-            },
-            {
-                path: ROUTES.PAYMENT,
-                element: <Payment/>
             },
             {
                 path: ROUTES.FAQ,
