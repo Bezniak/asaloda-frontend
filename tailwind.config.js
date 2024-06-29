@@ -8,6 +8,7 @@ export default {
     extend: {
       height: {
         '10vh': '10vh',
+        '50vh': '50vh',
       },
       screens: {
         'xs': '320px',

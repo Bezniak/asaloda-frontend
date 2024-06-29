@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 
 const Map = () => {
     useEffect(() => {
@@ -24,7 +24,7 @@ const Map = () => {
     }, []);
 
     return (
-        <div id="yandex-map-container" className='md:w-3/5 md:min-h-96 xs:mt-10'/>
+        <div id="yandex-map-container" className='md:w-3/5 md:min-h-96 xs:h-50vh xs:mt-10'/>
     );
 };
 
