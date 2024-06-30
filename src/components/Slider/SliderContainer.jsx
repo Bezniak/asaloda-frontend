@@ -11,7 +11,6 @@ const SliderContainer = () => {
             description: 'Программы диетического питания от 1000 Ккал для желающих сбросить вес',
             smallPhoto1: '/food1.png',
             smallPhoto2: '/food1.png',
-            smallPhoto3: '/food1.png',
             bgColor: '#7ECA1D',
             bigPhoto: '/food2.jpg',
             colorText: 'black',
@@ -24,11 +23,10 @@ const SliderContainer = () => {
             description: 'Доставка сбалансированных рационов питания в Гродно',
             smallPhoto1: '/food1.png',
             smallPhoto2: '/food1.png',
-            smallPhoto3: '/food1.png',
             bgColor: '#00196f',
             bigPhoto: '/food2.jpg',
             colorText: 'white',
-            button: <Button content={'Выбрать программу'} borderColor={'lightgray'} />
+            button: <Button content={'Выбрать программу'} borderColor={'lightgray'}/>
         },
         {
             id: 3,
@@ -37,18 +35,17 @@ const SliderContainer = () => {
             description: 'Программа питания с повышенной калорийностью и высоким содержанием белка',
             smallPhoto1: '/food1.png',
             smallPhoto2: '/food1.png',
-            smallPhoto3: '/food1.png',
             bgColor: '#1dcfc6',
             bigPhoto: '/food2.jpg',
             colorText: '#FFFFFF',
-            button: <Button content={'Выбрать программу'} />
+            button: <Button content={'Выбрать программу'}/>
         }
     ];
 
 
     return (
         <div>
-            <Slider slides={slides} />
+            <Slider slides={slides}/>
         </div>
     );
 };

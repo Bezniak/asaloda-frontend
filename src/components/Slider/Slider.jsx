@@ -4,19 +4,20 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import {Navigation, Pagination} from 'swiper/modules';
-import './slider.css'
+import './slider.css';
 
 const Slider = ({slides}) => {
     return (
         <Swiper
-            dir="rtl"
+            spaceBetween={50}
+            slidesPerView={1}
             navigation={true}
             pagination={{clickable: true}}
-            modules={[Navigation, Pagination]}
+            modules={[Navigation, Pagination]} // Removed History for now
             className="mySwiper"
         >
-            {slides.map((slide) => (
-                <SwiperSlide key={slide.id}>
+            {slides.map((slide, index) => (
+                <SwiperSlide key={index}>
                     <div style={{
                         backgroundColor: slide.bgColor,
                         minHeight: '90vh',
@@ -37,13 +38,11 @@ const Slider = ({slides}) => {
                                    style={{color: slide.colorText}}>
                                     {slide.description}
                                 </p>
-                                <div className="flex justify-center md:justify-start space-x-4 mb-10">
+                                <div className="flex justify-center md:justify-evenly space-x-4 mb-10">
                                     <img className="object-cover rounded-lg h-24 w-24 md:h-36 md:w-36 mx-4"
                                          src={slide.smallPhoto1} alt="photo1"/>
                                     <img className="object-cover rounded-lg h-24 w-24 md:h-36 md:w-36"
                                          src={slide.smallPhoto2} alt="photo2"/>
-                                    <img className="object-cover rounded-lg h-24 w-24 md:h-36 md:w-36 md:mx-0 mx-4"
-                                         src={slide.smallPhoto3} alt="photo3"/>
                                 </div>
                                 <div>{slide.button}</div>
                             </div>
