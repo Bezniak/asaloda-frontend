@@ -4,11 +4,17 @@ import {ROUTES} from '../../config/routes.js';
 
 const Navbar = () => {
     const [isProgramDropdownVisible, setProgramDropdownVisible] = useState(false);
+    const [isUserDropdownVisible, setUserDropdownVisible] = useState(false);
     const [isMobileMenuVisible, setMobileMenuVisible] = useState(false);
     const dropdownRef = useRef(null);
+    const dropdownUserRef = useRef(null);
 
     const toggleProgramDropdown = () => {
         setProgramDropdownVisible(!isProgramDropdownVisible);
+    };
+
+    const toggleUserDropdown = () => {
+        setUserDropdownVisible(!isUserDropdownVisible);
     };
 
     const toggleMobileMenu = () => {
@@ -21,9 +27,17 @@ const Navbar = () => {
             setMobileMenuVisible(false);
         }
 
+        if (!event.target.closest('.mega-menu-user-dropdown') && isMobileMenuVisible) {
+            setMobileMenuVisible(false);
+        }
+
         // Close program dropdown if clicked outside of it
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setProgramDropdownVisible(false);
+        }
+
+        if (dropdownUserRef.current && !dropdownUserRef.current.contains(event.target)) {
+            setUserDropdownVisible(false);
         }
     };
 
@@ -180,6 +194,35 @@ const Navbar = () => {
                                 Контакты
                             </NavLink>
                         </li>
+
+
+                        <li>
+                            <NavLink
+                                to=""
+                                id="mega-menu-full-dropdown-button"
+                                onClick={toggleUserDropdown}
+                                className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-green-500 md:dark:hover:bg-transparent dark:border-gray-700"
+                            >
+                                Аккаунт
+                                <svg
+                                    className="w-2.5 h-2.5 ms-2.5"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 10 6"
+                                >
+                                    <path
+                                        stroke="currentColor"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="m1 1 4 4 4-4"
+                                    />
+                                </svg>
+                            </NavLink>
+                        </li>
+
+
                     </ul>
                 </div>
             </div>
@@ -209,7 +252,7 @@ const Navbar = () => {
                                     className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
                                     onClick={handleProgramLinkClick}
                                 >
-                                    <div className="font-semibold">Легкость</div>
+                                <div className="font-semibold">Легкость</div>
                                     <span className="text-sm text-gray-500 dark:text-gray-400">1500 ккал</span>
                                 </a>
                             </li>
@@ -281,6 +324,43 @@ const Navbar = () => {
                     </div>
                 </div>
             )}
+
+
+            {isUserDropdownVisible && (
+                <div
+                    id="mega-menu-user-dropdown"
+                    ref={dropdownUserRef}
+                    className="border-gray-200 shadow-sm bg-gray-50 md:bg-white border-y dark:bg-gray-800 dark:border-gray-600"
+                >
+                    <div
+                        className="grid max-w-screen-xl px-4 py-1 mx-auto text-gray-900 dark:text-white sm:grid-cols-2 md:px-6">
+                        <ul>
+                            <li>
+                                <a
+                                    href="#"
+                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    onClick={handleProgramLinkClick}
+                                >
+                                    <div className="font-semibold">Мои заказы</div>
+                                </a>
+                            </li>
+                            <hr/>
+                            <li>
+                                <a
+                                    href="#"
+                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    onClick={handleProgramLinkClick}
+                                >
+                                    <div className="font-semibold">Выйти</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            )}
+
+
+
         </nav>
     );
 };
