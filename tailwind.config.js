@@ -9,6 +9,8 @@ export default {
       height: {
         '10vh': '10vh',
         '50vh': '50vh',
+        '80vh': '80vh',
+        '100vh': '100vh',
       },
       screens: {
         'xs': '320px',

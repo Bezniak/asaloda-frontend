@@ -1,6 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {NavLink} from 'react-router-dom';
+import {NavLink, useNavigate} from 'react-router-dom';
 import {ROUTES} from '../../config/routes.js';
+import {useAuth} from "../../context/AuthContext.jsx";
+import {FaSignInAlt, FaUserPlus} from "react-icons/fa";
 
 const Navbar = () => {
     const [isProgramDropdownVisible, setProgramDropdownVisible] = useState(false);
@@ -8,6 +10,9 @@ const Navbar = () => {
     const [isMobileMenuVisible, setMobileMenuVisible] = useState(false);
     const dropdownRef = useRef(null);
     const dropdownUserRef = useRef(null);
+    const {user, logout, role, theme, toggleTheme} = useAuth();
+    const navigate = useNavigate();
+
 
     const toggleProgramDropdown = () => {
         setProgramDropdownVisible(!isProgramDropdownVisible);
@@ -52,6 +57,15 @@ const Navbar = () => {
         setProgramDropdownVisible(false);
         setMobileMenuVisible(false);
     };
+
+    const handleLogout = () => {
+        logout();
+    };
+
+    const handleNavigate = (path) => {
+        navigate(path);
+    };
+
 
     return (
         <nav className="bg-white border-gray-200 dark:border-gray-600 dark:bg-gray-900">
@@ -194,33 +208,60 @@ const Navbar = () => {
                                 Контакты
                             </NavLink>
                         </li>
+                        {user
+                            ? (
+                                <li>
+                                    <NavLink
+                                        to=""
+                                        id="mega-menu-full-dropdown-button"
+                                        onClick={toggleUserDropdown}
+                                        className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-green-500 md:dark:hover:bg-transparent dark:border-gray-700"
+                                    >
+                                        Аккаунт
+                                        <svg
+                                            className="w-2.5 h-2.5 ms-2.5"
+                                            aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 10 6"
+                                        >
+                                            <path
+                                                stroke="currentColor"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="2"
+                                                d="m1 1 4 4 4-4"
+                                            />
+                                        </svg>
+                                    </NavLink>
+                                </li>
+                            )
+                            : (
+                                <>
+                                    <li>
+                                        <NavLink
+                                            to={ROUTES.LOGIN}
+                                            className="flex items-center py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
+                                            onClick={() => setMobileMenuVisible(false)} // Close mobile menu
+                                        >
+                                            <FaSignInAlt className='mr-3 text-[var(--green)] text-3xl'/>
+                                            Войти
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink
+                                            to={ROUTES.REGISTER}
+                                            className="flex items-center py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
+                                            onClick={() => setMobileMenuVisible(false)} // Close mobile menu
+                                        >
+                                            <FaUserPlus className='mr-3 text-[var(--green)] text-3xl'/>
+                                            Зарегистрироваться
+                                        </NavLink>
+                                    </li>
+                                </>
+                            )
 
-
-                        <li>
-                            <NavLink
-                                to=""
-                                id="mega-menu-full-dropdown-button"
-                                onClick={toggleUserDropdown}
-                                className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-green-500 md:dark:hover:bg-transparent dark:border-gray-700"
-                            >
-                                Аккаунт
-                                <svg
-                                    className="w-2.5 h-2.5 ms-2.5"
-                                    aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 10 6"
-                                >
-                                    <path
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="m1 1 4 4 4-4"
-                                    />
-                                </svg>
-                            </NavLink>
-                        </li>
+                        }
 
 
                     </ul>
@@ -252,7 +293,7 @@ const Navbar = () => {
                                     className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
                                     onClick={handleProgramLinkClick}
                                 >
-                                <div className="font-semibold">Легкость</div>
+                                    <div className="font-semibold">Легкость</div>
                                     <span className="text-sm text-gray-500 dark:text-gray-400">1500 ккал</span>
                                 </a>
                             </li>
@@ -358,7 +399,6 @@ const Navbar = () => {
                     </div>
                 </div>
             )}
-
 
 
         </nav>

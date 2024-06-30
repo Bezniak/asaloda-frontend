@@ -1,0 +1,184 @@
+import React, {useState} from 'react';
+import {useForm} from 'react-hook-form';
+import {useNavigate} from "react-router-dom";
+import {useAuth} from "../../context/AuthContext.jsx";
+import {useTranslation} from "react-i18next";
+import api from "../../api/api.js";
+
+
+const Register = () => {
+    const {register, handleSubmit, watch, formState: {errors}, trigger} = useForm();
+    const password = watch('password');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(null);
+    const navigate = useNavigate();
+    const {login, theme} = useAuth();
+    const {t} = useTranslation();
+
+
+    const onSubmit = async (data) => {
+        // Exclude repeat_password from data
+        setIsSubmitting(true);
+        const {repeat_password, ...formData} = data;
+
+        try {
+            const response = await api.post('/auth/local/register', formData);
+            login(response);
+            navigate('/');
+        } catch (error) {
+            console.error('Error submitting data:', error);
+            if (error.response && error.response.status === 400) {
+                setErrorMessage(error.response.data.error.message);
+            } else {
+                setErrorMessage(t('unexpected_error'));
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
+
+        console.log(formData);
+
+    };
+
+
+    return (
+        <div className="h-100vh flex items-center justify-center">
+            <form onSubmit={handleSubmit(onSubmit)} className="w-5/12 mx-auto">
+
+                <div className="grid md:grid-cols-2 md:gap-6">
+                    <div className="relative z-0 w-full mb-5 group">
+                        <input
+                            type="text"
+                            name="username"
+                            id="username"
+                            {...register('username', {required: true})}
+                            onBlur={() => trigger('username')}
+                            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" "
+                        />
+                        <label htmlFor="username"
+                               className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                        >
+                            Имя
+                        </label>
+                        {errors.username &&
+                            <span className="text-red-500 text-sm">Это поле обязательно к заполнению</span>}
+                    </div>
+                    <div className="relative z-0 w-full mb-5 group">
+                        <input
+                            type="text"
+                            name="userlastname"
+                            id="userlastname"
+                            {...register('userlastname', {required: true})}
+                            onBlur={() => trigger('userlastname')}
+                            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" "
+                        />
+                        <label htmlFor="userlastname"
+                               className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                        >
+                            Фамилия
+                        </label>
+                        {errors.userlastname &&
+                            <span className="text-red-500 text-sm">Это поле обязательно к заполнению</span>}
+                    </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 md:gap-6">
+                    <div className="relative z-0 w-full mb-5 group">
+                        <input
+                            type="password"
+                            name="password"
+                            id="password"
+                            {...register('password', {required: true, minLength: 6})}
+                            onBlur={() => trigger('password')}
+                            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" "
+                        />
+                        <label htmlFor="password"
+                               className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                        >
+                            Пароль
+                        </label>
+                        {errors.password && <span
+                            className="text-red-500 text-sm">{errors.password.type === 'minLength' ? 'Пароль должен содержать не менее 6 символов' : 'Это поле обязательно к заполнению'}</span>}
+                    </div>
+                    <div className="relative z-0 w-full mb-5 group">
+                        <input
+                            type="password"
+                            name="repeat_password"
+                            id="repeat_password"
+                            {...register('repeat_password', {required: true, validate: value => value === password})}
+                            onBlur={() => trigger('repeat_password')}
+                            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" "
+                        />
+                        <label htmlFor="repeat_password"
+                               className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                        >
+                            Подтвердите пароль
+                        </label>
+                        {errors.repeat_password && <span
+                            className="text-red-500 text-sm">{errors.repeat_password.type === 'validate' ? 'Пароли не совпадают' : 'Это поле обязательно к заполнению'}</span>}
+                    </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 md:gap-6">
+                    <div className="relative z-0 w-full mb-5 group">
+                        <input
+                            type="tel"
+                            name="userphone"
+                            id="userphone"
+                            {...register('userphone', {
+                                required: true,
+                                pattern: /^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]{7,14}$/
+                            })}
+                            onBlur={() => trigger('userphone')}
+                            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" "
+                        />
+                        <label htmlFor="userphone"
+                               className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                        >
+                            Телефон
+                        </label>
+                        {errors.userphone && <span
+                            className="text-red-500 text-sm">{errors.userphone.type === 'pattern' ? 'Введите корректный номер телефона' : 'Это поле обязательно к заполнению'}</span>}
+                    </div>
+
+                    <div className="relative z-0 w-full mb-5 group">
+                        <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            {...register('email', {
+                                required: "Это поле обязательно к заполнению",
+                                pattern: {
+                                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                    message: "Введите корректный адрес электронной почты"
+                                }
+                            })}
+                            onBlur={() => trigger('email')}
+                            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" "
+                        />
+                        <label htmlFor="email"
+                               className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                        >
+                            Email
+                        </label>
+                        {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
+                    </div>
+                </div>
+                <button type="submit"
+                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        disabled={isSubmitting}
+                >
+                    {isSubmitting ? 'Отправка запроса...' : 'Зарегистрироваться'}
+                </button>
+            </form>
+        </div>
+    );
+};
+
+export default Register;

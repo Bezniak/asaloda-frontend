@@ -6,6 +6,8 @@ export const ROUTES = {
     PAYMENT_DELIVERY: "/payment_delivery",
     FAQ: "/faq",
     ABOUTUS: "/about-us",
-    PARTNERSHIP: "/partnership"
+    PARTNERSHIP: "/partnership",
+    REGISTER: "/register",
+    LOGIN: "/login",
 
 };

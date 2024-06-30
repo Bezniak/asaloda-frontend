@@ -12,6 +12,7 @@ import DiscountsContainer from "./components/Discounts/DiscountsContainer.jsx";
 import FaqContainer from "./components/FAQ/FAQContainer.jsx";
 import PaymentDeliveryContainer from "./components/PaymentDelivery/PaymentDeliveryContainer.jsx";
 import ReviewsContainer from "./components/Reviews/ReviewsContainer.jsx";
+import Login from "./components/Login/Login.jsx";
 
 const Layout = () => {
     return (
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
             {
                 path: ROUTES.PARTNERSHIP,
                 element: <Partnership/>
+            },
+            {
+                path: ROUTES.LOGIN,
+                element: <Login/>
             },
         ]
     },
