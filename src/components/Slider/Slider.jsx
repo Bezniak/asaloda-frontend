@@ -38,10 +38,10 @@ const Slider = ({slides}) => {
                                    style={{color: slide.colorText}}>
                                     {slide.description}
                                 </p>
-                                <div className="flex justify-center md:justify-evenly space-x-4 mb-10">
-                                    <img className="object-cover rounded-lg h-24 w-24 md:h-36 md:w-36 mx-4"
+                                <div className="flex justify-center md:justify-start xs:justify-center space-x-4 mb-10">
+                                    <img className="object-cover rounded-lg h-32 w-32 md:h-40 md:w-40 mx-4"
                                          src={slide.smallPhoto1} alt="photo1"/>
-                                    <img className="object-cover rounded-lg h-24 w-24 md:h-36 md:w-36"
+                                    <img className="object-cover rounded-lg h-32 w-32 md:h-40 md:w-40"
                                          src={slide.smallPhoto2} alt="photo2"/>
                                 </div>
                                 <div>{slide.button}</div>
