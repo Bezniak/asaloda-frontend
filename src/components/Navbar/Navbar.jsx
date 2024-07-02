@@ -7,9 +7,13 @@ import {FaSignInAlt, FaUserPlus} from "react-icons/fa";
 const Navbar = () => {
     const [isProgramDropdownVisible, setProgramDropdownVisible] = useState(false);
     const [isUserDropdownVisible, setUserDropdownVisible] = useState(false);
+    const [isAboutUsDropdownVisible, setAboutUsDropdownVisible] = useState(false);
     const [isMobileMenuVisible, setMobileMenuVisible] = useState(false);
+
     const dropdownRef = useRef(null);
     const dropdownUserRef = useRef(null);
+    const dropdownAboutUsRef = useRef(null);
+
     const {user, logout, role, theme, toggleTheme} = useAuth();
     const navigate = useNavigate();
 
@@ -20,6 +24,10 @@ const Navbar = () => {
 
     const toggleUserDropdown = () => {
         setUserDropdownVisible(!isUserDropdownVisible);
+    };
+
+    const toggleAboutUsDropdown = () => {
+        setAboutUsDropdownVisible(!isAboutUsDropdownVisible);
     };
 
     const toggleMobileMenu = () => {
@@ -36,6 +44,10 @@ const Navbar = () => {
             setMobileMenuVisible(false);
         }
 
+        if (!event.target.closest('.mega-menu-full-dropdown-about-us') && isMobileMenuVisible) {
+            setMobileMenuVisible(false);
+        }
+
         // Close program dropdown if clicked outside of it
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setProgramDropdownVisible(false);
@@ -43,6 +55,10 @@ const Navbar = () => {
 
         if (dropdownUserRef.current && !dropdownUserRef.current.contains(event.target)) {
             setUserDropdownVisible(false);
+        }
+
+        if (dropdownAboutUsRef.current && !dropdownAboutUsRef.current.contains(event.target)) {
+            setAboutUsDropdownVisible(false);
         }
     };
 
@@ -55,6 +71,11 @@ const Navbar = () => {
 
     const handleProgramLinkClick = () => {
         setProgramDropdownVisible(false);
+        setMobileMenuVisible(false);
+    };
+
+    const handleAboutUaLinkClick = () => {
+        setAboutUsDropdownVisible(false);
         setMobileMenuVisible(false);
     };
 
@@ -156,38 +177,11 @@ const Navbar = () => {
                         </li>
                         <li>
                             <NavLink
-                                to={ROUTES.REVIEWS}
-                                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
-                                onClick={() => setMobileMenuVisible(false)} // Close mobile menu
-                            >
-                                Отзывы
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
                                 to={ROUTES.PAYMENT_DELIVERY}
                                 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
                                 onClick={() => setMobileMenuVisible(false)} // Close mobile menu
                             >
                                 Оплата и доставка
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                to={ROUTES.FAQ}
-                                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
-                                onClick={() => setMobileMenuVisible(false)} // Close mobile menu
-                            >
-                                Вопрос-ответ
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                to={ROUTES.ABOUTUS}
-                                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
-                                onClick={() => setMobileMenuVisible(false)} // Close mobile menu
-                            >
-                                О нас
                             </NavLink>
                         </li>
                         <li>
@@ -201,13 +195,31 @@ const Navbar = () => {
                         </li>
                         <li>
                             <NavLink
-                                to={ROUTES.PARTNERSHIP}
-                                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
-                                onClick={() => setMobileMenuVisible(false)} // Close mobile menu
+                                to=""
+                                id="mega-menu-full-dropdown-button-about-us"
+                                onClick={toggleAboutUsDropdown}
+                                className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-green-500 md:dark:hover:bg-transparent dark:border-gray-700"
                             >
-                                Контакты
+                                О нас
+                                <svg
+                                    className="w-2.5 h-2.5 ms-2.5"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 10 6"
+                                >
+                                    <path
+                                        stroke="currentColor"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="m1 1 4 4 4-4"
+                                    />
+                                </svg>
                             </NavLink>
                         </li>
+
+
                         {user
                             ? (
                                 <li>
@@ -263,8 +275,9 @@ const Navbar = () => {
 
                         }
 
-
                     </ul>
+
+
                 </div>
             </div>
 
@@ -360,6 +373,59 @@ const Navbar = () => {
                                     <span
                                         className="text-sm text-gray-500 dark:text-gray-400">Здоровье в каждом глотке</span>
                                 </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            )}
+
+
+            {isAboutUsDropdownVisible && (
+                <div
+                    id="mega-menu-full-dropdown-about-us"
+                    ref={dropdownAboutUsRef}
+                    className="border-gray-200 shadow-sm bg-gray-50 md:bg-white border-y dark:bg-gray-800 dark:border-gray-600"
+                >
+                    <div
+                        className="grid max-w-screen-xl px-4 py-1 mx-auto text-gray-900 dark:text-white sm:grid-cols-2 md:px-6">
+                        <ul>
+                            <li>
+                                <NavLink
+                                    to={ROUTES.ABOUTUS}
+                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    onClick={handleAboutUaLinkClick}
+                                >
+                                    <div className="font-semibold">О компании</div>
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink
+                                    to={ROUTES.REVIEWS}
+                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    onClick={handleAboutUaLinkClick}
+                                >
+                                    <div className="font-semibold">Отзывы</div>
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink
+                                    to={ROUTES.FAQ}
+                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    onClick={handleAboutUaLinkClick}
+                                >
+                                    <div className="font-semibold">Вопрос-ответ</div>
+                                </NavLink>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li>
+                                <NavLink
+                                    to={ROUTES.CONTACTS}
+                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    onClick={handleAboutUaLinkClick}
+                                >
+                                    <div className="font-semibold">Контакты</div>
+                                </NavLink>
                             </li>
                         </ul>
                     </div>

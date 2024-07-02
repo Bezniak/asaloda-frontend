@@ -13,6 +13,8 @@ import FaqContainer from "./components/FAQ/FAQContainer.jsx";
 import PaymentDeliveryContainer from "./components/PaymentDelivery/PaymentDeliveryContainer.jsx";
 import ReviewsContainer from "./components/Reviews/ReviewsContainer.jsx";
 import Login from "./components/Login/Login.jsx";
+import Register from "./components/Register/Register.jsx";
+import Contacts from "./components/Contacts/Contacts.jsx";
 
 const Layout = () => {
     return (
@@ -67,6 +69,14 @@ const router = createBrowserRouter([
             {
                 path: ROUTES.LOGIN,
                 element: <Login/>
+            },
+            {
+                path: ROUTES.REGISTER,
+                element: <Register/>
+            },
+            {
+                path: ROUTES.CONTACTS,
+                element: <Contacts/>
             },
         ]
     },

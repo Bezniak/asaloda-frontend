@@ -9,5 +9,6 @@ export const ROUTES = {
     PARTNERSHIP: "/partnership",
     REGISTER: "/register",
     LOGIN: "/login",
+    CONTACTS: "/contacts",
 
 };
