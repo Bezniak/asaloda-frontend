@@ -253,10 +253,10 @@ const Navbar = () => {
                                     <li>
                                         <NavLink
                                             to={ROUTES.LOGIN}
-                                            className="flex items-center py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
+                                            className="md:ml-10 flex items-center py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
                                             onClick={() => setMobileMenuVisible(false)} // Close mobile menu
                                         >
-                                            <FaSignInAlt className='mr-3 text-[var(--green)] text-3xl'/>
+                                            <FaSignInAlt className='mr-3 text-[var(--green)] text-2xl'/>
                                             Войти
                                         </NavLink>
                                     </li>
@@ -266,7 +266,7 @@ const Navbar = () => {
                                             className="flex items-center py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
                                             onClick={() => setMobileMenuVisible(false)} // Close mobile menu
                                         >
-                                            <FaUserPlus className='mr-3 text-[var(--green)] text-3xl'/>
+                                            <FaUserPlus className='mr-3 text-[var(--green)] text-2xl'/>
                                             Зарегистрироваться
                                         </NavLink>
                                     </li>

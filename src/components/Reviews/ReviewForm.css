@@ -1,0 +1,47 @@
+.bg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    background: linear-gradient(135deg, #e0f7fa, #e0fce1, #ffe0e0);
+}
+
+.form-container {
+    height: 300px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.input-field {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.input-label {
+    transition: all 0.2s ease;
+}
+
+.error {
+    color: red;
+    font-size: 0.8rem;
+}
+
+.submit-button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.relative.z-0.w-full.mb-5.group {
+    margin-bottom: 1.25rem;
+}
+
+textarea.input-field {
+    height: 11.85rem;
+    resize: none;
+}

@@ -6,9 +6,9 @@ const Review = ({data}) => {
     console.log(data);
 
     return (
-        <div className=''>
+        <div className='w-full max-w-7xl mx-auto p-3'>
             {data && data.map(user => (
-                <div key={user.id} className='mt-10 mb-10'>
+                <div key={user.id} className='mt-5 mb-10'>
                     {user.attributes.users.data.map(u => (
                         <div key={u.id} className='flex flex-row items-center mb-6'>
                             <div
