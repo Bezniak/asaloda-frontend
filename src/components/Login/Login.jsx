@@ -14,12 +14,14 @@ const Login = () => {
     }
         = useForm();
     const [error, setError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
     const {login, theme} = useAuth();
     const navigate = useNavigate();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
 
     const onSubmit = async (data) => {
-        setIsLoading(true);
+        setIsSubmitting(true);
+
         try {
             const response = await api.post('/auth/local', {
                 identifier: data.email,
@@ -35,7 +37,7 @@ const Login = () => {
                 setError('Произошла непредвиденная ошибка.');
             }
         } finally {
-            setIsLoading(false);
+            setIsSubmitting(false);
         }
     };
 
@@ -77,11 +79,14 @@ const Login = () => {
                     </label>
                     {errors.password && <p className="text-red-500 text-xs mt-2">{errors.password.message}</p>}
                 </div>
-                <button type="submit"
-                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                    Войти
-                </button>
+                <div className='text-center w-full'>
+                    <button type="submit"
+                            className="text-white bg-[var(--green)] hover:bg-[var(--oringe)] transition-all focus:ring-4 focus:outline-none font-medium rounded-lg text-base w-full px-5 py-2.5 text-center"
+                            disabled={isSubmitting}
+                    >
+                        {isSubmitting ? 'Отправка запроса...' : 'Войти'}
+                    </button>
+                </div>
             </form>
         </div>
     );

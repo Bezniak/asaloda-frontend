@@ -15,6 +15,7 @@ import ReviewsContainer from "./components/Reviews/ReviewsContainer.jsx";
 import Login from "./components/Login/Login.jsx";
 import Register from "./components/Register/Register.jsx";
 import Contacts from "./components/Contacts/Contacts.jsx";
+import MyOrder from "./components/MyOrder/MyOrder.jsx";
 
 const Layout = () => {
     return (
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
             {
                 path: ROUTES.CONTACTS,
                 element: <Contacts/>
+            },
+            {
+                path: ROUTES.MY_ORDER,
+                element: <MyOrder/>
             },
         ]
     },

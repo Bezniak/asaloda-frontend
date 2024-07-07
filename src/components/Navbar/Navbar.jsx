@@ -3,6 +3,7 @@ import {NavLink, useNavigate} from 'react-router-dom';
 import {ROUTES} from '../../config/routes.js';
 import {useAuth} from "../../context/AuthContext.jsx";
 import {FaSignInAlt, FaUserPlus} from "react-icons/fa";
+import useFetchAllData from "../../api/useFetchAllData.js";
 
 const Navbar = () => {
     const [isProgramDropdownVisible, setProgramDropdownVisible] = useState(false);
@@ -17,6 +18,14 @@ const Navbar = () => {
     const {user, logout, role, theme, toggleTheme} = useAuth();
     const navigate = useNavigate();
 
+    const {data, loading, error} = useFetchAllData(`/programs?populate=*`);
+    const {
+        data: additional_programs_data,
+        loading: additional_programs_loading,
+        error: additional_programs_error
+    } = useFetchAllData(`/additional-programs?populate=*`);
+
+    console.log(additional_programs_data)
 
     const toggleProgramDropdown = () => {
         setProgramDropdownVisible(!isProgramDropdownVisible);
@@ -74,8 +83,13 @@ const Navbar = () => {
         setMobileMenuVisible(false);
     };
 
-    const handleAboutUaLinkClick = () => {
+    const handleAboutUsLinkClick = () => {
         setAboutUsDropdownVisible(false);
+        setMobileMenuVisible(false);
+    };
+
+    const handleUserInfoLinkClick = () => {
+        setUserDropdownVisible(false);
         setMobileMenuVisible(false);
     };
 
@@ -291,88 +305,32 @@ const Navbar = () => {
                         className="grid max-w-screen-xl px-4 py-1 mx-auto text-gray-900 dark:text-white sm:grid-cols-2 md:px-6">
                         <ul>
                             <li>
-                                <a
-                                    href="#"
-                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    onClick={handleProgramLinkClick}
-                                >
-                                    <div className="font-semibold">Ультра легкость</div>
-                                    <span className="text-sm text-gray-500 dark:text-gray-400">1000 ккал</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    onClick={handleProgramLinkClick}
-                                >
-                                    <div className="font-semibold">Легкость</div>
-                                    <span className="text-sm text-gray-500 dark:text-gray-400">1500 ккал</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    onClick={handleProgramLinkClick}
-                                >
-                                    <div className="font-semibold">Баланс</div>
-                                    <span className="text-sm text-gray-500 dark:text-gray-400">2000 ккал</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    onClick={handleProgramLinkClick}
-                                >
-                                    <div className="font-semibold">Актив баланс</div>
-                                    <span className="text-sm text-gray-500 dark:text-gray-400">2500 ккал</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    onClick={handleProgramLinkClick}
-                                >
-                                    <div className="font-semibold">Динамика</div>
-                                    <span className="text-sm text-gray-500 dark:text-gray-400">3000 ккал</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    onClick={handleProgramLinkClick}
-                                >
-                                    <div className="font-semibold">Динамика Макси</div>
-                                    <span className="text-sm text-gray-500 dark:text-gray-400">3500 ккал</span>
-                                </a>
+                                {data.map((item) => (
+                                    <NavLink to={item.id}
+                                             className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                             onClick={handleProgramLinkClick}
+                                    >
+                                        <div className="font-semibold">{item.attributes.name}</div>
+                                        <span
+                                            className="text-sm text-gray-500 dark:text-gray-400">{item.attributes.kcal}</span>
+                                    </NavLink>
+                                ))}
                             </li>
                         </ul>
                         <ul>
                             <li>
-                                <a
-                                    href="#"
-                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    onClick={handleProgramLinkClick}
-                                >
-                                    <div className="font-semibold">Ужины</div>
-                                    <span className="text-sm text-gray-500 dark:text-gray-400">Проведите время "для себя"</span>
-                                </a>
-                            </li>
-                            <hr/>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    onClick={handleProgramLinkClick}
-                                >
-                                    <div className="font-semibold">Напитки</div>
-                                    <span
-                                        className="text-sm text-gray-500 dark:text-gray-400">Здоровье в каждом глотке</span>
-                                </a>
+                                {additional_programs_data.map((item) => (
+                                    <NavLink to={item.id}
+                                             className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                             onClick={handleProgramLinkClick}
+                                    >
+                                        <div className="font-semibold">{item.attributes.name}</div>
+                                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                                            {item.attributes.desc}
+                                        </span>
+
+                                    </NavLink>
+                                ))}
                             </li>
                         </ul>
                     </div>
@@ -393,7 +351,7 @@ const Navbar = () => {
                                 <NavLink
                                     to={ROUTES.ABOUTUS}
                                     className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    onClick={handleAboutUaLinkClick}
+                                    onClick={handleAboutUsLinkClick}
                                 >
                                     <div className="font-semibold">О компании</div>
                                 </NavLink>
@@ -402,7 +360,7 @@ const Navbar = () => {
                                 <NavLink
                                     to={ROUTES.REVIEWS}
                                     className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    onClick={handleAboutUaLinkClick}
+                                    onClick={handleAboutUsLinkClick}
                                 >
                                     <div className="font-semibold">Отзывы</div>
                                 </NavLink>
@@ -411,7 +369,7 @@ const Navbar = () => {
                                 <NavLink
                                     to={ROUTES.FAQ}
                                     className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    onClick={handleAboutUaLinkClick}
+                                    onClick={handleAboutUsLinkClick}
                                 >
                                     <div className="font-semibold">Вопрос-ответ</div>
                                 </NavLink>
@@ -422,7 +380,7 @@ const Navbar = () => {
                                 <NavLink
                                     to={ROUTES.CONTACTS}
                                     className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    onClick={handleAboutUaLinkClick}
+                                    onClick={handleAboutUsLinkClick}
                                 >
                                     <div className="font-semibold">Контакты</div>
                                 </NavLink>
@@ -443,23 +401,23 @@ const Navbar = () => {
                         className="grid max-w-screen-xl px-4 py-1 mx-auto text-gray-900 dark:text-white sm:grid-cols-2 md:px-6">
                         <ul>
                             <li>
-                                <a
-                                    href="#"
+                                <NavLink
+                                    to={ROUTES.MY_ORDER}
                                     className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    onClick={handleProgramLinkClick}
+                                    onClick={handleUserInfoLinkClick}
                                 >
                                     <div className="font-semibold">Мои заказы</div>
-                                </a>
+                                </NavLink>
                             </li>
                             <hr/>
-                            <li>
-                                <a
-                                    href="#"
+                            <li onClick={handleLogout}>
+                                <NavLink
+                                    to={ROUTES.HOME}
                                     className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    onClick={handleProgramLinkClick}
+                                    onClick={handleUserInfoLinkClick}
                                 >
                                     <div className="font-semibold">Выйти</div>
-                                </a>
+                                </NavLink>
                             </li>
                         </ul>
                     </div>

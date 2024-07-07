@@ -114,7 +114,8 @@ const ReviewForm = ({programData}) => {
                             {errors.userphone && errors.userphone.type === 'pattern' && (
                                 <span className="text-red-500 text-sm">Введите корректный номер телефона</span>)}
                             {errors.userphone && (errors.userphone.type === 'minLength' || errors.userphone.type === 'maxLength') && (
-                                <span className="text-red-500 text-sm">Номер телефона должен быть от 10 до 15 цифр</span>)}
+                                <span
+                                    className="text-red-500 text-sm">Номер телефона должен быть от 10 до 15 цифр</span>)}
                         </div>
 
                         <div className="relative w-full group z-50">

@@ -10,5 +10,6 @@ export const ROUTES = {
     REGISTER: "/register",
     LOGIN: "/login",
     CONTACTS: "/contacts",
+    MY_ORDER: "/my-order",
 
 };
