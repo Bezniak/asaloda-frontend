@@ -16,6 +16,7 @@ import Login from "./components/Login/Login.jsx";
 import Register from "./components/Register/Register.jsx";
 import Contacts from "./components/Contacts/Contacts.jsx";
 import MyOrder from "./components/MyOrder/MyOrder.jsx";
+import Program from "./components/Program/Program.jsx";
 
 const Layout = () => {
     return (
@@ -82,6 +83,10 @@ const router = createBrowserRouter([
             {
                 path: ROUTES.MY_ORDER,
                 element: <MyOrder/>
+            },
+            {
+                path: ROUTES.PROGRAM,
+                element: <Program/>
             },
         ]
     },

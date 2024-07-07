@@ -25,7 +25,6 @@ const Navbar = () => {
         error: additional_programs_error
     } = useFetchAllData(`/additional-programs?populate=*`);
 
-    console.log(additional_programs_data)
 
     const toggleProgramDropdown = () => {
         setProgramDropdownVisible(!isProgramDropdownVisible);
@@ -306,9 +305,10 @@ const Navbar = () => {
                         <ul>
                             <li>
                                 {data.map((item) => (
-                                    <NavLink to={item.id}
+                                    <NavLink to={`${ROUTES.PROGRAM.replace(":id", item.id)}`}
                                              className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
                                              onClick={handleProgramLinkClick}
+                                             key={item.id}
                                     >
                                         <div className="font-semibold">{item.attributes.name}</div>
                                         <span
@@ -323,6 +323,7 @@ const Navbar = () => {
                                     <NavLink to={item.id}
                                              className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
                                              onClick={handleProgramLinkClick}
+                                             key={item.id}
                                     >
                                         <div className="font-semibold">{item.attributes.name}</div>
                                         <span className="text-sm text-gray-500 dark:text-gray-400">
