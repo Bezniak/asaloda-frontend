@@ -310,7 +310,7 @@ const Navbar = () => {
                                              onClick={handleProgramLinkClick}
                                              key={item.id}
                                     >
-                                        <div className="font-semibold">{item.attributes.name}</div>
+                                        <div className="font-semibold">{item.attributes.program_name}</div>
                                         <span
                                             className="text-sm text-gray-500 dark:text-gray-400">{item.attributes.kcal}</span>
                                     </NavLink>
