@@ -9,7 +9,6 @@ dayjs.locale('ru');
 
 const DateCalendar = ({ dates, selectedDate, setSelectedDate }) => {
     const today = dayjs();
-    const twoDaysLater = today.add(2, 'day');
 
     return (
         <div className='w-full max-w-7xl mx-auto md:mt-10 md:mb-20 xs:mt-10 xs:mb-10'>

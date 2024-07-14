@@ -2,20 +2,21 @@ import React, {useState} from 'react';
 import Dish from "./Dish.jsx";
 import {Preloader} from "../Preloader/Preloader.jsx";
 import {Alert} from "flowbite-react";
-import error from "eslint-plugin-react/lib/util/error.js";
 import {calculator} from "../../utils/utils.js";
+import ChangeDish from "./ChangeDish.jsx";
 
 const DishContainer = ({dishData, dishLoading, dishError}) => {
+    // const [isAdditionalMenuVisible, setIsAdditionalMenuVisible] = useState(false);
 
-    const [isAdditionalMenuVisible, setIsAdditionalMenuVisible] = useState(false);
+    // console.log('isAdditionalMenuVisible', isAdditionalMenuVisible);
 
-    if (dishLoading) return <Preloader/>
+    if (dishLoading) return <Preloader/>;
 
     if (dishError) {
         return (
             <div>
                 <Alert variant="danger" className="w-25 m-5 d-flex justify-content-center align-items-center">
-                    Error: {error.message}
+                    Error: {dishError.message}
                 </Alert>
             </div>
         );
@@ -26,8 +27,6 @@ const DishContainer = ({dishData, dishLoading, dishError}) => {
             {dishData?.map((dish) => (
                 <Dish key={dish.id}
                       dish={dish}
-                      setIsAdditionalMenuVisible={setIsAdditionalMenuVisible}
-                      isAdditionalMenuVisible={isAdditionalMenuVisible}
                 />
             ))}
             <div
@@ -64,6 +63,11 @@ const DishContainer = ({dishData, dishLoading, dishError}) => {
                     Заказать
                 </button>
             </div>
+
+            {/*{isAdditionalMenuVisible && (*/}
+            {/*    <ChangeDish isVisible={isAdditionalMenuVisible} setIsVisible={setIsAdditionalMenuVisible}/>*/}
+            {/*)}*/}
+
         </div>
     );
 };

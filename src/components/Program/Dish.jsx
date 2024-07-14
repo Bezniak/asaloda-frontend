@@ -1,9 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import DishModalWindow from "./DishModalWindow.jsx";
+import ChangeDish from "./ChangeDish.jsx";
 
-const Dish = ({dish, setIsAdditionalMenuVisible, isAdditionalMenuVisible}) => {
+const Dish = ({dish}) => {
 
     // console.log('dish', dish)
+
+    const [isAdditionalMenuVisible, setIsAdditionalMenuVisible] = useState(false);
+
 
     const [showModal, setShowModal] = useState(false);
 
@@ -58,6 +62,14 @@ const Dish = ({dish, setIsAdditionalMenuVisible, isAdditionalMenuVisible}) => {
             {showModal && (
                 <DishModalWindow onClose={closeModal} dishData={dish}/>
             )}
+
+            {isAdditionalMenuVisible && (
+                <ChangeDish isAdditionalMenuVisible={isAdditionalMenuVisible}
+                            setIsAdditionalMenuVisible={setIsAdditionalMenuVisible}
+                            dish={dish}
+                />
+            )}
+
         </div>
     );
 };
