@@ -33,7 +33,7 @@ const DateCalendar = ({ dates, selectedDate, setSelectedDate }) => {
                         key={index}
                         onClick={() => setSelectedDate(date)}
                         className={`flex flex-col items-center justify-center md:w-16 md:h-24 xs:w-12 xs:h-20 p-2 rounded-lg cursor-pointer border ${
-                            date.isSame(selectedDate, 'day') ? 'bg-green-400' :
+                            date.isSame(selectedDate, 'day') ? 'bg-[var(--green)]' :
                                 date.isSame(today, 'day') || date.isSame(today.add(1, 'day'), 'day') ? 'bg-gray-100 text-gray-400' :
                                     'bg-white text-gray-800'
                         }`}

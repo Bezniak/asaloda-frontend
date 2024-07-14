@@ -12,3 +12,8 @@ export function formatDate(dateString) {
 
     return `${day} ${month} ${year}`;
 }
+
+
+export const calculator = (data) => {
+    return data.reduce((sum, current) => sum + current, 0)
+}
