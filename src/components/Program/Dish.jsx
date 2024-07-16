@@ -1,14 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import DishModalWindow from "./DishModalWindow.jsx";
 import ChangeDish from "./ChangeDish.jsx";
+import dayjs from "dayjs";
 
-const Dish = ({dish}) => {
-
-    // console.log('dish', dish)
+const Dish = ({dish, selectedDate, twoDaysFromToday}) => {
 
     const [isAdditionalMenuVisible, setIsAdditionalMenuVisible] = useState(false);
-
-
     const [showModal, setShowModal] = useState(false);
 
     const openModal = () => {
@@ -33,6 +30,8 @@ const Dish = ({dish}) => {
         };
     }, [showModal]);
 
+
+
     return (
         <div
             className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
@@ -52,11 +51,13 @@ const Dish = ({dish}) => {
                     <p className="text-base text-gray-700 text-left">
                         {dish?.attributes?.eating_type}
                     </p>
-                    <button className='border-0 text-base text-[var(--oringe)]'
-                            onClick={() => setIsAdditionalMenuVisible(!isAdditionalMenuVisible)}
-                    >
-                        Заменить
-                    </button>
+                    {selectedDate.isAfter(twoDaysFromToday) && (
+                        <button className='border-0 text-base text-[var(--oringe)]'
+                                onClick={() => setIsAdditionalMenuVisible(!isAdditionalMenuVisible)}
+                        >
+                            Заменить
+                        </button>
+                    )}
                 </div>
             </div>
             {showModal && (
@@ -69,7 +70,6 @@ const Dish = ({dish}) => {
                             dish={dish}
                 />
             )}
-
         </div>
     );
 };

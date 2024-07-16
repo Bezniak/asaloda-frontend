@@ -12,7 +12,8 @@ const ProgramContainer = () => {
     const {id} = useParams();
     const [dates, setDates] = useState([]);
     const [selectedDate, setSelectedDate] = useState(dayjs().add(2, 'day'));
-    const [selectedProgram, setSelectedProgram] = useState(null);
+
+    console.log('selectedDate', selectedDate)
 
     const {data, loading, error} = useFetchAllData(`/programs/${id}?populate=*`);
     const {
@@ -44,7 +45,7 @@ const ProgramContainer = () => {
             <WelcomeSection data={data}/>
             <DescriptionBlockContainer data={data}/>
             <DateCalendar dates={dates} selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
-            <DishContainer dishData={dishData} dishLoading={dishLoading} dishError={dishError}/>
+            <DishContainer dishData={dishData} dishLoading={dishLoading} dishError={dishError} selectedDate={selectedDate}/>
         </div>
     );
 };

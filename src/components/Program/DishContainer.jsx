@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Dish from "./Dish.jsx";
 import {Preloader} from "../Preloader/Preloader.jsx";
 import {Alert} from "flowbite-react";
 import {calculator} from "../../utils/utils.js";
-import ChangeDish from "./ChangeDish.jsx";
+import dayjs from "dayjs";
 
-const DishContainer = ({dishData, dishLoading, dishError}) => {
-    // const [isAdditionalMenuVisible, setIsAdditionalMenuVisible] = useState(false);
+const DishContainer = ({dishData, dishLoading, dishError, selectedDate}) => {
 
-    // console.log('isAdditionalMenuVisible', isAdditionalMenuVisible);
+    // Calculate the date two days from today
+    const twoDaysFromToday = dayjs().add(1, 'day');
 
     if (dishLoading) return <Preloader/>;
 
@@ -27,6 +27,8 @@ const DishContainer = ({dishData, dishLoading, dishError}) => {
             {dishData?.map((dish) => (
                 <Dish key={dish.id}
                       dish={dish}
+                      selectedDate={selectedDate}
+                      twoDaysFromToday={twoDaysFromToday}
                 />
             ))}
             <div
@@ -58,16 +60,14 @@ const DishContainer = ({dishData, dishLoading, dishError}) => {
                     </div>
                 </div>
                 <p className="text-4xl font-bold mt-8 mb-10">от {calculator(dishData.map(dish => (dish?.attributes?.price)))} руб/день</p>
-                <button
-                    className='rounded-full bg-[var(--green)] py-3 w-full text-white text-base mb-5 hover:!bg-green-600 transition'>
-                    Заказать
-                </button>
+                {selectedDate.isAfter(twoDaysFromToday) && (
+                    <button
+                        className='rounded-full bg-[var(--green)] py-3 w-full text-white text-base mb-5 hover:!bg-green-600 transition'>
+                        Заказать
+                    </button>
+                )}
+
             </div>
-
-            {/*{isAdditionalMenuVisible && (*/}
-            {/*    <ChangeDish isVisible={isAdditionalMenuVisible} setIsVisible={setIsAdditionalMenuVisible}/>*/}
-            {/*)}*/}
-
         </div>
     );
 };
