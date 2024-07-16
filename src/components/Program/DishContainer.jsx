@@ -1,13 +1,19 @@
 import React from 'react';
-import Dish from "./Dish.jsx";
+import dayjs from 'dayjs';
 import {Preloader} from "../Preloader/Preloader.jsx";
 import {Alert} from "flowbite-react";
+import Dish from "./Dish.jsx";
 import {calculator} from "../../utils/utils.js";
-import dayjs from "dayjs";
 
-const DishContainer = ({dishData, dishLoading, dishError, selectedDate, setEatingType, changedDishData}) => {
-
-    // Calculate the date two days from today
+const DishContainer = ({
+                           dishData,
+                           dishLoading,
+                           dishError,
+                           selectedDate,
+                           setEatingType,
+                           changedDishData,
+                           replaceDish
+                       }) => {
     const twoDaysFromToday = dayjs().add(1, 'day');
 
     if (dishLoading) return <Preloader/>;
@@ -22,15 +28,20 @@ const DishContainer = ({dishData, dishLoading, dishError, selectedDate, setEatin
         );
     }
 
+    const handleSubmitOrder = () => {
+        console.log('dishData on order click', dishData)
+    }
+
     return (
         <div className='w-full max-w-7xl mx-auto mt-10 mb-20 flex flex-wrap gap-10'>
-            {dishData?.map((dish) => (
+            {Array.isArray(dishData) && dishData.map((dish) => (
                 <Dish key={dish.id}
                       dish={dish}
                       selectedDate={selectedDate}
                       twoDaysFromToday={twoDaysFromToday}
                       setEatingType={setEatingType}
                       changedDishData={changedDishData}
+                      replaceDish={replaceDish}
                 />
             ))}
             <div
@@ -64,11 +75,12 @@ const DishContainer = ({dishData, dishLoading, dishError, selectedDate, setEatin
                 <p className="text-4xl font-bold mt-8 mb-10">от {calculator(dishData.map(dish => (dish?.attributes?.price)))} руб/день</p>
                 {selectedDate.isAfter(twoDaysFromToday) && (
                     <button
-                        className='rounded-full bg-[var(--green)] py-3 w-full text-white text-base mb-5 hover:!bg-green-600 transition'>
+                        className='rounded-full bg-[var(--green)] py-3 w-full text-white text-base mb-5 hover:!bg-green-600 transition'
+                        onClick={handleSubmitOrder}
+                    >
                         Заказать
                     </button>
                 )}
-
             </div>
         </div>
     );

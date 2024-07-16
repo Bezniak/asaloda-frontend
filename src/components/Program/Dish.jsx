@@ -2,10 +2,7 @@ import React, {useEffect, useState} from 'react';
 import DishModalWindow from "./DishModalWindow.jsx";
 import ChangeDish from "./ChangeDish.jsx";
 
-const Dish = ({dish, selectedDate, twoDaysFromToday, setEatingType, changedDishData}) => {
-
-    console.log('dish', dish)
-
+const Dish = ({dish, selectedDate, twoDaysFromToday, setEatingType, changedDishData, replaceDish}) => {
     const [isAdditionalMenuVisible, setIsAdditionalMenuVisible] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
@@ -17,7 +14,6 @@ const Dish = ({dish, selectedDate, twoDaysFromToday, setEatingType, changedDishD
         setShowModal(!showModal);
     };
 
-    // Disable scroll when modal is open
     useEffect(() => {
         if (showModal) {
             document.body.style.overflow = 'hidden';
@@ -25,17 +21,13 @@ const Dish = ({dish, selectedDate, twoDaysFromToday, setEatingType, changedDishD
             document.body.style.overflow = 'auto';
         }
 
-        // Clean up on unmount
         return () => {
             document.body.style.overflow = 'auto';
         };
     }, [showModal]);
 
-
     return (
-        <div
-            className="max-w-sm bg-white border border-gray-200 rounded-lg shadow"
-        >
+        <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
             <img className="rounded-t-lg cursor-pointer"
                  src={import.meta.env.VITE_UPLOAD_URL + dish?.attributes?.main_img?.data?.attributes?.url}
                  alt={dish?.attributes?.main_img?.data?.attributes?.name}
@@ -60,19 +52,18 @@ const Dish = ({dish, selectedDate, twoDaysFromToday, setEatingType, changedDishD
                         >
                             Заменить
                         </button>
-
                     )}
                 </div>
             </div>
             {showModal && (
                 <DishModalWindow onClose={closeModal} dishData={dish}/>
             )}
-
             {isAdditionalMenuVisible && (
                 <ChangeDish isAdditionalMenuVisible={isAdditionalMenuVisible}
                             setIsAdditionalMenuVisible={setIsAdditionalMenuVisible}
                             dish={dish}
                             changedDishData={changedDishData}
+                            replaceDish={replaceDish}
                 />
             )}
         </div>

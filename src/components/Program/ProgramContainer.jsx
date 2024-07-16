@@ -1,20 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from "react-router-dom";
+import {useParams} from 'react-router-dom';
+import dayjs from 'dayjs';
 import useFetchAllData from "../../api/useFetchAllData.js";
 import {Preloader} from "../Preloader/Preloader.jsx";
 import WelcomeSection from "./WelcomeSection.jsx";
 import DescriptionBlockContainer from "./DescriptionBlockContainer.jsx";
-import DishContainer from "./DishContainer.jsx";
-import dayjs from "dayjs";
 import DateCalendar from "./DateCalendar.jsx";
+import DishContainer from "./DishContainer.jsx";
 
 const ProgramContainer = () => {
     const {id} = useParams();
     const [dates, setDates] = useState([]);
     const [selectedDate, setSelectedDate] = useState(dayjs().add(2, 'day'));
     const [eatingType, setEatingType] = useState(null);
+    const [selectedDishes, setSelectedDishes] = useState([]);
+    const [replacedDishes, setReplacedDishes] = useState({});
 
-    console.log('eatingType', eatingType)
+    console.log('replacedDishes', replacedDishes)
 
 
     const {data, loading, error} = useFetchAllData(`/programs/${id}?populate=*`);
@@ -25,6 +27,8 @@ const ProgramContainer = () => {
     } = useFetchAllData(
         `/dishes?filters[week_day][$eq]=${selectedDate.format('dd')}&&filters[program_type][$eq]=${data?.attributes?.program_name}&populate=*`
     );
+    console.log('dishData', dishData)
+
     const {
         data: changedDishData,
         loading: changedDishLoading,
@@ -32,8 +36,6 @@ const ProgramContainer = () => {
     } = useFetchAllData(
         `/changed-dishes?filters[program_type][$eq]=${data?.attributes?.program_name}&&filters[eating_type][$eq]=${eatingType}&populate=*`
     );
-
-    console.log('changedDishData', changedDishData)
 
     useEffect(() => {
         const today = dayjs();
@@ -49,19 +51,38 @@ const ProgramContainer = () => {
         setDates(newDates);
     }, []);
 
+    useEffect(() => {
+        if (dishData && Array.isArray(dishData)) {
+            const currentReplacedDishes = replacedDishes[selectedDate.format('DD-MM-YYYY')] || dishData;
+            setSelectedDishes(currentReplacedDishes);
+        }
+    }, [dishData, selectedDate, replacedDishes]);
+
     if (loading || dishLoading) return <Preloader/>;
+
+    const replaceDish = (oldDishId, newDish) => {
+        setReplacedDishes((prevReplacedDishes) => {
+            const currentReplacedDishes = prevReplacedDishes[selectedDate.format('DD-MM-YYYY')] || selectedDishes;
+            const updatedDishes = currentReplacedDishes.map(dish => dish.id === oldDishId ? newDish : dish);
+            return {
+                ...prevReplacedDishes,
+                [selectedDate.format('DD-MM-YYYY')]: updatedDishes
+            };
+        });
+    };
 
     return (
         <div>
             <WelcomeSection data={data}/>
             <DescriptionBlockContainer data={data}/>
             <DateCalendar dates={dates} selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
-            <DishContainer dishData={dishData}
+            <DishContainer dishData={selectedDishes}
                            dishLoading={dishLoading}
                            dishError={dishError}
                            selectedDate={selectedDate}
                            setEatingType={setEatingType}
                            changedDishData={changedDishData}
+                           replaceDish={replaceDish}
             />
         </div>
     );

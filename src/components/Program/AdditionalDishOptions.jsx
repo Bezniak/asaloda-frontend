@@ -3,7 +3,7 @@ import React from 'react';
 const AdditionalDishOptions = ({item}) => {
     return (
         <div
-            className="max-w-80 bg-white border border-gray-200 rounded-lg shadow"
+            className="max-w-80 cursor-pointer bg-white border border-gray-200 rounded-lg shadow"
             key={item.id}
         >
             <img
