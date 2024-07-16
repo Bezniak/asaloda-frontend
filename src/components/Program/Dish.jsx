@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import DishModalWindow from "./DishModalWindow.jsx";
 import ChangeDish from "./ChangeDish.jsx";
-import dayjs from "dayjs";
 
-const Dish = ({dish, selectedDate, twoDaysFromToday}) => {
+const Dish = ({dish, selectedDate, twoDaysFromToday, setEatingType, changedDishData}) => {
+
+    console.log('dish', dish)
 
     const [isAdditionalMenuVisible, setIsAdditionalMenuVisible] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -31,10 +32,9 @@ const Dish = ({dish, selectedDate, twoDaysFromToday}) => {
     }, [showModal]);
 
 
-
     return (
         <div
-            className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+            className="max-w-sm bg-white border border-gray-200 rounded-lg shadow"
         >
             <img className="rounded-t-lg cursor-pointer"
                  src={import.meta.env.VITE_UPLOAD_URL + dish?.attributes?.main_img?.data?.attributes?.url}
@@ -53,10 +53,14 @@ const Dish = ({dish, selectedDate, twoDaysFromToday}) => {
                     </p>
                     {selectedDate.isAfter(twoDaysFromToday) && (
                         <button className='border-0 text-base text-[var(--oringe)]'
-                                onClick={() => setIsAdditionalMenuVisible(!isAdditionalMenuVisible)}
+                                onClick={() => {
+                                    setIsAdditionalMenuVisible(!isAdditionalMenuVisible);
+                                    setEatingType(dish?.attributes?.eating_type);
+                                }}
                         >
                             Заменить
                         </button>
+
                     )}
                 </div>
             </div>
@@ -68,6 +72,7 @@ const Dish = ({dish, selectedDate, twoDaysFromToday}) => {
                 <ChangeDish isAdditionalMenuVisible={isAdditionalMenuVisible}
                             setIsAdditionalMenuVisible={setIsAdditionalMenuVisible}
                             dish={dish}
+                            changedDishData={changedDishData}
                 />
             )}
         </div>

@@ -12,8 +12,10 @@ const ProgramContainer = () => {
     const {id} = useParams();
     const [dates, setDates] = useState([]);
     const [selectedDate, setSelectedDate] = useState(dayjs().add(2, 'day'));
+    const [eatingType, setEatingType] = useState(null);
 
-    console.log('selectedDate', selectedDate)
+    console.log('eatingType', eatingType)
+
 
     const {data, loading, error} = useFetchAllData(`/programs/${id}?populate=*`);
     const {
@@ -23,6 +25,15 @@ const ProgramContainer = () => {
     } = useFetchAllData(
         `/dishes?filters[week_day][$eq]=${selectedDate.format('dd')}&&filters[program_type][$eq]=${data?.attributes?.program_name}&populate=*`
     );
+    const {
+        data: changedDishData,
+        loading: changedDishLoading,
+        error: changedDishError
+    } = useFetchAllData(
+        `/changed-dishes?filters[program_type][$eq]=${data?.attributes?.program_name}&&filters[eating_type][$eq]=${eatingType}&populate=*`
+    );
+
+    console.log('changedDishData', changedDishData)
 
     useEffect(() => {
         const today = dayjs();
@@ -45,7 +56,13 @@ const ProgramContainer = () => {
             <WelcomeSection data={data}/>
             <DescriptionBlockContainer data={data}/>
             <DateCalendar dates={dates} selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
-            <DishContainer dishData={dishData} dishLoading={dishLoading} dishError={dishError} selectedDate={selectedDate}/>
+            <DishContainer dishData={dishData}
+                           dishLoading={dishLoading}
+                           dishError={dishError}
+                           selectedDate={selectedDate}
+                           setEatingType={setEatingType}
+                           changedDishData={changedDishData}
+            />
         </div>
     );
 };

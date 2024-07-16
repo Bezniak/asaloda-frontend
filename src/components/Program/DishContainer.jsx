@@ -5,7 +5,7 @@ import {Alert} from "flowbite-react";
 import {calculator} from "../../utils/utils.js";
 import dayjs from "dayjs";
 
-const DishContainer = ({dishData, dishLoading, dishError, selectedDate}) => {
+const DishContainer = ({dishData, dishLoading, dishError, selectedDate, setEatingType, changedDishData}) => {
 
     // Calculate the date two days from today
     const twoDaysFromToday = dayjs().add(1, 'day');
@@ -29,6 +29,8 @@ const DishContainer = ({dishData, dishLoading, dishError, selectedDate}) => {
                       dish={dish}
                       selectedDate={selectedDate}
                       twoDaysFromToday={twoDaysFromToday}
+                      setEatingType={setEatingType}
+                      changedDishData={changedDishData}
                 />
             ))}
             <div
