@@ -78,6 +78,14 @@ p {
     text-align: center;
 }
 
+.bg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    background: linear-gradient(135deg, #e0f7fa, #e0fce1, #ffe0e0);
+}
+
 
 
 

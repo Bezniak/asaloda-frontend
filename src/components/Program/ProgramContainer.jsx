@@ -7,6 +7,7 @@ import WelcomeSection from "./WelcomeSection.jsx";
 import DescriptionBlockContainer from "./DescriptionBlockContainer.jsx";
 import DateCalendar from "./DateCalendar.jsx";
 import DishContainer from "./DishContainer.jsx";
+import OrderContainer from "../Order/OrderContainer.jsx";
 
 const ProgramContainer = () => {
     const {id} = useParams();
@@ -16,10 +17,11 @@ const ProgramContainer = () => {
     const [selectedDishes, setSelectedDishes] = useState([]);
     const [replacedDishes, setReplacedDishes] = useState({});
 
-    console.log('replacedDishes', replacedDishes)
 
 
     const {data, loading, error} = useFetchAllData(`/programs/${id}?populate=*`);
+    console.log('data', data)
+
     const {
         data: dishData,
         loading: dishLoading,
@@ -83,6 +85,10 @@ const ProgramContainer = () => {
                            setEatingType={setEatingType}
                            changedDishData={changedDishData}
                            replaceDish={replaceDish}
+            />
+            <OrderContainer programName={data?.attributes?.program_name}
+                            programImg={data?.attributes?.order_img}
+                            bg={data?.attributes?.bg_color}
             />
         </div>
     );
