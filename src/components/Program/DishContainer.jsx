@@ -12,7 +12,8 @@ const DishContainer = ({
                            selectedDate,
                            setEatingType,
                            changedDishData,
-                           replaceDish
+                           replaceDish,
+                           programPrice
                        }) => {
     const twoDaysFromToday = dayjs().add(1, 'day');
 
@@ -56,7 +57,7 @@ const DishContainer = ({
                     <div className='flex flex-row justify-between border-b py-2'>
                         <h3 className="text-base text-gray-700 text-left">Белки</h3>
                         <p className="text-base text-gray-700 text-right">
-                            {calculator(dishData.map(dish => (dish?.attributes?.squirrels)))}
+                            {calculator(dishData.map(dish => (dish?.attributes?.squirrels))).toFixed(1)}
                         </p>
                     </div>
                     <div className='flex flex-row justify-between border-b py-2'>
@@ -72,7 +73,7 @@ const DishContainer = ({
                         </p>
                     </div>
                 </div>
-                <p className="text-4xl font-bold mt-8 mb-10">от {calculator(dishData.map(dish => (dish?.attributes?.price)))} руб/день</p>
+                <p className="text-4xl font-bold mt-8 mb-10">от {programPrice?.attributes?.one_day_price} руб/день</p>
                 {selectedDate.isAfter(twoDaysFromToday) && (
                     <button
                         className='rounded-full bg-[var(--green)] py-3 w-full text-white text-base mb-5 hover:!bg-green-600 transition'

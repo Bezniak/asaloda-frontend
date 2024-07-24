@@ -5,7 +5,9 @@ import Select from 'react-select'
 import dayjs from "dayjs";
 
 
-const OrderForm = ({programName}) => {
+const OrderForm = ({program}) => {
+
+    console.log('program', program)
 
     const today = dayjs();
     const [isFocused, setIsFocused] = useState(false);
@@ -14,6 +16,9 @@ const OrderForm = ({programName}) => {
     const [promoCodeValue, setPromoCodeValue] = useState("");
     const [discount, setDiscount] = useState(null);
     const [promoCodeMessage, setPromoCodeMessage] = useState("");
+
+    const [showComment, setShowComment] = useState(false);
+    const [commentValue, setCommentValue] = useState("");
 
     const {
         register,
@@ -63,6 +68,36 @@ const OrderForm = ({programName}) => {
         {value: '21:00 - 23:00', label: '21:00 - 23:00'},
     ]
 
+    const durations = [
+        {value: 'oneDay', label: '1 день'},
+        {value: 'twoDays', label: '2 дня'},
+        {value: 'threeDays', label: '3 дня'},
+        {value: 'fourDays', label: '4 дня'},
+        {value: 'fiveDays', label: '5 дней'},
+        {value: 'sixDays', label: '6 дней'},
+        {value: 'oneWeek', label: '1 неделя (7 дней)'},
+        {value: 'twoWeeks', label: '2 недели (14 дней)'},
+        {value: 'threeWeeks', label: '3 недели (21 день)'},
+        {value: 'fourWeeks', label: '4 недели (28 дней)'},
+    ];
+
+    // State for duration selection and prices
+    const [selectedDuration, setSelectedDuration] = useState(durations[7]); // Default to 2 weeks
+
+    // Mapping of durations to their prices
+    const durationPrices = {
+        oneDay: program?.attributes?.one_day_price,
+        twoDays: program?.attributes?.two_day_price,
+        threeDays: program?.attributes?.three_day_price,
+        fourDays: program?.attributes?.fore_day_price,
+        fiveDays: program?.attributes?.five_day_price,
+        sixDays: program?.attributes?.six_day_price,
+        oneWeek: program?.attributes?.one_week_price,
+        twoWeeks: program?.attributes?.two_week_price,
+        threeWeeks: program?.attributes?.three_week_price,
+        fourWeeks: program?.attributes?.four_week_price,
+    };
+
     const applyPromoCode = async () => {
         try {
             const response = await fetch(import.meta.env.VITE_API_URL + `/promo-codes?filters[code][$eq]=${promoCodeValue}`);
@@ -84,55 +119,16 @@ const OrderForm = ({programName}) => {
     return (
         <div>
             <form onSubmit={handleSubmit(onSubmit)} className='bg-white p-10 flex flex-col gap-5'>
-
-                <div className='flex justify-between items-center gap-5'>
-                    <div className='border w-full p-3 flex justify-start items-center gap-5 rounded'>
-                        <input type="checkbox"
-                               name='oneDay'
-                               id='oneDay'
-                               {...register('oneDay', {})}
-                        />
-                        <label htmlFor="oneDay" className='cursor-pointer'>Один день</label>
-                    </div>
-
-                    <div className='border w-full p-3 flex justify-start items-center gap-5 rounded'>
-                        <input type="checkbox"
-                               name='oneWeek'
-                               id='oneWeek'
-                               {...register('oneWeek', {})}
-                        />
-                        <label htmlFor="oneWeek">Неделя (7 дней)</label>
-                    </div>
-                </div>
-
-                <div className='flex justify-between items-center gap-5'>
-                    <div className='border w-full p-3 flex justify-start items-center gap-5 rounded'>
-                        <input type="checkbox"
-                               name='twoWeeks'
-                               id='twoWeeks'
-                               {...register('twoWeeks', {})}
-                        />
-                        <label htmlFor="twoWeeks" className='cursor-pointer'>2 недели (14 дней)</label>
-                    </div>
-
-                    <div className='border w-full p-3 flex justify-start items-center gap-5 rounded'>
-                        <input type="checkbox"
-                               name='threeWeeks'
-                               id='threeWeeks'
-                               {...register('threeWeeks', {})}
-                        />
-                        <label htmlFor="threeWeeks">3 недели (21 день)</label>
-                    </div>
-                </div>
-
-                <div className='border w-full p-3 flex justify-start items-center gap-5 rounded'>
-                    <input type="checkbox"
-                           name='fourWeeks'
-                           id='fourWeeks'
-                           {...register('fourWeeks', {})}
-                    />
-                    <label htmlFor="fourWeeks">4 недели (28 дней)</label>
-                </div>
+                <Select
+                    options={durations}
+                    styles={customStyles}
+                    className='w-full'
+                    placeholder='Выберите продолжительность программы'
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
+                    defaultValue={durations[7]} // Default to 2 weeks
+                    onChange={(selectedOption) => setSelectedDuration(selectedOption)}
+                />
 
                 <hr className='h-0.5 my-2 bg-gray-200 border-0'/>
 
@@ -260,25 +256,51 @@ const OrderForm = ({programName}) => {
                         onFocus={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(false)}
                     />
-
-                    {/*<select name="startTime" id="startTime" className='p-3 w-full border rounded outline-none'>*/}
-                    {/*    <option disabled value="startTime">Время</option>*/}
-                    {/*    <option value="18-20">18:00 - 20:00</option>*/}
-                    {/*    <option value="21-23">21:00 - 23:00</option>*/}
-                    {/*</select>*/}
                 </div>
+
+                <hr className='h-0.5 my-2 bg-gray-200 border-0'/>
+
+
+                <div className='border w-full p-3 flex justify-start items-center gap-5 rounded'>
+                    <input
+                        type="checkbox"
+                        name='comment'
+                        id='comment'
+                        {...register('comment')}
+                        checked={showComment}
+                        onChange={() => setShowComment(!showComment)}
+                    />
+                    <label htmlFor="comment">Добавить комментарий к заказу</label>
+                </div>
+
+                {showComment && (
+                    <div className='flex items-center gap-5'>
+                        <textarea
+                            name='comment'
+                            id='comment'
+                            {...register('comment', {})}
+                            value={commentValue}
+                            onChange={(e) => setCommentValue(e.target.value)}
+                            className='w-full border p-3 rounded outline-none'
+                            placeholder='Комментарий'
+                        />
+                    </div>
+                )}
+
 
                 <hr className='h-0.5 my-2 bg-gray-200 border-0'/>
 
                 <div className='flex flex-col gap-5'>
                     <div className='flex justify-between items-center border-b border-dashed pb-3'>
-                        <p className='text-gray-400'>{programName}</p>
-                        <p className='font-medium'>100 BYN</p>
+                        <p className='text-gray-400'>{program?.attributes?.program_name}</p>
+                        <p className='font-medium'>{discount
+                            ? durationPrices[selectedDuration.value] * (1 - discount / 100)
+                            : durationPrices[selectedDuration.value]} BYN</p>
                     </div>
 
                     <div className='flex justify-between items-center border-b border-dashed pb-3'>
                         <p className='text-gray-400'>Скидка</p>
-                        <p className='text-[var(--green)] font-medium'>-20 BYN</p>
+                        <p className='text-[var(--green)] font-medium'>{discount || ''} %</p>
                     </div>
 
                     <div className='flex justify-between items-center border-b border-dashed pb-3'>

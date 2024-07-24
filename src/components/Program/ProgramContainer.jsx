@@ -85,8 +85,9 @@ const ProgramContainer = () => {
                            setEatingType={setEatingType}
                            changedDishData={changedDishData}
                            replaceDish={replaceDish}
+                           programPrice={data}
             />
-            <OrderContainer programName={data?.attributes?.program_name}
+            <OrderContainer program={data}
                             programImg={data?.attributes?.order_img}
                             bg={data?.attributes?.bg_color}
             />

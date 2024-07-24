@@ -1,7 +1,7 @@
 import React from 'react';
 import OrderForm from "./OrderForm.jsx";
 
-const OrderContainer = ({programName, programImg, bg}) => {
+const OrderContainer = ({program, programImg, bg}) => {
     return (
         <div className='bg'>
             <div className='w-full max-w-5xl mx-auto md:mt-10 md:mb-20 xs:mt-10 xs:mb-10'>
@@ -9,7 +9,7 @@ const OrderContainer = ({programName, programImg, bg}) => {
                      style={{backgroundColor: `${bg}`}}
                 >
                     <div>
-                        <h2 className='uppercase text-white font-bold text-4xl'>Заказать {programName}</h2>
+                        <h2 className='uppercase text-white font-bold text-4xl'>Заказать {program?.attributes?.program_name}</h2>
                     </div>
                     <div>
                         <img className='w-64 h-auto'
@@ -18,7 +18,7 @@ const OrderContainer = ({programName, programImg, bg}) => {
                         />
                     </div>
                 </div>
-                <OrderForm programName={programName}/>
+                <OrderForm program={program} />
             </div>
         </div>
     );
