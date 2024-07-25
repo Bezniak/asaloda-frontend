@@ -98,6 +98,12 @@ const OrderForm = ({program}) => {
         fourWeeks: program?.attributes?.four_week_price,
     };
 
+    const bonusesMapping = {
+        twoWeeks: program?.attributes?.bonuses_for_two_weeks,
+        threeWeeks: program?.attributes?.bonuses_for_three_weeks,
+        fourWeeks: program?.attributes?.bonuses_for_four_weeks,
+    };
+
     const applyPromoCode = async () => {
         try {
             const response = await fetch(import.meta.env.VITE_API_URL + `/promo-codes?filters[code][$eq]=${promoCodeValue}`);
@@ -293,24 +299,39 @@ const OrderForm = ({program}) => {
                 <div className='flex flex-col gap-5'>
                     <div className='flex justify-between items-center border-b border-dashed pb-3'>
                         <p className='text-gray-400'>{program?.attributes?.program_name}</p>
-                        <p className='font-medium'>{discount
-                            ? durationPrices[selectedDuration.value] * (1 - discount / 100)
-                            : durationPrices[selectedDuration.value]} BYN</p>
+                        <p className='font-medium'>{durationPrices[selectedDuration.value]} BYN</p>
                     </div>
 
-                    <div className='flex justify-between items-center border-b border-dashed pb-3'>
-                        <p className='text-gray-400'>Скидка</p>
-                        <p className='text-[var(--green)] font-medium'>{discount || ''} %</p>
-                    </div>
+                    {discount && (
+                        <div className='flex justify-between items-center border-b border-dashed pb-3'>
+                            <p className='text-gray-400'>Скидка по промокоду</p>
+                            <p className='text-[var(--green)] font-medium'>{discount} %</p>
+                        </div>
+                    )}
 
-                    <div className='flex justify-between items-center border-b border-dashed pb-3'>
-                        <p className='text-gray-400'>Будет начислено бонусов</p>
-                        <p className='text-[var(--green)] font-medium'>200 Б</p>
-                    </div>
+                    {discount && (
+                        <div className='flex justify-between items-center border-b border-dashed pb-3'>
+                            <p className='text-gray-400'>Сумма скидки</p>
+                            <p className='text-[var(--green)] font-medium'>
+                                {(durationPrices[selectedDuration.value] * (discount / 100)).toFixed(2)} BYN
+                            </p>
+                        </div>
+                    )}
+
+                    {bonusesMapping[selectedDuration.value] && (
+                        <div className='flex justify-between items-center border-b border-dashed pb-3'>
+                            <h2 className='text-gray-400'>Будет начислено бонусов</h2>
+                            <p className='text-[var(--green)] font-medium'>{bonusesMapping[selectedDuration.value]} Б</p>
+                        </div>
+                    )}
 
                     <div className='flex justify-between items-center border-b border-dashed pb-3'>
                         <p className='text-gray-400'>Итого</p>
-                        <p className='text-[var(--green)] font-extrabold'>80 BYN</p>
+                        <p className='text-[var(--green)] font-extrabold'>
+                            {discount
+                                ? (durationPrices[selectedDuration.value] * (1 - discount / 100)).toFixed(2)
+                                : durationPrices[selectedDuration.value]} BYN
+                        </p>
                     </div>
                 </div>
 
