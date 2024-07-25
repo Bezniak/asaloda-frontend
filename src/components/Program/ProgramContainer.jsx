@@ -89,7 +89,7 @@ const ProgramContainer = () => {
             />
             <OrderContainer program={data}
                             programImg={data?.attributes?.order_img}
-                            bg={data?.attributes?.bg_color}
+                            color={data?.attributes?.bg_color}
             />
         </div>
     );

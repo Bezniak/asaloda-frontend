@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
-import {useForm} from "react-hook-form";
+import {useForm, Controller} from "react-hook-form";
 import {NavLink} from "react-router-dom";
 import Select from 'react-select'
 import dayjs from "dayjs";
 
+const OrderForm = ({program, color}) => {
 
-const OrderForm = ({program}) => {
+    console.log('program', program);
 
-    console.log('program', program)
+    const programName = program?.attributes?.program_name;
 
     const today = dayjs();
     const [isFocused, setIsFocused] = useState(false);
@@ -24,24 +25,40 @@ const OrderForm = ({program}) => {
         register,
         handleSubmit,
         watch,
-        errors
-    } =
-        useForm()
-
+        formState: {errors},
+        setValue,
+        control,
+        trigger,
+    } = useForm();
 
     const onSubmit = (data) => {
-        console.log(data)
-    }
+        const formData = {
+            ...data,
+            deliveryTime: data.deliveryTime.label,
+            duration: data.duration.label,
+            startDate: data.startDate.label,
+            totalPrice: calculateTotalPrice(data.duration.value, discount),
+            programName: programName,
+        };
+        console.log(formData);
+    };
 
+    const calculateTotalPrice = (duration, discount) => {
+        const basePrice = durationPrices[duration];
+        return discount
+            ? (basePrice * (1 - discount / 100)).toFixed(2)
+            : basePrice;
+    };
+
+    const getBonuses = (duration) => {
+        return bonusesMapping[duration] || 0;
+    };
 
     const dateOptions = Array.from({length: 14}, (_, i) => {
         const date = today.add(2 + i, 'day');
         return {value: date.format('DD MMMM'), label: date.format('DD MMMM')};
     });
 
-    // Состояние для отслеживания фокуса на выпадающем списке
-
-    // Кастомные стили для компонента Select
     const customStyles = {
         control: (provided, state) => ({
             ...provided,
@@ -66,7 +83,7 @@ const OrderForm = ({program}) => {
     const timeOptions = [
         {value: '18:00 - 20:00', label: '18:00 - 20:00'},
         {value: '21:00 - 23:00', label: '21:00 - 23:00'},
-    ]
+    ];
 
     const durations = [
         {value: 'oneDay', label: '1 день'},
@@ -81,10 +98,8 @@ const OrderForm = ({program}) => {
         {value: 'fourWeeks', label: '4 недели (28 дней)'},
     ];
 
-    // State for duration selection and prices
-    const [selectedDuration, setSelectedDuration] = useState(durations[7]); // Default to 2 weeks
+    const [selectedDuration, setSelectedDuration] = useState(durations[7]);
 
-    // Mapping of durations to their prices
     const durationPrices = {
         oneDay: program?.attributes?.one_day_price,
         twoDays: program?.attributes?.two_day_price,
@@ -125,16 +140,34 @@ const OrderForm = ({program}) => {
     return (
         <div>
             <form onSubmit={handleSubmit(onSubmit)} className='bg-white p-10 flex flex-col gap-5'>
-                <Select
-                    options={durations}
-                    styles={customStyles}
-                    className='w-full'
-                    placeholder='Выберите продолжительность программы'
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
-                    defaultValue={durations[7]} // Default to 2 weeks
-                    onChange={(selectedOption) => setSelectedDuration(selectedOption)}
-                />
+
+                <div className='mb-4'>
+                    <Controller
+                        name="duration"
+                        control={control}
+                        defaultValue={durations[7]}
+                        rules={{required: true}}
+                        render={({field}) => (
+                            <Select
+                                {...field}
+                                options={durations}
+                                styles={customStyles}
+                                className='w-full'
+                                placeholder='Выберите продолжительность программы'
+                                onFocus={() => setIsFocused(true)}
+                                onBlur={() => {
+                                    setIsFocused(false);
+                                    trigger("duration");
+                                }}
+                                onChange={(selectedOption) => {
+                                    setSelectedDuration(selectedOption);
+                                    field.onChange(selectedOption);
+                                }}
+                            />
+                        )}
+                    />
+                    {errors.duration && <span className='text-red-500'>Выберите продолжительность программы</span>}
+                </div>
 
                 <hr className='h-0.5 my-2 bg-gray-200 border-0'/>
 
@@ -143,7 +176,7 @@ const OrderForm = ({program}) => {
                         <input type="checkbox"
                                name='excludeSaturday'
                                id='excludeSaturday'
-                               {...register('excludeSaturday', {})}
+                               {...register('excludeSaturday')}
                         />
                         <label htmlFor="excludeSaturday">Исключить субботу</label>
                     </div>
@@ -152,7 +185,7 @@ const OrderForm = ({program}) => {
                         <input type="checkbox"
                                name='excludeSunday'
                                id='excludeSunday'
-                               {...register('excludeSunday', {})}
+                               {...register('excludeSunday')}
                         />
                         <label htmlFor="excludeSunday">Исключить воскресенье</label>
                     </div>
@@ -178,7 +211,7 @@ const OrderForm = ({program}) => {
                             type="text"
                             name='promoCodeValue'
                             id='promoCodeValue'
-                            {...register('promoCodeValue', {required: true})}
+                            {...register('promoCodeValue', {required: showInputPromoCode})}
                             value={promoCodeValue}
                             onChange={(e) => setPromoCodeValue(e.target.value)}
                             className='w-full border p-3 rounded outline-none'
@@ -200,72 +233,114 @@ const OrderForm = ({program}) => {
 
                 <h2 className='text-3xl text-left text-bold'>Доставка</h2>
                 <div className='flex gap-5'>
-                    <input type="text"
-                           name='userName'
-                           id='userName'
-                           {...register('userName', {
-                               required: true,
-                           })}
-                           placeholder='Имя'
-                           className='w-full border p-3 border-gray-200 rounded outline-none'
-                    />
-                    <input type="tel"
-                           name='userPhone'
-                           id='userPhone'
-                           {...register('userPhone', {
-                               required: true,
-                               pattern: /^[+]?[0-9\s]*$/,
-                               minLength: 10,
-                               maxLength: 15
-                           })}
-                           placeholder='Телефон'
-                           className='w-full border p-3 border-gray-200 rounded outline-none'
-                    />
+
+                    <div className='flex flex-col w-full'>
+                        <input type="text"
+                               name='userName'
+                               id='userName'
+                               {...register('userName', {required: true})}
+                               placeholder='Имя'
+                               className={`w-full border p-3 border-gray-200 rounded outline-none ${errors.userName ? 'border-red-500' : ''}`}
+                               onBlur={() => trigger("userName")}
+                        />
+                        {errors.userName && <span className='text-red-500 mt-2 mb-2 text-sm'>Введите имя</span>}
+                    </div>
+
+                    <div className='flex flex-col w-full'>
+                        <input type="tel"
+                               name='userPhone'
+                               id='userPhone'
+                               {...register('userPhone', {
+                                   required: true,
+                                   pattern: /^[+]?[0-9\s]*$/,
+                                   minLength: 10,
+                                   maxLength: 15
+                               })}
+                               placeholder='Телефон'
+                               className={`w-full border p-3 border-gray-200 rounded outline-none ${errors.userPhone ? 'border-red-500' : ''}`}
+                               onBlur={() => trigger("userPhone")}
+                        />
+                        {errors.userPhone &&
+                            <span className='text-red-500 mt-2 mb-2 text-sm'>Введите правильный номер телефона</span>}
+                    </div>
                 </div>
                 <div className='flex gap-5'>
-                    <input type="email"
-                           name='email'
-                           id='email'
-                           {...register('email', {
-                               required: true
-                           })}
-                           placeholder='Email (обязательно)'
-                           className='w-full border p-3 border-gray-200 rounded outline-none'
-                    />
-                    <input type="text"
-                           name='address'
-                           id='address'
-                           {...register('address', {
-                               required: true,
-                           })}
-                           placeholder='Адрес: г. Гродно, ул. Горького, 91, кв. 22'
-                           className='p-3 w-full border rounded outline-none'
-                    />
+
+                    <div className='flex flex-col w-full'>
+                        <input type="email"
+                               name='email'
+                               id='email'
+                               {...register('email', {required: true})}
+                               placeholder='Email (обязательно)'
+                               className={`w-full border p-3 border-gray-200 rounded outline-none ${errors.email ? 'border-red-500' : ''}`}
+                               onBlur={() => trigger("email")}
+                        />
+                        {errors.email && <span className='text-red-500 mt-2 mb-2 text-sm'>Введите email</span>}
+                    </div>
+
+                    <div className='flex flex-col w-full'>
+                        <input type="text"
+                               name='address'
+                               id='address'
+                               {...register('address', {required: true})}
+                               placeholder='Адрес: г. Гродно, ул. Горького, 91, кв. 22'
+                               className={`p-3 w-full border rounded outline-none ${errors.address ? 'border-red-500' : ''}`}
+                               onBlur={() => trigger("address")}
+                        />
+                        {errors.address && <span className='text-red-500 mt-2 mb-2 text-sm'>Введите адрес</span>}
+                    </div>
                 </div>
 
                 <div className='flex gap-5'>
 
-                    <Select
-                        options={dateOptions}
-                        styles={customStyles}
-                        className='w-full'
-                        placeholder='Начиная с'
-                        onFocus={() => setIsFocused(true)}
-                        onBlur={() => setIsFocused(false)}
-                    />
+                    <div className='flex flex-col w-full'>
+                        <Controller
+                            name="startDate"
+                            control={control}
+                            rules={{required: true}}
+                            render={({field}) => (
+                                <Select
+                                    {...field}
+                                    options={dateOptions}
+                                    styles={customStyles}
+                                    className='w-full'
+                                    placeholder='Начиная с'
+                                    onFocus={() => setIsFocused(true)}
+                                    onBlur={() => {
+                                        setIsFocused(false);
+                                        trigger("startDate");
+                                    }}
+                                />
+                            )}
+                        />
+                        {errors.startDate && <span className='text-red-500 mt-2 mb-2 text-sm'>Выберите дату</span>}
+                    </div>
 
-                    <Select
-                        options={timeOptions}
-                        styles={customStyles}
-                        className='w-full'
-                        placeholder='Время'
-                        onFocus={() => setIsFocused(true)}
-                        onBlur={() => setIsFocused(false)}
-                    />
+                    <div className='flex flex-col w-full'>
+                        <Controller
+                            name="deliveryTime"
+                            control={control}
+                            rules={{required: true}}
+                            render={({field}) => (
+                                <Select
+                                    {...field}
+                                    options={timeOptions}
+                                    styles={customStyles}
+                                    className='w-full'
+                                    placeholder='Время'
+                                    onFocus={() => setIsFocused(true)}
+                                    onBlur={() => {
+                                        setIsFocused(false);
+                                        trigger("deliveryTime");
+                                    }}
+                                />
+                            )}
+                        />
+                        {errors.deliveryTime && <span className='text-red-500 mt-2 mb-2 text-sm'>Выберите время</span>}
+                    </div>
                 </div>
 
                 <hr className='h-0.5 my-2 bg-gray-200 border-0'/>
-
 
                 <div className='border w-full p-3 flex justify-start items-center gap-5 rounded'>
                     <input
@@ -284,71 +359,66 @@ const OrderForm = ({program}) => {
                         <textarea
                             name='comment'
                             id='comment'
-                            {...register('comment', {})}
+                            {...register('comment')}
                             value={commentValue}
                             onChange={(e) => setCommentValue(e.target.value)}
-                            className='w-full border p-3 rounded outline-none'
+                            className='w-full border p-3 rounded outline-none resize-none md:h-60 xs:h-36'
                             placeholder='Комментарий'
                         />
                     </div>
                 )}
 
-
                 <hr className='h-0.5 my-2 bg-gray-200 border-0'/>
 
                 <div className='flex flex-col gap-5'>
                     <div className='flex justify-between items-center border-b border-dashed pb-3'>
-                        <p className='text-gray-400'>{program?.attributes?.program_name}</p>
-                        <p className='font-medium'>{durationPrices[selectedDuration.value]} BYN</p>
+                        <p className='text-gray-400'>{programName}</p>
+                        <p className='font-medium' style={{color: `${color}`}}>{durationPrices[selectedDuration.value]} BYN</p>
                     </div>
 
                     {discount && (
-                        <div className='flex justify-between items-center border-b border-dashed pb-3'>
-                            <p className='text-gray-400'>Скидка по промокоду</p>
-                            <p className='text-[var(--green)] font-medium'>{discount} %</p>
-                        </div>
-                    )}
-
-                    {discount && (
-                        <div className='flex justify-between items-center border-b border-dashed pb-3'>
-                            <p className='text-gray-400'>Сумма скидки</p>
-                            <p className='text-[var(--green)] font-medium'>
-                                {(durationPrices[selectedDuration.value] * (discount / 100)).toFixed(2)} BYN
-                            </p>
-                        </div>
+                        <>
+                            <div className='flex justify-between items-center border-b border-dashed pb-3'>
+                                <p className='text-gray-400'>Скидка по промокоду</p>
+                                <p className='font-medium' style={{color: `${color}`}}>{discount} %</p>
+                            </div>
+                            <div className='flex justify-between items-center border-b border-dashed pb-3'>
+                                <p className='text-gray-400'>Сумма скидки</p>
+                                <p className='font-medium' style={{color: `${color}`}}>
+                                    {(durationPrices[selectedDuration.value] * (discount / 100)).toFixed(2)} BYN
+                                </p>
+                            </div>
+                        </>
                     )}
 
                     {bonusesMapping[selectedDuration.value] && (
                         <div className='flex justify-between items-center border-b border-dashed pb-3'>
                             <h2 className='text-gray-400'>Будет начислено бонусов</h2>
-                            <p className='text-[var(--green)] font-medium'>{bonusesMapping[selectedDuration.value]} Б</p>
+                            <p className='font-medium' style={{color: `${color}`}}>{bonusesMapping[selectedDuration.value]} Б</p>
                         </div>
                     )}
 
                     <div className='flex justify-between items-center border-b border-dashed pb-3'>
                         <p className='text-gray-400'>Итого</p>
-                        <p className='text-[var(--green)] font-extrabold'>
-                            {discount
-                                ? (durationPrices[selectedDuration.value] * (1 - discount / 100)).toFixed(2)
-                                : durationPrices[selectedDuration.value]} BYN
+                        <p className='font-extrabold' style={{color: `${color}`}}>
+                            {calculateTotalPrice(selectedDuration.value, discount)} BYN
                         </p>
                     </div>
                 </div>
 
-
                 <div className='flex justify-between items-center gap-10 mt-10'>
                     <p>Нажимая кнопку “Оформить” Вы даёте согласие на
-                        <NavLink to='' className='text-[var(--green)]'> обработку персональных данных</NavLink>
+                        <NavLink to='' style={{color: `${color}`}} className='font-semibold'> обработку персональных данных</NavLink>
                         &nbsp; и &nbsp;
-                        <NavLink to='' className='text-[var(--green)]'> соглашаетесь с публичной офертой</NavLink>
+                        <NavLink to='' style={{color: `${color}`}} className='font-semibold'> соглашаетесь с публичной офертой</NavLink>
                     </p>
                     <button type="submit"
                             className='bg-[var(--green)] px-20 py-5 rounded-full w-fit text-white'
+                            style={{backgroundColor: `${color}`}}
                     >
                         Оформить
                     </button>
                 </div>
-
             </form>
         </div>
     );
