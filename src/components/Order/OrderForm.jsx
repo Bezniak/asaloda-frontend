@@ -1,12 +1,10 @@
 import React, {useState} from 'react';
-import {useForm, Controller} from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 import {NavLink} from "react-router-dom";
 import Select from 'react-select'
 import dayjs from "dayjs";
 
 const OrderForm = ({program, color}) => {
-
-    console.log('program', program);
 
     const programName = program?.attributes?.program_name;
 
@@ -31,6 +29,25 @@ const OrderForm = ({program, color}) => {
         trigger,
     } = useForm();
 
+    const oneDayPrice = program?.attributes?.one_day_price;
+    const bonusesForOrdering = program?.attributes?.bonuses_for_ordering;
+
+    const calculateTotalPrice = (duration, discount) => {
+        const basePrice = oneDayPrice * duration;
+        return discount
+            ? (basePrice * (1 - discount / 100)).toFixed(2)
+            : basePrice.toFixed(2);
+    };
+
+    const calculateDiscountAmount = (duration, discount) => {
+        const basePrice = oneDayPrice * duration;
+        return discount ? ((basePrice * discount) / 100).toFixed(2) : 0;
+    };
+
+    const getBonuses = (duration) => {
+        return duration >= 14 ? bonusesForOrdering * (duration / 7) : 0;
+    };
+
     const onSubmit = (data) => {
         const formData = {
             ...data,
@@ -41,17 +58,6 @@ const OrderForm = ({program, color}) => {
             programName: programName,
         };
         console.log(formData);
-    };
-
-    const calculateTotalPrice = (duration, discount) => {
-        const basePrice = durationPrices[duration];
-        return discount
-            ? (basePrice * (1 - discount / 100)).toFixed(2)
-            : basePrice;
-    };
-
-    const getBonuses = (duration) => {
-        return bonusesMapping[duration] || 0;
     };
 
     const dateOptions = Array.from({length: 14}, (_, i) => {
@@ -86,38 +92,19 @@ const OrderForm = ({program, color}) => {
     ];
 
     const durations = [
-        {value: 'oneDay', label: '1 день'},
-        {value: 'twoDays', label: '2 дня'},
-        {value: 'threeDays', label: '3 дня'},
-        {value: 'fourDays', label: '4 дня'},
-        {value: 'fiveDays', label: '5 дней'},
-        {value: 'sixDays', label: '6 дней'},
-        {value: 'oneWeek', label: '1 неделя (7 дней)'},
-        {value: 'twoWeeks', label: '2 недели (14 дней)'},
-        {value: 'threeWeeks', label: '3 недели (21 день)'},
-        {value: 'fourWeeks', label: '4 недели (28 дней)'},
+        {value: '1', label: '1 день'},
+        {value: '2', label: '2 дня'},
+        {value: '3', label: '3 дня'},
+        {value: '4', label: '4 дня'},
+        {value: '5', label: '5 дней'},
+        {value: '6', label: '6 дней'},
+        {value: '7', label: '1 неделя (7 дней)'},
+        {value: '14', label: '2 недели (14 дней)'},
+        {value: '21', label: '3 недели (21 день)'},
+        {value: '28', label: '4 недели (28 дней)'},
     ];
 
     const [selectedDuration, setSelectedDuration] = useState(durations[7]);
-
-    const durationPrices = {
-        oneDay: program?.attributes?.one_day_price,
-        twoDays: program?.attributes?.two_day_price,
-        threeDays: program?.attributes?.three_day_price,
-        fourDays: program?.attributes?.fore_day_price,
-        fiveDays: program?.attributes?.five_day_price,
-        sixDays: program?.attributes?.six_day_price,
-        oneWeek: program?.attributes?.one_week_price,
-        twoWeeks: program?.attributes?.two_week_price,
-        threeWeeks: program?.attributes?.three_week_price,
-        fourWeeks: program?.attributes?.four_week_price,
-    };
-
-    const bonusesMapping = {
-        twoWeeks: program?.attributes?.bonuses_for_two_weeks,
-        threeWeeks: program?.attributes?.bonuses_for_three_weeks,
-        fourWeeks: program?.attributes?.bonuses_for_four_weeks,
-    };
 
     const applyPromoCode = async () => {
         try {
@@ -136,6 +123,7 @@ const OrderForm = ({program, color}) => {
             setPromoCodeMessage("Произошла ошибка при проверке промокода");
         }
     };
+
 
     return (
         <div>
@@ -168,6 +156,7 @@ const OrderForm = ({program, color}) => {
                     />
                     {errors.duration && <span className='text-red-500'>Выберите продолжительность программы</span>}
                 </div>
+
 
                 <hr className='h-0.5 my-2 bg-gray-200 border-0'/>
 
@@ -283,8 +272,8 @@ const OrderForm = ({program, color}) => {
                                name='address'
                                id='address'
                                {...register('address', {required: true})}
-                               placeholder='Адрес: г. Гродно, ул. Горького, 91, кв. 22'
-                               className={`p-3 w-full border rounded outline-none ${errors.address ? 'border-red-500' : ''}`}
+                               placeholder='Улица, номер дома, номер квартиры'
+                               className={`w-full border p-3 border-gray-200 rounded outline-none ${errors.address ? 'border-red-500' : ''}`}
                                onBlur={() => trigger("address")}
                         />
                         {errors.address && <span className='text-red-500 mt-2 mb-2 text-sm'>Введите адрес</span>}
@@ -293,10 +282,11 @@ const OrderForm = ({program, color}) => {
 
                 <div className='flex gap-5'>
 
-                    <div className='flex flex-col w-full'>
+                    <div className='mb-4 w-full'>
                         <Controller
                             name="startDate"
                             control={control}
+                            defaultValue={dateOptions[0]}
                             rules={{required: true}}
                             render={({field}) => (
                                 <Select
@@ -304,22 +294,24 @@ const OrderForm = ({program, color}) => {
                                     options={dateOptions}
                                     styles={customStyles}
                                     className='w-full'
-                                    placeholder='Начиная с'
+                                    placeholder='Выберите дату начала'
                                     onFocus={() => setIsFocused(true)}
                                     onBlur={() => {
                                         setIsFocused(false);
                                         trigger("startDate");
                                     }}
+                                    onChange={(selectedOption) => field.onChange(selectedOption)}
                                 />
                             )}
                         />
-                        {errors.startDate && <span className='text-red-500 mt-2 mb-2 text-sm'>Выберите дату</span>}
+                        {errors.startDate && <span className='text-red-500'>Выберите дату начала</span>}
                     </div>
 
-                    <div className='flex flex-col w-full'>
+                    <div className='mb-4 w-full'>
                         <Controller
                             name="deliveryTime"
                             control={control}
+                            defaultValue={timeOptions[0]}
                             rules={{required: true}}
                             render={({field}) => (
                                 <Select
@@ -327,16 +319,17 @@ const OrderForm = ({program, color}) => {
                                     options={timeOptions}
                                     styles={customStyles}
                                     className='w-full'
-                                    placeholder='Время'
+                                    placeholder='Выберите время доставки'
                                     onFocus={() => setIsFocused(true)}
                                     onBlur={() => {
                                         setIsFocused(false);
                                         trigger("deliveryTime");
                                     }}
+                                    onChange={(selectedOption) => field.onChange(selectedOption)}
                                 />
                             )}
                         />
-                        {errors.deliveryTime && <span className='text-red-500 mt-2 mb-2 text-sm'>Выберите время</span>}
+                        {errors.deliveryTime && <span className='text-red-500'>Выберите время доставки</span>}
                     </div>
                 </div>
 
@@ -372,8 +365,12 @@ const OrderForm = ({program, color}) => {
 
                 <div className='flex flex-col gap-5'>
                     <div className='flex justify-between items-center border-b border-dashed pb-3'>
-                        <p className='text-gray-400'>{programName}</p>
-                        <p className='font-medium' style={{color: `${color}`}}>{durationPrices[selectedDuration.value]} BYN</p>
+                        <p className='text-gray-400'>Стоимость программы: {programName}</p>
+                        <p className='font-medium'
+                           style={{color: `${color}`}}
+                        >
+                            {oneDayPrice * selectedDuration.value} BYN
+                        </p>
                     </div>
 
                     {discount && (
@@ -385,16 +382,20 @@ const OrderForm = ({program, color}) => {
                             <div className='flex justify-between items-center border-b border-dashed pb-3'>
                                 <p className='text-gray-400'>Сумма скидки</p>
                                 <p className='font-medium' style={{color: `${color}`}}>
-                                    {(durationPrices[selectedDuration.value] * (discount / 100)).toFixed(2)} BYN
+                                    {calculateDiscountAmount(selectedDuration.value, discount)} BYN
                                 </p>
                             </div>
                         </>
                     )}
 
-                    {bonusesMapping[selectedDuration.value] && (
+                    {getBonuses(selectedDuration.value) > 0 && (
                         <div className='flex justify-between items-center border-b border-dashed pb-3'>
                             <h2 className='text-gray-400'>Будет начислено бонусов</h2>
-                            <p className='font-medium' style={{color: `${color}`}}>{bonusesMapping[selectedDuration.value]} Б</p>
+                            <p className='font-medium'
+                               style={{color: `${color}`}}
+                            >
+                                {getBonuses(selectedDuration.value)} Б
+                            </p>
                         </div>
                     )}
 
@@ -408,9 +409,11 @@ const OrderForm = ({program, color}) => {
 
                 <div className='flex justify-between items-center gap-10 mt-10'>
                     <p>Нажимая кнопку “Оформить” Вы даёте согласие на
-                        <NavLink to='' style={{color: `${color}`}} className='font-semibold'> обработку персональных данных</NavLink>
+                        <NavLink to='' style={{color: `${color}`}} className='font-semibold'> обработку персональных
+                            данных</NavLink>
                         &nbsp; и &nbsp;
-                        <NavLink to='' style={{color: `${color}`}} className='font-semibold'> соглашаетесь с публичной офертой</NavLink>
+                        <NavLink to='' style={{color: `${color}`}} className='font-semibold'> соглашаетесь с публичной
+                            офертой</NavLink>
                     </p>
                     <button type="submit"
                             className='bg-[var(--green)] px-20 py-5 rounded-full w-fit text-white'
