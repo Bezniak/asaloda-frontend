@@ -7,7 +7,6 @@ import dayjs from "dayjs";
 const OrderForm = ({program, color}) => {
 
     const programName = program?.attributes?.program_name;
-
     const today = dayjs();
     const [isFocused, setIsFocused] = useState(false);
 
@@ -19,11 +18,14 @@ const OrderForm = ({program, color}) => {
     const [showComment, setShowComment] = useState(false);
     const [commentValue, setCommentValue] = useState("");
 
+    const [excludeSaturday, setExcludeSaturday] = useState(false);
+    const [excludeSunday, setExcludeSunday] = useState(false);
+
     const {
         register,
         handleSubmit,
         watch,
-        formState: {errors},
+        formState: { errors },
         setValue,
         control,
         trigger,
@@ -32,15 +34,21 @@ const OrderForm = ({program, color}) => {
     const oneDayPrice = program?.attributes?.one_day_price;
     const bonusesForOrdering = program?.attributes?.bonuses_for_ordering;
 
-    const calculateTotalPrice = (duration, discount) => {
-        const basePrice = oneDayPrice * duration;
+    const calculateTotalPrice = (duration, discount, excludeSaturday, excludeSunday) => {
+        let effectiveDays = duration;
+        if (excludeSaturday) effectiveDays -= 1;
+        if (excludeSunday) effectiveDays -= 1;
+        const basePrice = oneDayPrice * effectiveDays;
         return discount
             ? (basePrice * (1 - discount / 100)).toFixed(2)
             : basePrice.toFixed(2);
     };
 
-    const calculateDiscountAmount = (duration, discount) => {
-        const basePrice = oneDayPrice * duration;
+    const calculateDiscountAmount = (duration, discount, excludeSaturday, excludeSunday) => {
+        let effectiveDays = duration;
+        if (excludeSaturday) effectiveDays -= 1;
+        if (excludeSunday) effectiveDays -= 1;
+        const basePrice = oneDayPrice * effectiveDays;
         return discount ? ((basePrice * discount) / 100).toFixed(2) : 0;
     };
 
@@ -54,15 +62,15 @@ const OrderForm = ({program, color}) => {
             deliveryTime: data.deliveryTime.label,
             duration: data.duration.label,
             startDate: data.startDate.label,
-            totalPrice: calculateTotalPrice(data.duration.value, discount),
+            totalPrice: calculateTotalPrice(data.duration.value, discount, excludeSaturday, excludeSunday),
             programName: programName,
         };
         console.log(formData);
     };
 
-    const dateOptions = Array.from({length: 14}, (_, i) => {
+    const dateOptions = Array.from({ length: 14 }, (_, i) => {
         const date = today.add(2 + i, 'day');
-        return {value: date.format('DD MMMM'), label: date.format('DD MMMM')};
+        return { value: date.format('DD MMMM'), label: date.format('DD MMMM') };
     });
 
     const customStyles = {
@@ -72,8 +80,8 @@ const OrderForm = ({program, color}) => {
             border: `1px solid ${state.isFocused ? '#7ECA1D' : '#ccc'}`,
             boxShadow: state.isFocused ? '0 0 0 1px #7ECA1D' : provided.boxShadow,
             '&:hover': {
-                border: `1px solid ${state.isFocused ? '#7ECA1D' : '#ccc'}`
-            }
+                border: `1px solid ${state.isFocused ? '#7ECA1D' : '#ccc'}`,
+            },
         }),
         option: (provided, state) => ({
             ...provided,
@@ -87,21 +95,21 @@ const OrderForm = ({program, color}) => {
     };
 
     const timeOptions = [
-        {value: '18:00 - 20:00', label: '18:00 - 20:00'},
-        {value: '21:00 - 23:00', label: '21:00 - 23:00'},
+        { value: '18:00 - 20:00', label: '18:00 - 20:00' },
+        { value: '21:00 - 23:00', label: '21:00 - 23:00' },
     ];
 
     const durations = [
-        {value: '1', label: '1 день'},
-        {value: '2', label: '2 дня'},
-        {value: '3', label: '3 дня'},
-        {value: '4', label: '4 дня'},
-        {value: '5', label: '5 дней'},
-        {value: '6', label: '6 дней'},
-        {value: '7', label: '1 неделя (7 дней)'},
-        {value: '14', label: '2 недели (14 дней)'},
-        {value: '21', label: '3 недели (21 день)'},
-        {value: '28', label: '4 недели (28 дней)'},
+        { value: '1', label: '1 день' },
+        { value: '2', label: '2 дня' },
+        { value: '3', label: '3 дня' },
+        { value: '4', label: '4 дня' },
+        { value: '5', label: '5 дней' },
+        { value: '6', label: '6 дней' },
+        { value: '7', label: '1 неделя (7 дней)' },
+        { value: '14', label: '2 недели (14 дней)' },
+        { value: '21', label: '3 недели (21 день)' },
+        { value: '28', label: '4 недели (28 дней)' },
     ];
 
     const [selectedDuration, setSelectedDuration] = useState(durations[7]);
@@ -157,7 +165,6 @@ const OrderForm = ({program, color}) => {
                     {errors.duration && <span className='text-red-500'>Выберите продолжительность программы</span>}
                 </div>
 
-
                 <hr className='h-0.5 my-2 bg-gray-200 border-0'/>
 
                 <div className='flex justify-between items-center gap-5'>
@@ -166,6 +173,11 @@ const OrderForm = ({program, color}) => {
                                name='excludeSaturday'
                                id='excludeSaturday'
                                {...register('excludeSaturday')}
+                               checked={excludeSaturday}
+                               onChange={() => {
+                                   setExcludeSaturday(!excludeSaturday);
+                                   trigger("excludeSaturday");
+                               }}
                         />
                         <label htmlFor="excludeSaturday">Исключить субботу</label>
                     </div>
@@ -175,10 +187,16 @@ const OrderForm = ({program, color}) => {
                                name='excludeSunday'
                                id='excludeSunday'
                                {...register('excludeSunday')}
+                               checked={excludeSunday}
+                               onChange={() => {
+                                   setExcludeSunday(!excludeSunday);
+                                   trigger("excludeSunday");
+                               }}
                         />
                         <label htmlFor="excludeSunday">Исключить воскресенье</label>
                     </div>
                 </div>
+
 
                 <hr className='h-0.5 my-2 bg-gray-200 border-0'/>
 
@@ -200,7 +218,7 @@ const OrderForm = ({program, color}) => {
                             type="text"
                             name='promoCodeValue'
                             id='promoCodeValue'
-                            {...register('promoCodeValue', {required: showInputPromoCode})}
+                            {...register('promoCodeValue', { required: showInputPromoCode })}
                             value={promoCodeValue}
                             onChange={(e) => setPromoCodeValue(e.target.value)}
                             className='w-full border p-3 rounded outline-none'
@@ -216,7 +234,11 @@ const OrderForm = ({program, color}) => {
                     </div>
                 )}
 
-                {promoCodeMessage && <p className='text-red-500'>{promoCodeMessage}</p>}
+                {promoCodeMessage && (
+                    <div className='bg-gray-200 p-3 rounded'>
+                        <p>{promoCodeMessage}</p>
+                    </div>
+                )}
 
                 <hr className='h-0.5 my-2 bg-gray-200 border-0'/>
 
@@ -400,9 +422,9 @@ const OrderForm = ({program, color}) => {
                     )}
 
                     <div className='flex justify-between items-center border-b border-dashed pb-3'>
-                        <p className='text-gray-400'>Итого</p>
+                        <p className='text-gray-400'>Итоговая сумма:</p>
                         <p className='font-extrabold' style={{color: `${color}`}}>
-                            {calculateTotalPrice(selectedDuration.value, discount)} BYN
+                            {calculateTotalPrice(selectedDuration.value, discount, excludeSaturday, excludeSunday)} BYN
                         </p>
                     </div>
                 </div>
