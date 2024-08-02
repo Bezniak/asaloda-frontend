@@ -25,7 +25,7 @@ const OrderForm = ({program, color}) => {
         register,
         handleSubmit,
         watch,
-        formState: { errors },
+        formState: {errors},
         setValue,
         control,
         trigger,
@@ -36,8 +36,8 @@ const OrderForm = ({program, color}) => {
 
     const calculateTotalPrice = (duration, discount, excludeSaturday, excludeSunday) => {
         let effectiveDays = duration;
-        if (excludeSaturday) effectiveDays -= 1;
-        if (excludeSunday) effectiveDays -= 1;
+        if (excludeSaturday) effectiveDays -= Math.floor(duration / 7);
+        if (excludeSunday) effectiveDays -= Math.floor(duration / 7);
         const basePrice = oneDayPrice * effectiveDays;
         return discount
             ? (basePrice * (1 - discount / 100)).toFixed(2)
@@ -46,8 +46,8 @@ const OrderForm = ({program, color}) => {
 
     const calculateDiscountAmount = (duration, discount, excludeSaturday, excludeSunday) => {
         let effectiveDays = duration;
-        if (excludeSaturday) effectiveDays -= 1;
-        if (excludeSunday) effectiveDays -= 1;
+        if (excludeSaturday) effectiveDays -= Math.floor(duration / 7);
+        if (excludeSunday) effectiveDays -= Math.floor(duration / 7);
         const basePrice = oneDayPrice * effectiveDays;
         return discount ? ((basePrice * discount) / 100).toFixed(2) : 0;
     };
@@ -68,9 +68,9 @@ const OrderForm = ({program, color}) => {
         console.log(formData);
     };
 
-    const dateOptions = Array.from({ length: 14 }, (_, i) => {
+    const dateOptions = Array.from({length: 14}, (_, i) => {
         const date = today.add(2 + i, 'day');
-        return { value: date.format('DD MMMM'), label: date.format('DD MMMM') };
+        return {value: date.format('YYYY-MM-DD'), label: date.format('DD MMMM')};
     });
 
     const customStyles = {
@@ -95,24 +95,25 @@ const OrderForm = ({program, color}) => {
     };
 
     const timeOptions = [
-        { value: '18:00 - 20:00', label: '18:00 - 20:00' },
-        { value: '21:00 - 23:00', label: '21:00 - 23:00' },
+        {value: '18:00 - 20:00', label: '18:00 - 20:00'},
+        {value: '21:00 - 23:00', label: '21:00 - 23:00'},
     ];
 
     const durations = [
-        { value: '1', label: '1 день' },
-        { value: '2', label: '2 дня' },
-        { value: '3', label: '3 дня' },
-        { value: '4', label: '4 дня' },
-        { value: '5', label: '5 дней' },
-        { value: '6', label: '6 дней' },
-        { value: '7', label: '1 неделя (7 дней)' },
-        { value: '14', label: '2 недели (14 дней)' },
-        { value: '21', label: '3 недели (21 день)' },
-        { value: '28', label: '4 недели (28 дней)' },
+        {value: 1, label: '1 день'},
+        {value: 2, label: '2 дня'},
+        {value: 3, label: '3 дня'},
+        {value: 4, label: '4 дня'},
+        {value: 5, label: '5 дней'},
+        {value: 6, label: '6 дней'},
+        {value: 7, label: '1 неделя (7 дней)'},
+        {value: 14, label: '2 недели (14 дней)'},
+        {value: 21, label: '3 недели (21 день)'},
+        {value: 28, label: '4 недели (28 дней)'},
     ];
 
-    const [selectedDuration, setSelectedDuration] = useState(durations[7]);
+    const [selectedDuration, setSelectedDuration] = useState(durations[6]);
+    const [selectedStartDate, setSelectedStartDate] = useState(dateOptions[0]);
 
     const applyPromoCode = async () => {
         try {
@@ -132,6 +133,25 @@ const OrderForm = ({program, color}) => {
         }
     };
 
+    const generateCalendarDates = () => {
+        const startDate = dayjs(selectedStartDate.value);
+        const duration = selectedDuration.value;
+        const dates = [];
+
+        for (let i = 0; i < duration; i++) {
+            const date = startDate.add(i, 'day');
+            const isSaturday = date.day() === 6;
+            const isSunday = date.day() === 0;
+            dates.push({
+                date: date.format('DD MMMM'),
+                dayOfWeek: date.format('dddd'), // Add this line
+                isExcluded: (isSaturday && excludeSaturday) || (isSunday && excludeSunday),
+                isSaturday,
+                isSunday,
+            });
+        }
+        return dates;
+    };
 
     return (
         <div>
@@ -141,7 +161,7 @@ const OrderForm = ({program, color}) => {
                     <Controller
                         name="duration"
                         control={control}
-                        defaultValue={durations[7]}
+                        defaultValue={durations[6]}
                         rules={{required: true}}
                         render={({field}) => (
                             <Select
@@ -218,7 +238,7 @@ const OrderForm = ({program, color}) => {
                             type="text"
                             name='promoCodeValue'
                             id='promoCodeValue'
-                            {...register('promoCodeValue', { required: showInputPromoCode })}
+                            {...register('promoCodeValue', {required: showInputPromoCode})}
                             value={promoCodeValue}
                             onChange={(e) => setPromoCodeValue(e.target.value)}
                             className='w-full border p-3 rounded outline-none'
@@ -322,7 +342,10 @@ const OrderForm = ({program, color}) => {
                                         setIsFocused(false);
                                         trigger("startDate");
                                     }}
-                                    onChange={(selectedOption) => field.onChange(selectedOption)}
+                                    onChange={(selectedOption) => {
+                                        setSelectedStartDate(selectedOption);
+                                        field.onChange(selectedOption);
+                                    }}
                                 />
                             )}
                         />
@@ -427,6 +450,17 @@ const OrderForm = ({program, color}) => {
                             {calculateTotalPrice(selectedDuration.value, discount, excludeSaturday, excludeSunday)} BYN
                         </p>
                     </div>
+                </div>
+
+                <h2 className='mt-5 text-2xl text-left'>Расписание программы</h2>
+                <div className='flex flex-wrap gap-5 justify-evenly items-center'>
+                    {generateCalendarDates().map((dateObj, index) => (
+                        <div key={index}
+                             className={`p-2 text-center rounded border text-base ${dateObj.isExcluded ? 'line-through text-gray-400' : ''}`}>
+                            <div>{dateObj.date}</div>
+                            <div>{dateObj.dayOfWeek}</div>
+                        </div>
+                    ))}
                 </div>
 
                 <div className='flex justify-between items-center gap-10 mt-10'>
