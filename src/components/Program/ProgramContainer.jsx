@@ -8,6 +8,7 @@ import DescriptionBlockContainer from "./DescriptionBlockContainer.jsx";
 import DateCalendar from "./DateCalendar.jsx";
 import DishContainer from "./DishContainer.jsx";
 import OrderContainer from "../Order/OrderContainer.jsx";
+import WhyAsalodaAfterFormContainer from "../WhyAsalodaAfterForm/WhyAsalodaAfterFormContainer.jsx";
 
 const ProgramContainer = () => {
     const {id} = useParams();
@@ -16,7 +17,6 @@ const ProgramContainer = () => {
     const [eatingType, setEatingType] = useState(null);
     const [selectedDishes, setSelectedDishes] = useState([]);
     const [replacedDishes, setReplacedDishes] = useState({});
-
 
 
     const {data, loading, error} = useFetchAllData(`/programs/${id}?populate=*`);
@@ -73,6 +73,8 @@ const ProgramContainer = () => {
         });
     };
 
+    console.log('changedDishData', changedDishData)
+
     return (
         <div>
             <WelcomeSection data={data}/>
@@ -90,7 +92,9 @@ const ProgramContainer = () => {
             <OrderContainer program={data}
                             programImg={data?.attributes?.order_img}
                             color={data?.attributes?.bg_color}
+                            replacedDishes={replacedDishes}
             />
+            <WhyAsalodaAfterFormContainer/>
         </div>
     );
 };

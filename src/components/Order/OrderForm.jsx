@@ -3,12 +3,16 @@ import {Controller, useForm} from "react-hook-form";
 import {NavLink} from "react-router-dom";
 import Select from 'react-select'
 import dayjs from "dayjs";
+import {useAuth} from "../../context/AuthContext.jsx";
+import api from "../../api/api.js";
 
-const OrderForm = ({program, color}) => {
+const OrderForm = ({program, color, replacedDishes}) => {
 
     const programName = program?.attributes?.program_name;
     const today = dayjs();
     const [isFocused, setIsFocused] = useState(false);
+    const {user, role} = useAuth();
+
 
     const [showInputPromoCode, setShowInputPromoCode] = useState(false);
     const [promoCodeValue, setPromoCodeValue] = useState("");
@@ -34,39 +38,77 @@ const OrderForm = ({program, color}) => {
     const oneDayPrice = program?.attributes?.one_day_price;
     const bonusesForOrdering = program?.attributes?.bonuses_for_ordering;
 
-    const calculateTotalPrice = (duration, discount, excludeSaturday, excludeSunday) => {
-        let effectiveDays = duration;
-        if (excludeSaturday) effectiveDays -= Math.floor(duration / 7);
-        if (excludeSunday) effectiveDays -= Math.floor(duration / 7);
+    const calculateEffectiveDays = (startDate, duration, excludeSaturday, excludeSunday) => {
+        let effectiveDays = 0;
+        const start = dayjs(startDate);
+        for (let i = 0; i < duration; i++) {
+            const day = start.add(i, 'day');
+            const isSaturday = day.day() === 6;
+            const isSunday = day.day() === 0;
+            if ((isSaturday && excludeSaturday) || (isSunday && excludeSunday)) {
+                continue;
+            }
+            effectiveDays++;
+        }
+        return effectiveDays;
+    };
+
+    const calculateTotalPrice = (startDate, duration, discount, excludeSaturday, excludeSunday) => {
+        const effectiveDays = calculateEffectiveDays(startDate, duration, excludeSaturday, excludeSunday);
         const basePrice = oneDayPrice * effectiveDays;
         return discount
             ? (basePrice * (1 - discount / 100)).toFixed(2)
             : basePrice.toFixed(2);
     };
 
-    const calculateDiscountAmount = (duration, discount, excludeSaturday, excludeSunday) => {
-        let effectiveDays = duration;
-        if (excludeSaturday) effectiveDays -= Math.floor(duration / 7);
-        if (excludeSunday) effectiveDays -= Math.floor(duration / 7);
+    const calculateDiscountAmount = (startDate, duration, discount, excludeSaturday, excludeSunday) => {
+        const effectiveDays = calculateEffectiveDays(startDate, duration, excludeSaturday, excludeSunday);
         const basePrice = oneDayPrice * effectiveDays;
         return discount ? ((basePrice * discount) / 100).toFixed(2) : 0;
     };
+
 
     const getBonuses = (duration) => {
         return duration >= 14 ? bonusesForOrdering * (duration / 7) : 0;
     };
 
-    const onSubmit = (data) => {
-        const formData = {
-            ...data,
-            deliveryTime: data.deliveryTime.label,
-            duration: data.duration.label,
-            startDate: data.startDate.label,
-            totalPrice: calculateTotalPrice(data.duration.value, discount, excludeSaturday, excludeSunday),
-            programName: programName,
-        };
-        console.log(formData);
+    const onSubmit = async (data) => {
+        try {
+            // Structure the payload with a `data` key
+            const payload = {
+                data: {
+                    address: data.address,
+                    comment: data.comment || '',
+                    deliveryTime: data.deliveryTime?.value || '',
+                    duration: String(data.duration.value),
+                    excludeSaturday: excludeSaturday,
+                    excludeSunday: excludeSunday,
+                    programName: programName,
+                    promoCode: showInputPromoCode,
+                    promoCodeValue: promoCodeValue || '',
+                    startDate: data.startDate.value,
+                    totalPrice: parseFloat(calculateTotalPrice(data.startDate.value, data.duration.value, discount, excludeSaturday, excludeSunday)),
+                    user: user?.id || null,
+                    replacedDishes: replacedDishes,
+                }
+            };
+
+            console.log('Payload:', payload);
+
+            const response = await api.post('http://localhost:1337/api/orders', payload);
+            console.log('Response:', response);
+        } catch (error) {
+            if (error.response) {
+                console.error('Error Response:', error.response.data);
+            } else {
+                console.error('Error:', error.message);
+            }
+        }
     };
+
+
+
+
 
     const dateOptions = Array.from({length: 14}, (_, i) => {
         const date = today.add(2 + i, 'day');
@@ -328,7 +370,6 @@ const OrderForm = ({program, color}) => {
                         <Controller
                             name="startDate"
                             control={control}
-                            defaultValue={dateOptions[0]}
                             rules={{required: true}}
                             render={({field}) => (
                                 <Select
@@ -356,7 +397,6 @@ const OrderForm = ({program, color}) => {
                         <Controller
                             name="deliveryTime"
                             control={control}
-                            defaultValue={timeOptions[0]}
                             rules={{required: true}}
                             render={({field}) => (
                                 <Select
@@ -445,9 +485,9 @@ const OrderForm = ({program, color}) => {
                     )}
 
                     <div className='flex justify-between items-center border-b border-dashed pb-3'>
-                        <p className='text-gray-400'>Итоговая сумма:</p>
+                        <p className='font-extrabold text-gray-400'>Итоговая сумма:</p>
                         <p className='font-extrabold' style={{color: `${color}`}}>
-                            {calculateTotalPrice(selectedDuration.value, discount, excludeSaturday, excludeSunday)} BYN
+                            {calculateTotalPrice(selectedStartDate.value, selectedDuration.value, discount, excludeSaturday, excludeSunday)} BYN
                         </p>
                     </div>
                 </div>

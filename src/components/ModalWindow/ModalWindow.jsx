@@ -12,7 +12,7 @@ const ModalWindow = ({onClose, modalTitle, modalDescription, img, listTitle, lis
                          src={import.meta.env.VITE_UPLOAD_URL + img} alt={'img'}/>
                 }
                 <div className="flex items-center justify-between p-5">
-                    <h3 className="text-xl font-bold text-gray-900 text-left">
+                    <h3 className="text-xl pr-3 font-bold text-gray-900 text-left">
                         {modalTitle}
                     </h3>
                     <button

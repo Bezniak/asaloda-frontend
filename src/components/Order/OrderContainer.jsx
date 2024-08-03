@@ -1,7 +1,7 @@
 import React from 'react';
 import OrderForm from "./OrderForm.jsx";
 
-const OrderContainer = ({program, programImg, color}) => {
+const OrderContainer = ({program, programImg, color, replacedDishes}) => {
     return (
         <div className='bg'>
             <div className='w-full max-w-5xl mx-auto md:mt-10 md:mb-20 xs:mt-10 xs:mb-10'>
@@ -18,7 +18,7 @@ const OrderContainer = ({program, programImg, color}) => {
                         />
                     </div>
                 </div>
-                <OrderForm program={program} color={color}/>
+                <OrderForm program={program} color={color} replacedDishes={replacedDishes}/>
             </div>
         </div>
     );

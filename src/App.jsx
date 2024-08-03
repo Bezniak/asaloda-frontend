@@ -15,7 +15,7 @@ import ReviewsContainer from "./components/Reviews/ReviewsContainer.jsx";
 import Login from "./components/Login/Login.jsx";
 import Register from "./components/Register/Register.jsx";
 import Contacts from "./components/Contacts/Contacts.jsx";
-import MyOrder from "./components/MyOrder/MyOrder.jsx";
+import MyOrders from "./components/MyOrders/MyOrders.jsx";
 import ProgramContainer from "./components/Program/ProgramContainer.jsx";
 
 const Layout = () => {
@@ -82,7 +82,7 @@ const router = createBrowserRouter([
             },
             {
                 path: ROUTES.MY_ORDER,
-                element: <MyOrder/>
+                element: <MyOrders/>
             },
             {
                 path: ROUTES.PROGRAM,
