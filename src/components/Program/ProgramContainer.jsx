@@ -9,6 +9,7 @@ import DateCalendar from "./DateCalendar.jsx";
 import DishContainer from "./DishContainer.jsx";
 import OrderContainer from "../Order/OrderContainer.jsx";
 import WhyAsalodaAfterFormContainer from "../WhyAsalodaAfterForm/WhyAsalodaAfterFormContainer.jsx";
+import FAQContainer from "../FAQ/FAQContainer.jsx";
 
 const ProgramContainer = () => {
     const {id} = useParams();
@@ -95,6 +96,7 @@ const ProgramContainer = () => {
                             replacedDishes={replacedDishes}
             />
             <WhyAsalodaAfterFormContainer/>
+            <FAQContainer/>
         </div>
     );
 };

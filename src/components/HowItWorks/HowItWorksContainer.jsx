@@ -1,6 +1,5 @@
 import React from 'react';
 import HowItWorks from "./HowItWorks.jsx";
-import FAQContainer from "../FAQ/FAQContainer.jsx";
 
 const HowItWorksContainer = () => {
     return (
@@ -21,7 +20,7 @@ const HowItWorksContainer = () => {
                             description={'Каждый день без лишних усилий, потери времени на кухне и в магазине за покупкой продуктов'}
                             isButtonShow={false}
                 />
-                <FAQContainer/>
+
             </div>
         </div>
 

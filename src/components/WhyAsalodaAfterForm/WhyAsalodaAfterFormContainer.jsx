@@ -3,7 +3,7 @@ import HealthyFood from "../HealthyFoodContainer/HealthyFood.jsx";
 
 const WhyAsalodaAfterFormContainer = () => {
     return (
-        <div className='mt-20 mb-10 w-full max-w-7xl mx-auto'>
+        <div className='mt-20 mb-20 w-full max-w-7xl mx-auto'>
             <h1 className='text-5xl font-bold mb-10 md:text-left'>Здоровое питание от AsalodaFood</h1>
             <div
                 className=' flex flex-col md:flex-row items-stretch justify-between gap-10 px-4'
