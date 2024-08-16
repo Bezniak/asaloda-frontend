@@ -18,6 +18,8 @@ const Navbar = () => {
     const {user, logout, role, theme, toggleTheme} = useAuth();
     const navigate = useNavigate();
 
+    console.log('role', role)
+
     const {data, loading, error} = useFetchAllData(`/programs?populate=*`);
     const {
         data: additional_programs_data,
@@ -401,16 +403,29 @@ const Navbar = () => {
                     <div
                         className="grid max-w-screen-xl px-4 py-1 mx-auto text-gray-900 dark:text-white sm:grid-cols-2 md:px-6">
                         <ul>
-                            <li>
-                                <NavLink
-                                    to={ROUTES.MY_ORDER}
-                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    onClick={handleUserInfoLinkClick}
-                                >
-                                    <div className="font-semibold">Мои заказы</div>
-                                </NavLink>
-                            </li>
-                            <hr/>
+                            {role === 'admin' ? (
+                                <li>
+                                    <NavLink
+                                        to={ROUTES.ALL_ORDER}
+                                        className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        onClick={handleUserInfoLinkClick}
+                                    >
+                                        <div className="font-semibold">Все заказы</div>
+                                    </NavLink>
+                                </li>
+                            ) : role === 'authenticated' ? (
+                                <li>
+                                    <NavLink
+                                        to={ROUTES.MY_ORDER}
+                                        className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        onClick={handleUserInfoLinkClick}
+                                    >
+                                        <div className="font-semibold">Мои заказы</div>
+                                    </NavLink>
+                                </li>
+                            ) : null}
+
+                            {/*<hr/>*/}
                             <li onClick={handleLogout}>
                                 <NavLink
                                     to={ROUTES.HOME}

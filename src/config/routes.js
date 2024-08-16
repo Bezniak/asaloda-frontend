@@ -12,5 +12,5 @@ export const ROUTES = {
     CONTACTS: "/contacts",
     MY_ORDER: "/my-order",
     PROGRAM: "/program/:id",
-
+    ALL_ORDER: "/all-orders",
 };
