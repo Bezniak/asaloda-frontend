@@ -13,7 +13,6 @@ const OrderForm = ({program, color, replacedDishes}) => {
     const [isFocused, setIsFocused] = useState(false);
     const {user, role} = useAuth();
 
-
     const [showInputPromoCode, setShowInputPromoCode] = useState(false);
     const [promoCodeValue, setPromoCodeValue] = useState("");
     const [discount, setDiscount] = useState(null);
@@ -24,6 +23,10 @@ const OrderForm = ({program, color, replacedDishes}) => {
 
     const [excludeSaturday, setExcludeSaturday] = useState(false);
     const [excludeSunday, setExcludeSunday] = useState(false);
+
+    const [isSubmitting, setIsSubmitting] = useState(false);  // For disabling the button
+    const [submissionMessage, setSubmissionMessage] = useState("");  // For success/error messages
+    const [formSubmitted, setFormSubmitted] = useState(false);  // To track form submission
 
     const {
         register,
@@ -67,12 +70,12 @@ const OrderForm = ({program, color, replacedDishes}) => {
         return discount ? ((basePrice * discount) / 100).toFixed(2) : 0;
     };
 
-
     const getBonuses = (duration) => {
         return duration >= 14 ? bonusesForOrdering * (duration / 7) : 0;
     };
 
     const onSubmit = async (data) => {
+        setIsSubmitting(true); // Disable the submit button
         try {
             // Structure the payload with a `data` key
             const payload = {
@@ -90,6 +93,9 @@ const OrderForm = ({program, color, replacedDishes}) => {
                     totalPrice: parseFloat(calculateTotalPrice(data.startDate.value, data.duration.value, discount, excludeSaturday, excludeSunday)),
                     user: user?.id || null,
                     replacedDishes: replacedDishes,
+                    userName: data.userName,
+                    userEmail: data.email,
+                    userPhone: data.userPhone,
                 }
             };
 
@@ -97,18 +103,20 @@ const OrderForm = ({program, color, replacedDishes}) => {
 
             const response = await api.post('http://localhost:1337/api/orders', payload);
             console.log('Response:', response);
+
+            setFormSubmitted(true);  // Mark form as submitted
+            setSubmissionMessage("Ваш заказ принят!");
         } catch (error) {
+            setIsSubmitting(false);  // Re-enable the submit button in case of an error
             if (error.response) {
                 console.error('Error Response:', error.response.data);
+                setSubmissionMessage(`Ошибка: ${error.response.data.message}`);
             } else {
                 console.error('Error:', error.message);
+                setSubmissionMessage(`Ошибка: ${error.message}`);
             }
         }
     };
-
-
-
-
 
     const dateOptions = Array.from({length: 14}, (_, i) => {
         const date = today.add(2 + i, 'day');
@@ -195,6 +203,14 @@ const OrderForm = ({program, color, replacedDishes}) => {
         return dates;
     };
 
+    // Conditionally render the form or the success message
+    if (formSubmitted) {
+        return (
+            <div className='bg-white p-10 flex flex-col gap-5'>
+                <h2 className='text-2xl font-bold'>{submissionMessage}</h2>
+            </div>
+        );
+    }
     return (
         <div>
             <form onSubmit={handleSubmit(onSubmit)} className='bg-white p-10 flex flex-col gap-5'>
@@ -511,14 +527,22 @@ const OrderForm = ({program, color, replacedDishes}) => {
                         <NavLink to='' style={{color: `${color}`}} className='font-semibold'> соглашаетесь с публичной
                             офертой</NavLink>
                     </p>
-                    <button type="submit"
-                            className='bg-[var(--green)] px-20 py-5 rounded-full w-fit text-white'
-                            style={{backgroundColor: `${color}`}}
+                    <button
+                        type='submit'
+                        disabled={isSubmitting}
+                        className='bg-[var(--green)] px-20 py-5 rounded-full w-fit text-white'
+                        style={{backgroundColor: color}}
                     >
-                        Оформить
+                        {isSubmitting ? 'Отправка...' : 'Оформить'}
                     </button>
+
                 </div>
             </form>
+            {submissionMessage && (
+                <div className='mt-5'>
+                    <p className='text-red-500'>{submissionMessage}</p>
+                </div>
+            )}
         </div>
     );
 };

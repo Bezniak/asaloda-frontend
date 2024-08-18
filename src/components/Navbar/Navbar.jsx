@@ -18,8 +18,6 @@ const Navbar = () => {
     const {user, logout, role, theme, toggleTheme} = useAuth();
     const navigate = useNavigate();
 
-    console.log('role', role)
-
     const {data, loading, error} = useFetchAllData(`/programs?populate=*`);
     const {
         data: additional_programs_data,

@@ -21,7 +21,6 @@ const ProgramContainer = () => {
 
 
     const {data, loading, error} = useFetchAllData(`/programs/${id}?populate=*`);
-    console.log('data', data)
 
     const {
         data: dishData,
@@ -30,7 +29,6 @@ const ProgramContainer = () => {
     } = useFetchAllData(
         `/dishes?filters[week_day][$eq]=${selectedDate.format('dd')}&&filters[program_type][$eq]=${data?.attributes?.program_name}&populate=*`
     );
-    console.log('dishData', dishData)
 
     const {
         data: changedDishData,
