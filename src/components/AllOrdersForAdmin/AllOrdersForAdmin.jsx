@@ -17,17 +17,20 @@ const AllOrdersForAdmin = () => {
                 const response = await axios.get(import.meta.env.VITE_API_URL + '/orders?populate=*');
                 const rawOrders = response.data.data;
 
-                console.log('rawOrders', rawOrders)
-
                 const processedOrders = rawOrders.flatMap(order => {
-                    const {startDate, duration, replacedDishes} = order.attributes;
+                    const { startDate, duration, replacedDishes } = order.attributes;
                     const start = parseISO(startDate);
                     const end = addDays(start, duration - 1);
-                    const dates = eachDayOfInterval({start, end});
+                    const dates = eachDayOfInterval({ start, end });
 
                     return dates.map(date => {
                         const formattedDate = format(date, 'dd.MM.yyyy');
                         const replacedDishesForDate = replacedDishes?.[formattedDate.replace(/\./g, '-')];
+
+                        // Format replaced dishes with numbering and eating_type
+                        const formattedReplacedDishes = replacedDishesForDate?.map((dish, index) => {
+                            return `${index + 1}. ${dish.attributes.eating_type}: ${dish.attributes.dish_name}`;
+                        }).join('\n') || 'Нет замен';
 
                         return {
                             ...order,
@@ -35,7 +38,7 @@ const AllOrdersForAdmin = () => {
                             username: order.attributes.user?.data?.attributes?.username || order.attributes.userName || 'Не указано',
                             userphone: order.attributes.user?.data?.attributes?.userphone || order.attributes.userPhone || 'Не указано',
                             email: order.attributes.user?.data?.attributes?.email || order.attributes.userEmail || 'Не указано',
-                            replacedDishesForDate: replacedDishesForDate?.map(dish => dish.attributes.dish_name).join(', ') || 'Нет замен'
+                            replacedDishesForDate: formattedReplacedDishes
                         };
                     });
                 });
@@ -166,7 +169,7 @@ const AllOrdersForAdmin = () => {
                                         return (
                                             <td
                                                 key={column.Header}
-                                                className={`border border-gray-300 px-2 py-1 break-words whitespace-normal ${
+                                                className={`border border-gray-300 px-2 py-1 break-words whitespace-pre-line ${
                                                     column.accessor === 'replacedDishesForDate' && cellValue !== 'Нет замен' ? 'bg-red-400' : ''
                                                 }`}
                                                 style={{minWidth: '100px', maxWidth: '200px'}} // Control column width

@@ -19,6 +19,9 @@ const ProgramContainer = () => {
     const [selectedDishes, setSelectedDishes] = useState([]);
     const [replacedDishes, setReplacedDishes] = useState({});
 
+    // console.log('replacedDishes from ProgramContainer', replacedDishes);
+    // console.log('selectedDishes from ProgramContainer', selectedDishes);
+
 
     const {data, loading, error} = useFetchAllData(`/programs/${id}?populate=*`);
 

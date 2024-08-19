@@ -10,8 +10,8 @@ const ChangeDish = ({isAdditionalMenuVisible, setIsAdditionalMenuVisible, dish, 
         setIsAdditionalMenuVisible(false);
     };
 
-    console.log('changedDishData', changedDishData);
-    console.log('replaceDish', replaceDish)
+    // console.log('changedDishData', changedDishData);
+    // console.log('replaceDish', replaceDish)
 
     return (
         <>

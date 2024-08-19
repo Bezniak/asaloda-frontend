@@ -11,6 +11,8 @@ const MyOrders = () => {
     if (loading) return <Preloader />;
     if (error) return <div className="text-center mt-8 text-red-500">Ошибка: {error.message}</div>;
 
+    console.log('data my orders', data)
+
     return (
         <div className="container mx-auto p-4 mt-10">
 
