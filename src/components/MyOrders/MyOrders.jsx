@@ -1,27 +1,27 @@
 import React from 'react';
 import dayjs from 'dayjs';
-import { useAuth } from "../../context/AuthContext.jsx";
+import {useAuth} from "../../context/AuthContext.jsx";
 import useFetchAllData from "../../api/useFetchAllData.js";
-import { Preloader } from "../Preloader/Preloader.jsx";
+import {Preloader} from "../Preloader/Preloader.jsx";
 
 const MyOrders = () => {
-    const { user } = useAuth();
-    const { data, loading, error } = useFetchAllData(`/orders?filters[user][$eq]=${user?.id}&populate=*`);
+    const {user} = useAuth();
+    const {data, loading, error} = useFetchAllData(`/orders?filters[user][$eq]=${user?.id}&populate=*`);
 
-    if (loading) return <Preloader />;
+    if (loading) return <Preloader/>;
     if (error) return <div className="text-center mt-8 text-red-500">Ошибка: {error.message}</div>;
 
     console.log('data my orders', data)
 
     return (
         <div className="container mx-auto p-4 mt-10">
+            <h1 className="text-3xl font-bold mb-6 text-left">Мои заказы</h1>
 
             {data?.length === 0 ? (
                 <div className="text-center text-gray-500">У вас нет заказов</div>
             ) : (
                 data?.map((order) => (
                     <div key={order.id} className="bg-white shadow-lg rounded-lg p-6 mb-10">
-                        <h1 className="text-3xl font-bold mb-6 text-left">Мои заказы</h1>
                         <h2 className="text-2xl font-semibold mb-4 text-left">Заказ № {order.id}</h2>
                         <div className="flex justify-between items-start">
                             <div className="flex flex-col justify-start items-start">

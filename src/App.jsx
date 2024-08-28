@@ -15,9 +15,9 @@ import ReviewsContainer from "./components/Reviews/ReviewsContainer.jsx";
 import Login from "./components/Login/Login.jsx";
 import Register from "./components/Register/Register.jsx";
 import Contacts from "./components/Contacts/Contacts.jsx";
-import MyOrders from "./components/MyOrders/MyOrders.jsx";
 import ProgramContainer from "./components/Program/ProgramContainer.jsx";
 import AllOrdersForAdmin from "./components/AllOrdersForAdmin/AllOrdersForAdmin.jsx";
+import MyOrders from "./components/MyOrders/MyOrders.jsx";
 
 const Layout = () => {
     return (

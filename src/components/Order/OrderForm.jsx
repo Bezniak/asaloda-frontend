@@ -6,7 +6,9 @@ import dayjs from "dayjs";
 import {useAuth} from "../../context/AuthContext.jsx";
 import api from "../../api/api.js";
 
-const OrderForm = ({program, color, replacedDishes}) => {
+const OrderForm = ({program, userChosenDishes}) => {
+
+    console.log('userChosenDishes', userChosenDishes)
 
     const programName = program?.attributes?.program_name;
     const today = dayjs();
@@ -74,9 +76,25 @@ const OrderForm = ({program, color, replacedDishes}) => {
         return duration >= 14 ? bonusesForOrdering * (duration / 7) : 0;
     };
 
+    const filterDishesByDate = (dishes, startDate) => {
+        const start = new Date(startDate);
+        return dishes.filter(dish => new Date(dish.attributes.date) >= start);
+    };
+
+
     const onSubmit = async (data) => {
         setIsSubmitting(true); // Disable the submit button
         try {
+            // Calculate the end date
+            const endDate = new Date(data.startDate.value);
+            endDate.setDate(endDate.getDate() + selectedDuration.value - 1);
+            const endDateFormatted = endDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+
+            // Filter dishes based on the startDate
+            const filteredDishes = filterDishesByDate(userChosenDishes, data.startDate.value);
+
+            console.log('filteredDishes', filteredDishes)
+
             // Structure the payload with a `data` key
             const payload = {
                 data: {
@@ -87,21 +105,21 @@ const OrderForm = ({program, color, replacedDishes}) => {
                     excludeSaturday: excludeSaturday,
                     excludeSunday: excludeSunday,
                     programName: programName,
-                    promoCode: showInputPromoCode,
-                    promoCodeValue: promoCodeValue || '',
+                    promoCode: showInputPromoCode ? promoCodeValue : '',
                     startDate: data.startDate.value,
+                    endDate: endDateFormatted,
                     totalPrice: parseFloat(calculateTotalPrice(data.startDate.value, data.duration.value, discount, excludeSaturday, excludeSunday)),
                     user: user?.id || null,
-                    replacedDishes: replacedDishes,
                     userName: data.userName,
                     userEmail: data.email,
                     userPhone: data.userPhone,
+                    dishes: filteredDishes.map(dish => dish.id), // Map dishes to their IDs
                 }
             };
 
             console.log('Payload:', payload);
 
-            const response = await api.post('http://localhost:1337/api/orders', payload);
+            const response = await api.post(import.meta.env.VITE_API_URL + '/orders', payload);
             console.log('Response:', response);
 
             setFormSubmitted(true);  // Mark form as submitted
@@ -117,6 +135,8 @@ const OrderForm = ({program, color, replacedDishes}) => {
             }
         }
     };
+
+
 
     const dateOptions = Array.from({length: 14}, (_, i) => {
         const date = today.add(2 + i, 'day');
@@ -211,10 +231,25 @@ const OrderForm = ({program, color, replacedDishes}) => {
             </div>
         );
     }
-    return (
-        <div>
-            <form onSubmit={handleSubmit(onSubmit)} className='bg-white p-10 flex flex-col gap-5'>
 
+
+    return (
+        <div className='bg'>
+            <form onSubmit={handleSubmit(onSubmit)}
+                  className='w-full max-w-5xl mx-auto md:mt-10 md:mb-20 xs:mt-10 xs:mb-10 bg-white p-10 flex flex-col gap-5'>
+                <div className='flex flex-row justify-around items-center rounded-lg'
+                     style={{backgroundColor: `${program?.attributes?.bg_color}`}}
+                >
+                    <div>
+                        <h2 className='uppercase text-white font-bold text-4xl'>Заказать {program?.attributes?.program_name}</h2>
+                    </div>
+                    <div>
+                        <img className='w-64 h-auto'
+                             src={import.meta.env.VITE_UPLOAD_URL + program?.attributes?.order_img?.data?.attributes?.url}
+                             alt={program?.attributes?.order_img?.data?.attributes?.name}
+                        />
+                    </div>
+                </div>
                 <div className='mb-4'>
                     <Controller
                         name="duration"
@@ -468,7 +503,7 @@ const OrderForm = ({program, color, replacedDishes}) => {
                     <div className='flex justify-between items-center border-b border-dashed pb-3'>
                         <p className='text-gray-400'>Стоимость программы: {programName}</p>
                         <p className='font-medium'
-                           style={{color: `${color}`}}
+                           style={{color: `${program?.attributes?.bg_color}`}}
                         >
                             {oneDayPrice * selectedDuration.value} BYN
                         </p>
@@ -478,11 +513,12 @@ const OrderForm = ({program, color, replacedDishes}) => {
                         <>
                             <div className='flex justify-between items-center border-b border-dashed pb-3'>
                                 <p className='text-gray-400'>Скидка по промокоду</p>
-                                <p className='font-medium' style={{color: `${color}`}}>{discount} %</p>
+                                <p className='font-medium'
+                                   style={{color: `${program?.attributes?.bg_color}`}}>{discount} %</p>
                             </div>
                             <div className='flex justify-between items-center border-b border-dashed pb-3'>
                                 <p className='text-gray-400'>Сумма скидки</p>
-                                <p className='font-medium' style={{color: `${color}`}}>
+                                <p className='font-medium' style={{color: `${program?.attributes?.bg_color}`}}>
                                     {calculateDiscountAmount(selectedDuration.value, discount)} BYN
                                 </p>
                             </div>
@@ -493,7 +529,7 @@ const OrderForm = ({program, color, replacedDishes}) => {
                         <div className='flex justify-between items-center border-b border-dashed pb-3'>
                             <h2 className='text-gray-400'>Будет начислено бонусов</h2>
                             <p className='font-medium'
-                               style={{color: `${color}`}}
+                               style={{color: `${program?.attributes?.bg_color}`}}
                             >
                                 {getBonuses(selectedDuration.value)} Б
                             </p>
@@ -502,7 +538,7 @@ const OrderForm = ({program, color, replacedDishes}) => {
 
                     <div className='flex justify-between items-center border-b border-dashed pb-3'>
                         <p className='font-extrabold text-gray-400'>Итоговая сумма:</p>
-                        <p className='font-extrabold' style={{color: `${color}`}}>
+                        <p className='font-extrabold' style={{color: `${program?.attributes?.bg_color}`}}>
                             {calculateTotalPrice(selectedStartDate.value, selectedDuration.value, discount, excludeSaturday, excludeSunday)} BYN
                         </p>
                     </div>
@@ -521,17 +557,19 @@ const OrderForm = ({program, color, replacedDishes}) => {
 
                 <div className='flex justify-between items-center gap-10 mt-10'>
                     <p>Нажимая кнопку “Оформить” Вы даёте согласие на
-                        <NavLink to='' style={{color: `${color}`}} className='font-semibold'> обработку персональных
+                        <NavLink to='' style={{color: `${program?.attributes?.bg_color}`}}
+                                 className='font-semibold'> обработку персональных
                             данных</NavLink>
                         &nbsp; и &nbsp;
-                        <NavLink to='' style={{color: `${color}`}} className='font-semibold'> соглашаетесь с публичной
+                        <NavLink to='' style={{color: `${program?.attributes?.bg_color}`}}
+                                 className='font-semibold'> соглашаетесь с публичной
                             офертой</NavLink>
                     </p>
                     <button
                         type='submit'
                         disabled={isSubmitting}
                         className='bg-[var(--green)] px-20 py-5 rounded-full w-fit text-white'
-                        style={{backgroundColor: color}}
+                        style={{backgroundColor: program?.attributes?.bg_color}}
                     >
                         {isSubmitting ? 'Отправка...' : 'Оформить'}
                     </button>
