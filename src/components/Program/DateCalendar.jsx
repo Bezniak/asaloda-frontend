@@ -10,7 +10,7 @@ import { calculator } from "../../utils/utils.js";
 dayjs.extend(localeData);
 dayjs.locale('ru');
 
-const DateCalendar = ({ allDish, allChangeDish, programType, onUpdateDishes }) => {
+const DateCalendar = ({ allDish, allChangeDish, replacedDishes, programType, onUpdateDishes, setUpdatedAllDishes }) => {
     const [selectedDish, setSelectedDish] = useState(null);
     const [isAdditionalMenuVisible, setIsAdditionalMenuVisible] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -20,7 +20,6 @@ const DateCalendar = ({ allDish, allChangeDish, programType, onUpdateDishes }) =
     const dates = Array.from({ length: 8 }, (_, i) => today.add(i, 'day'));
     const dayAbbreviations = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
 
-    // Define the order for eating types
     const eatingTypeOrder = {
         'Первый завтрак': 1,
         'Второй завтрак': 2,
@@ -34,17 +33,22 @@ const DateCalendar = ({ allDish, allChangeDish, programType, onUpdateDishes }) =
     };
 
     useEffect(() => {
-        const newFilteredDishes = allDish.filter(dish => {
-            return dayjs(dish.attributes.date).isSame(activeDate, 'day') && dish.attributes.changedDish === false;
-        });
+        let newFilteredDishes;
 
-        // Sort dishes based on the predefined eating type order
+        if (replacedDishes[activeDate.format('YYYY-MM-DD')]) {
+            newFilteredDishes = replacedDishes[activeDate.format('YYYY-MM-DD')];
+        } else {
+            newFilteredDishes = allDish.filter(dish => {
+                return dayjs(dish.attributes.date).isSame(activeDate, 'day') && dish.attributes.changedDish === false;
+            });
+        }
+
         newFilteredDishes.sort((a, b) => {
             return (eatingTypeOrder[a.attributes.eating_type] || 0) - (eatingTypeOrder[b.attributes.eating_type] || 0);
         });
 
         setFilteredDishes(newFilteredDishes);
-    }, [allDish, activeDate]);
+    }, [allDish, activeDate, replacedDishes]);
 
     const openModal = (dish) => {
         setSelectedDish(dish);
@@ -57,21 +61,27 @@ const DateCalendar = ({ allDish, allChangeDish, programType, onUpdateDishes }) =
     };
 
     const handleDishReplace = (newDish) => {
-        const updatedFilteredDishes = filteredDishes.map(dish =>
-            dish.id === selectedDish.id ? newDish : dish
-        );
-        setFilteredDishes(updatedFilteredDishes);
-
+        // Обновляем массив allDish, заменяя старое блюдо на новое
         const updatedAllDishes = allDish.map(dish =>
             dish.id === selectedDish.id ? newDish : dish
         );
-        console.log('Updated allDish array:', updatedAllDishes);
 
-        onUpdateDishes(updatedAllDishes)
+        // Обновляем массив filteredDishes, заменяя старое блюдо на новое
+        const updatedFilteredDishes = filteredDishes.map(dish =>
+            dish.id === selectedDish.id ? newDish : dish
+        );
+
+        // Обновляем состояние в родительском компоненте
+        onUpdateDishes(activeDate.format('YYYY-MM-DD'), updatedFilteredDishes);
+
+        // Сохраняем обновленный массив блюд
+        setFilteredDishes(updatedFilteredDishes);
+        setUpdatedAllDishes(updatedAllDishes);
 
         setIsAdditionalMenuVisible(false);
         setSelectedDish(newDish);
     };
+
 
     useEffect(() => {
         if (showModal || isAdditionalMenuVisible) {

@@ -8,6 +8,8 @@ const MyOrders = () => {
     const {user} = useAuth();
     const {data, loading, error} = useFetchAllData(`/orders?filters[user][$eq]=${user?.id}&populate=*`);
 
+
+
     if (loading) return <Preloader/>;
     if (error) return <div className="text-center mt-8 text-red-500">Ошибка: {error.message}</div>;
 

@@ -76,24 +76,39 @@ const OrderForm = ({program, userChosenDishes}) => {
         return duration >= 14 ? bonusesForOrdering * (duration / 7) : 0;
     };
 
-    const filterDishesByDate = (dishes, startDate) => {
-        const start = new Date(startDate);
-        return dishes.filter(dish => new Date(dish.attributes.date) >= start);
-    };
+    const filterDishesByDateAndDay = (dishes, startDate, duration, excludeSaturday, excludeSunday) => {
+        const start = dayjs(startDate);
+        return dishes.filter(dish => {
+            const dishDate = dayjs(dish.attributes.date);
+            const dayDifference = dishDate.diff(start, 'day');
+            const isWithinDuration = dayDifference >= 0 && dayDifference < duration;
 
+            const isSaturday = dishDate.day() === 6;
+            const isSunday = dishDate.day() === 0;
+
+            const isExcluded = (isSaturday && excludeSaturday) || (isSunday && excludeSunday);
+
+            return isWithinDuration && !isExcluded;
+        });
+    };
 
     const onSubmit = async (data) => {
         setIsSubmitting(true); // Disable the submit button
         try {
             // Calculate the end date
-            const endDate = new Date(data.startDate.value);
-            endDate.setDate(endDate.getDate() + selectedDuration.value - 1);
-            const endDateFormatted = endDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+            const endDate = dayjs(data.startDate.value).add(selectedDuration.value - 1, 'day');
+            const endDateFormatted = endDate.format('YYYY-MM-DD'); // Format as YYYY-MM-DD
 
-            // Filter dishes based on the startDate
-            const filteredDishes = filterDishesByDate(userChosenDishes, data.startDate.value);
+            // Filter dishes based on the startDate, duration, and excluded days
+            const filteredDishes = filterDishesByDateAndDay(
+                userChosenDishes,
+                data.startDate.value,
+                selectedDuration.value,
+                excludeSaturday,
+                excludeSunday
+            );
 
-            console.log('filteredDishes', filteredDishes)
+            console.log('filteredDishes', filteredDishes);
 
             // Structure the payload with a `data` key
             const payload = {
@@ -113,7 +128,7 @@ const OrderForm = ({program, userChosenDishes}) => {
                     userName: data.userName,
                     userEmail: data.email,
                     userPhone: data.userPhone,
-                    dishes: filteredDishes.map(dish => dish.id), // Map dishes to their IDs
+                    dishes: filteredDishes.map(dish => dish.id), // Map filtered dishes to their IDs
                 }
             };
 
@@ -226,7 +241,7 @@ const OrderForm = ({program, userChosenDishes}) => {
     // Conditionally render the form or the success message
     if (formSubmitted) {
         return (
-            <div className='bg-white p-10 flex flex-col gap-5'>
+            <div className='bg-white p-10 flex flex-col gap-5 min-h-96 items-center justify-center'>
                 <h2 className='text-2xl font-bold'>{submissionMessage}</h2>
             </div>
         );
