@@ -18,6 +18,7 @@ import Contacts from "./components/Contacts/Contacts.jsx";
 import ProgramContainer from "./components/Program/ProgramContainer.jsx";
 import AllOrdersForAdmin from "./components/AllOrdersForAdmin/AllOrdersForAdmin.jsx";
 import MyOrders from "./components/MyOrders/MyOrders.jsx";
+import MyOrder from "./components/MyOrders/MyOrder.jsx";
 
 const Layout = () => {
     return (
@@ -92,6 +93,10 @@ const router = createBrowserRouter([
             {
                 path: ROUTES.ALL_ORDER,
                 element: <AllOrdersForAdmin/>
+            },
+            {
+                path: ROUTES.ORDER,
+                element: <MyOrder/>
             },
         ]
     },

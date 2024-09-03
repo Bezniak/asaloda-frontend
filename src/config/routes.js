@@ -11,6 +11,7 @@ export const ROUTES = {
     LOGIN: "/login",
     CONTACTS: "/contacts",
     MY_ORDER: "/my-order",
+    ORDER: "/order/:id",
     PROGRAM: "/program/:id",
     ALL_ORDER: "/all-orders",
 };
