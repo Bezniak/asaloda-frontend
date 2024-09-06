@@ -10,7 +10,7 @@ const MyOrder = () => {
     const { id } = useParams();  // Get the order ID from the URL params
     const { data, loading, error } = useFetchAllData(`/orders/${id}?populate[dishes][populate]=*&populate[user][populate]=*`);
 
-    console.log('data', data)
+    console.log('data MyOrder', data)
 
     if (loading) return <Preloader />;
     if (error) return <div className="text-center mt-8 text-red-500">Ошибка: {error.message}</div>;
@@ -26,6 +26,9 @@ const MyOrder = () => {
     const programName = data.attributes.programName;
     const excludeSaturday = data.attributes.excludeSaturday;
     const excludeSunday = data.attributes.excludeSunday;
+    const programStartDate = dayjs(data.attributes.startDate).format('YYYY-MM-DD');
+    const programEndDate = dayjs(data.attributes.endDate).format('YYYY-MM-DD');
+
 
     // Extract all the dish dates, checking if dishes data exists
     const dishDates = data.attributes.dishes.data.map(dish => dayjs(dish.attributes.date));
@@ -56,6 +59,8 @@ const MyOrder = () => {
             orderId={id}
             excludeSaturday={excludeSaturday}
             excludeSunday={excludeSunday}
+            programStartDate={programStartDate}
+            programEndDate={programEndDate}
         />
     );
 };

@@ -4,19 +4,19 @@ import { MdClose } from "react-icons/md";
 import {Preloader} from "../Preloader/Preloader.jsx";
 
 const ChangeDish = ({ dishes, eatingType, onSelectDish, currentDish, onClose }) => {
-    const [filteredChangeDishes, setFilteredChangeDishes] = useState(null); // Изначально null, чтобы отличить состояние до фильтрации
+    const [filteredChangeDishes, setFilteredChangeDishes] = useState(null);
     const [newDate, setNewDate] = useState('');
 
     useEffect(() => {
         if (dishes.length > 0 && currentDish) {
+            // Фильтрация только по типу приема пищи и дате
             const newFilteredChangeDishes = dishes.filter(dish =>
                 dish.attributes.eating_type === eatingType &&
-                dayjs(dish.attributes.date).isSame(currentDish.attributes.date, 'day') &&
-                dish.attributes.changedDish === true
+                dayjs(dish.attributes.date).isSame(currentDish.attributes.date, 'day')
             );
-            setFilteredChangeDishes(newFilteredChangeDishes); // Устанавливаем отфильтрованные блюда
+            setFilteredChangeDishes(newFilteredChangeDishes);
         } else {
-            setFilteredChangeDishes([]); // Если условий нет, устанавливаем пустой массив
+            setFilteredChangeDishes([]);
         }
 
         const dateTwoDaysLater = dayjs().add(2, 'day').format('DD.MM.YYYY');

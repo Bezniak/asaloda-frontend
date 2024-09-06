@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 import useFetchAllData from "../../api/useFetchAllData.js";
@@ -6,7 +6,20 @@ import DishModalWindow from "../Program/DishModalWindow.jsx";
 import ChangeDish from "../Program/ChangeDish.jsx";
 import api from '../../api/api.js';
 
-const OrderDetails = ({userName, programName, startDate, endDate, dates, dishes: initialDishes, nextDay, orderId, excludeSaturday, excludeSunday}) => {
+const OrderDetails = ({
+                          userName,
+                          programName,
+                          startDate,
+                          endDate,
+                          dates,
+                          dishes: initialDishes,
+                          nextDay,
+                          orderId,
+                          excludeSaturday,
+                          excludeSunday,
+                          programStartDate,
+                          programEndDate
+                      }) => {
     const [selectedDish, setSelectedDish] = useState(null);
     const [isAdditionalMenuVisible, setIsAdditionalMenuVisible] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -24,12 +37,13 @@ const OrderDetails = ({userName, programName, startDate, endDate, dates, dishes:
     );
 
     const {data: allChangeDish, loading: allChangeDishLoading, error: allChangeDishError} = useFetchAllData(
-        `/dishes?filters[program_type][$eq]=${encodedProgramName}&filters[date][$gte]=${formattedNextDay}&filters[changedDish][$eq]=true&populate=*`
+        `/dishes?filters[program_type][$eq]=${encodedProgramName}&filters[date][$gte]=${programStartDate}&filters[date][$lte]=${programEndDate}&populate=*`
     );
 
     useEffect(() => {
         if (allDish) {
-            setUpdatedDishes([...initialDishes, ...allDish]);
+            const newUpdatedDishes = [...initialDishes, ...allDish];
+            setUpdatedDishes(newUpdatedDishes);
         }
     }, [allDish, initialDishes]);
 
@@ -114,7 +128,7 @@ const OrderDetails = ({userName, programName, startDate, endDate, dates, dishes:
                     <div key={formattedDate} className="mb-6">
                         <hr/>
                         <h3 className="text-xl text-left py-3 uppercase">{weekday}, {formattedDate}</h3>
-                        <div className="grid grid-cols-1 gap-4">
+                        <div className="flex justify-start items-center gap-10 flex-wrap">
                             {dishesForTheDay.map(dish => {
                                 const dishDate = dayjs(dish.attributes.date);
                                 const imageUrl = `${import.meta.env.VITE_UPLOAD_URL}${dish.attributes.main_img.data.attributes.url}`;
