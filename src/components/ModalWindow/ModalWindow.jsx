@@ -1,8 +1,7 @@
 import React from 'react';
-import Button from "../Button/Button.jsx";
 import {LuCircle} from "react-icons/lu";
 
-const ModalWindow = ({onClose, modalTitle, modalDescription, img, listTitle, list, buttonContent}) => {
+const ModalWindow = ({onClose, modalTitle, modalDescription, img, listTitle, list}) => {
     return (
         <div className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center px-4">
             <div className="fixed inset-0 bg-black opacity-70"></div>
@@ -17,12 +16,12 @@ const ModalWindow = ({onClose, modalTitle, modalDescription, img, listTitle, lis
                     </h3>
                     <button
                         type="button"
-                        className="absolute top-3 right-3 text-gray-400 hover:bg-gray-200 hover:text-green-700 rounded-lg text-sm w-10 h-10 p-3 flex items-center justify-center"
+                        className="absolute top-3 right-3 text-gray-400 hover:bg-[var(--green)] transition rounded-lg text-sm w-10 h-10 p-3 flex items-center justify-center"
                         onClick={onClose}
                     >
                         <svg className="w-3 h-3" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
                             <path
-                                stroke="#7ECA1D"
+                                stroke="#FF7B27"
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 strokeWidth="4"
@@ -41,13 +40,18 @@ const ModalWindow = ({onClose, modalTitle, modalDescription, img, listTitle, lis
                     <ul className="list-disc p-3 space-y-2">
                         <li className="font-bold">{listTitle}</li>
                         {list.map((item, index) => (
-                            <li key={index} className='text-sm'><LuCircle className='text-green-600 inline'/> {item}
+                            <li key={index} className='text-sm'><LuCircle className='text-green-600 inline'/>
+                                {item}
                             </li>
                         ))}
                     </ul>
                 )}
                 <div className="flex justify-center mt-4 pb-5">
-                    <Button content={buttonContent} onClick={onClose} borderColor={'lightgray'} color={'#7ECA1D'}/>
+                    <button className='btn'
+                            onClick={onClose}
+                    >
+                        Понятно
+                    </button>
                 </div>
             </div>
         </div>

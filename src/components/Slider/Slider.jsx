@@ -6,7 +6,7 @@ import 'swiper/css/pagination';
 import {Navigation, Pagination} from 'swiper/modules';
 import './slider.css';
 
-const Slider = ({slides}) => {
+const Slider = ({slides, scrollToProgram}) => {
     return (
         <Swiper
             spaceBetween={50}
@@ -44,7 +44,12 @@ const Slider = ({slides}) => {
                                     <img className="object-cover rounded-lg h-32 w-32 md:h-40 md:w-40"
                                          src={slide.smallPhoto2} alt="photo2"/>
                                 </div>
-                                <div>{slide.button}</div>
+                                <button
+                                    className='text-center font-bold py-3 bg-white rounded-full px-12 w-fit hover:bg-[var(--oringe)] hover:text-white transition'
+                                    onClick={scrollToProgram}
+                                >
+                                    Выбрать программу
+                                </button>
                             </div>
                             <div className="flex justify-center items-center w-full md:w-1/2">
                                 <img className="object-cover rounded-lg w-3/4 md:w-full md:h-auto" src={slide.bigPhoto}

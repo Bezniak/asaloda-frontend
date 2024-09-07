@@ -113,7 +113,7 @@ const DateCalendar = ({
     }, []);
 
     return (
-        <div className='w-full max-w-7xl mx-auto md:pt-14 md:pb-14 md:mt-20 md:mb-20 xs:mt-10 xs:mb-10'>
+        <div className='w-full max-w-7xl mx-auto'>
             {/* Оверлей */}
             {isAdditionalMenuVisible && (
                 <div className="fixed inset-0 bg-black bg-opacity-60 z-40"

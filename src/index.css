@@ -86,6 +86,20 @@ p {
     background: linear-gradient(135deg, #e0f7fa, #e0fce1, #ffe0e0);
 }
 
+.btn {
+    text-align: center;
+    font-weight: 600;
+    padding: 0.7rem 3rem;
+    background-color: var(--green);
+    border-radius: 40px;
+    transition: background-color 0.2s ease-in-out;
+    color: white;
+    letter-spacing: 2px;
+}
+
+.btn:hover {
+    background-color: var(--oringe);
+}
 
 
 

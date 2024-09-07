@@ -125,16 +125,13 @@ const WhichProgramToChoose = () => {
                                 className={`block w-full h-16 px-3 py-2 border ${errors.phone ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-600 sm:text-sm`}
                             />
                         </div>
-
-                        {/* Ошибки будут отображаться ниже полей формы */}
                         <div className="flex flex-col text-red-500 text-sm">
                             {errors.name && <small>{errors.name.message}</small>}
                             {errors.phone && <small>{errors.phone.message}</small>}
                         </div>
-
                         <button type="submit"
-                                className={`px-10 py-2 font-medium text-white bg-[var(--green)] rounded-full hover:bg-[var(--oringe)] transition ${!isValid ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                disabled={!isValid}  // Disable button if form is invalid
+                                className={`btn ${!isValid ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                disabled={!isValid}
                         >
                             Отправить
                         </button>

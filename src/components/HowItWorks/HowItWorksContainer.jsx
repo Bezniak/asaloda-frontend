@@ -3,7 +3,7 @@ import HowItWorks from "./HowItWorks.jsx";
 
 const HowItWorksContainer = () => {
     return (
-        <div className='w-full max-w-7xl mx-auto mt-10 mb-10'>
+        <div className='w-full max-w-7xl mx-auto mt-20 mb-20'>
             <h2 className="text-5xl font-bold mb-10 md:text-left">Как это работает</h2>
             <div
                 className='flex flex-col md:flex-row items-stretch justify-between gap-10 px-4'

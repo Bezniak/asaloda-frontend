@@ -1,30 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import ModalWindow from "../ModalWindow/ModalWindow.jsx";
+import useModal from "../../utils/useModal.jsx";
 
 const HealthyFood = ({img, title, description, modalTitle, modalDescription, isButtonShow}) => {
-    const [showModal, setShowModal] = useState(false);
-
-    const openModal = () => {
-        setShowModal(true);
-    };
-
-    const closeModal = () => {
-        setShowModal(false);
-    };
-
-    // Disable scroll when modal is open
-    useEffect(() => {
-        if (showModal) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'auto';
-        }
-
-        // Clean up on unmount
-        return () => {
-            document.body.style.overflow = 'auto';
-        };
-    }, [showModal]);
+    const {isModalOpen, openModal, closeModal} = useModal();
 
     return (
         <div
@@ -43,14 +22,12 @@ const HealthyFood = ({img, title, description, modalTitle, modalDescription, isB
             {isButtonShow && (
                 <>
                     <div
-                        className="px-3 py-2 text-base text-gray-400 md:hover:text-[var(--green)] hover:cursor-pointer transition"
+                        className="px-3 py-2 text-base text-gray-400 w-fit hover:text-[var(--oringe)] hover:cursor-pointer transition"
                         onClick={openModal}>
                         Подробнее
                     </div>
-                    {showModal &&
-                        <ModalWindow onClose={closeModal} modalTitle={modalTitle} modalDescription={modalDescription}
-                                     buttonContent={'Понятно'}
-                        />
+                    {isModalOpen &&
+                        <ModalWindow onClose={closeModal} modalTitle={modalTitle} modalDescription={modalDescription}/>
                     }
                 </>
             )}

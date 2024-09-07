@@ -9,6 +9,8 @@ import {ROUTES} from "../../config/routes.js";
 
 const OrderForm = ({program, userChosenDishes}) => {
 
+    console.log('program', program)
+
     const programName = program?.attributes?.program_name;
     const today = dayjs();
     const [isFocused, setIsFocused] = useState(false);

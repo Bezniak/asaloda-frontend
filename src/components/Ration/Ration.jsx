@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from "../Button/Button.jsx";
 
-const Ration = () => {
+const Ration = ({ scrollToProgram }) => {  // Получаем функцию scrollToProgram через пропсы
     return (
         <div
             className="relative w-full max-w-7xl mx-auto md:mt-32 md:mb-32 flex flex-col md:flex-row items-center justify-center bg-gradient-to-r from-[#ECFBFF] to-[#F5FFE5] rounded-lg shadow-lg p-6">
@@ -18,7 +18,9 @@ const Ration = () => {
                     Вы можете исключить любой ингредиент, блюдо или тип блюда по желанию. Укажите удобное время для
                     доставки готовых рационов правильного питания: по утрам или вечером.
                 </p>
-                <Button content={'Выбрать программу'} bgColor={'#7ECA1D'} color={'white'}/>
+                <button className='btn' onClick={scrollToProgram}>
+                    Выбрать программу
+                </button>
             </div>
             <div
                 className="absolute top-4 right-4 md:top-1/2 md:left-1/2 transform md:-translate-x-1/2 md:-translate-y-1/2 bg-white rounded-full w-36 h-36 flex flex-col items-center justify-center shadow-lg p-4 text-center">
@@ -27,8 +29,6 @@ const Ration = () => {
                     сутки</p>
             </div>
         </div>
-
-
     );
 };
 

@@ -1,8 +1,7 @@
 import React from 'react';
-import Button from "../Button/Button.jsx";
 import Slider from "./Slider.jsx";
 
-const SliderContainer = () => {
+const SliderContainer = ({ scrollToProgram }) => {
     const slides = [
         {
             id: 1,
@@ -14,7 +13,6 @@ const SliderContainer = () => {
             bgColor: '#7ECA1D',
             bigPhoto: '/food2.jpg',
             colorText: 'black',
-            button: <Button content={'Выбрать программу'}/>
         },
         {
             id: 2,
@@ -26,7 +24,6 @@ const SliderContainer = () => {
             bgColor: '#00196f',
             bigPhoto: '/food2.jpg',
             colorText: 'white',
-            button: <Button content={'Выбрать программу'} borderColor={'lightgray'}/>
         },
         {
             id: 3,
@@ -38,14 +35,12 @@ const SliderContainer = () => {
             bgColor: '#1dcfc6',
             bigPhoto: '/food2.jpg',
             colorText: '#FFFFFF',
-            button: <Button content={'Выбрать программу'}/>
         }
     ];
 
-
     return (
         <div>
-            <Slider slides={slides}/>
+            <Slider slides={slides} scrollToProgram={scrollToProgram}/>
         </div>
     );
 };

@@ -4,7 +4,6 @@ import {createBrowserRouter, Outlet, RouterProvider} from "react-router-dom";
 import {ROUTES} from "./config/routes.js";
 import NotFound from "./components/NotFound/NotFound.jsx";
 import Home from "./pages/Home/Home.jsx";
-import AboutUs from "./components/AboutUs/AboutUs.jsx";
 import Partnership from "./components/Partnership/Partnership.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import Navbar from "./components/Navbar/Navbar.jsx";
@@ -20,6 +19,7 @@ import AllOrdersForAdmin from "./components/AllOrdersForAdmin/AllOrdersForAdmin.
 import MyOrders from "./components/MyOrders/MyOrders.jsx";
 import MyOrder from "./components/MyOrders/MyOrder.jsx";
 import PrivacyPolicy from "./components/PrivacyPolicy/PrivacyPolicy.jsx";
+import AboutUsContainer from "./components/AboutUs/AboutUsContainer.jsx";
 
 const Layout = () => {
     return (
@@ -65,7 +65,7 @@ const router = createBrowserRouter([
             },
             {
                 path: ROUTES.ABOUTUS,
-                element: <AboutUs/>
+                element: <AboutUsContainer/>
             },
             {
                 path: ROUTES.PARTNERSHIP,
