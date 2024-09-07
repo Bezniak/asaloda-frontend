@@ -5,10 +5,9 @@ import Select from 'react-select'
 import dayjs from "dayjs";
 import {useAuth} from "../../context/AuthContext.jsx";
 import api from "../../api/api.js";
+import {ROUTES} from "../../config/routes.js";
 
 const OrderForm = ({program, userChosenDishes}) => {
-
-    console.log('userChosenDishes', userChosenDishes)
 
     const programName = program?.attributes?.program_name;
     const today = dayjs();
@@ -33,9 +32,7 @@ const OrderForm = ({program, userChosenDishes}) => {
     const {
         register,
         handleSubmit,
-        watch,
         formState: {errors},
-        setValue,
         control,
         trigger,
     } = useForm();
@@ -81,13 +78,10 @@ const OrderForm = ({program, userChosenDishes}) => {
         return dishes.filter(dish => {
             const dishDate = dayjs(dish.attributes.date);
             const dayDifference = dishDate.diff(start, 'day');
-            const isWithinDuration = dayDifference >= 0 && dayDifference < duration;
-
+            const isWithinDuration = dayDifference >= 0 && dayDifference < duration
             const isSaturday = dishDate.day() === 6;
             const isSunday = dishDate.day() === 0;
-
             const isExcluded = (isSaturday && excludeSaturday) || (isSunday && excludeSunday);
-
             return isWithinDuration && !isExcluded;
         });
     };
@@ -107,8 +101,6 @@ const OrderForm = ({program, userChosenDishes}) => {
                 excludeSaturday,
                 excludeSunday
             );
-
-            console.log('filteredDishes', filteredDishes);
 
             // Structure the payload with a `data` key
             const payload = {
@@ -132,10 +124,7 @@ const OrderForm = ({program, userChosenDishes}) => {
                 }
             };
 
-            console.log('Payload:', payload);
-
-            const response = await api.post(import.meta.env.VITE_API_URL + '/orders', payload);
-            console.log('Response:', response);
+            await api.post(import.meta.env.VITE_API_URL + '/orders', payload);
 
             setFormSubmitted(true);  // Mark form as submitted
             setSubmissionMessage("Ваш заказ принят!");
@@ -150,8 +139,6 @@ const OrderForm = ({program, userChosenDishes}) => {
             }
         }
     };
-
-
 
     const dateOptions = Array.from({length: 14}, (_, i) => {
         const date = today.add(2 + i, 'day');
@@ -170,14 +157,26 @@ const OrderForm = ({program, userChosenDishes}) => {
         }),
         option: (provided, state) => ({
             ...provided,
-            backgroundColor: state.isFocused ? '#7ECA1D' : provided.backgroundColor,
-            color: state.isFocused ? '#fff' : provided.color,
+            backgroundColor: state.isSelected
+                ? '#7ECA1D'  // Зеленый для выбранного элемента
+                : state.isFocused
+                    ? '#7ECA1D'  // Зеленый для фокуса
+                    : state.isActive
+                        ? '#7ECA1D'  // Зеленый при нажатии и удержании
+                        : provided.backgroundColor,
+            color: state.isSelected || state.isFocused || state.isActive
+                ? '#fff'  // Белый текст для выбранного, фокуса или при удержании
+                : provided.color,
+            '&:active': {
+                backgroundColor: '#7ECA1D',  // Зеленый для состояния active (нажатие мыши)
+            },
         }),
         menu: (provided) => ({
             ...provided,
             padding: '12px',
         }),
     };
+
 
     const timeOptions = [
         {value: '18:00 - 20:00', label: '18:00 - 20:00'},
@@ -251,7 +250,7 @@ const OrderForm = ({program, userChosenDishes}) => {
     return (
         <div className='bg'>
             <form onSubmit={handleSubmit(onSubmit)}
-                  className='w-full max-w-5xl mx-auto md:mt-10 md:mb-20 xs:mt-10 xs:mb-10 bg-white p-10 flex flex-col gap-5'>
+                  className='w-full max-w-5xl mx-auto md:mt-20 md:mb-20 xs:mt-10 xs:mb-10 bg-white p-10 flex flex-col gap-5'>
                 <div className='flex flex-row justify-around items-center rounded-lg'
                      style={{backgroundColor: `${program?.attributes?.bg_color}`}}
                 >
@@ -297,34 +296,37 @@ const OrderForm = ({program, userChosenDishes}) => {
 
                 <div className='flex justify-between items-center gap-5'>
                     <div className='border w-full p-3 flex justify-start items-center gap-5 rounded'>
-                        <input type="checkbox"
-                               name='excludeSaturday'
-                               id='excludeSaturday'
-                               {...register('excludeSaturday')}
-                               checked={excludeSaturday}
-                               onChange={() => {
-                                   setExcludeSaturday(!excludeSaturday);
-                                   trigger("excludeSaturday");
-                               }}
+                        <input
+                            type="checkbox"
+                            name='excludeSaturday'
+                            id='excludeSaturday'
+                            {...register('excludeSaturday')}
+                            checked={excludeSaturday}
+                            onChange={() => {
+                                setExcludeSaturday(!excludeSaturday);
+                                trigger("excludeSaturday");
+                            }}
+                            className='w-6 h-6 appearance-none border-2 border-gray-300 rounded checked:bg-[var(--green)] checked:border-[var(--green)] focus:outline-none'
                         />
                         <label htmlFor="excludeSaturday">Исключить субботу</label>
                     </div>
 
                     <div className='border w-full p-3 flex justify-start items-center gap-5 rounded'>
-                        <input type="checkbox"
-                               name='excludeSunday'
-                               id='excludeSunday'
-                               {...register('excludeSunday')}
-                               checked={excludeSunday}
-                               onChange={() => {
-                                   setExcludeSunday(!excludeSunday);
-                                   trigger("excludeSunday");
-                               }}
+                        <input
+                            type="checkbox"
+                            name='excludeSunday'
+                            id='excludeSunday'
+                            {...register('excludeSunday')}
+                            checked={excludeSunday}
+                            onChange={() => {
+                                setExcludeSunday(!excludeSunday);
+                                trigger("excludeSunday");
+                            }}
+                            className='w-6 h-6 appearance-none border-2 border-gray-300 rounded checked:bg-[var(--green)] checked:border-[var(--green)] focus:outline-none'
                         />
                         <label htmlFor="excludeSunday">Исключить воскресенье</label>
                     </div>
                 </div>
-
 
                 <hr className='h-0.5 my-2 bg-gray-200 border-0'/>
 
@@ -336,9 +338,11 @@ const OrderForm = ({program, userChosenDishes}) => {
                         {...register('promoCode')}
                         checked={showInputPromoCode}
                         onChange={() => setShowInputPromoCode(!showInputPromoCode)}
+                        className='w-6 h-6 appearance-none border-2 border-gray-300 rounded checked:bg-[var(--green)] checked:border-[var(--green)] focus:outline-none'
                     />
                     <label htmlFor="promoCode">У меня есть промокод</label>
                 </div>
+
 
                 {showInputPromoCode && (
                     <div className='flex items-center gap-5'>
@@ -355,7 +359,7 @@ const OrderForm = ({program, userChosenDishes}) => {
                         <button
                             type="button"
                             onClick={applyPromoCode}
-                            className='bg-[var(--green)] px-12 py-3 rounded-full text-white'
+                            className='bg-[var(--green)] px-12 py-3 rounded-full text-white hover:!bg-[var(--oringe)] transition'
                         >
                             Применить
                         </button>
@@ -494,9 +498,11 @@ const OrderForm = ({program, userChosenDishes}) => {
                         {...register('comment')}
                         checked={showComment}
                         onChange={() => setShowComment(!showComment)}
+                        className='w-6 h-6 appearance-none border-2 border-gray-300 rounded checked:bg-[var(--green)] checked:border-[var(--green)] focus:outline-none'
                     />
                     <label htmlFor="comment">Добавить комментарий к заказу</label>
                 </div>
+
 
                 {showComment && (
                     <div className='flex items-center gap-5'>
@@ -572,18 +578,16 @@ const OrderForm = ({program, userChosenDishes}) => {
 
                 <div className='flex justify-between items-center gap-10 mt-10'>
                     <p>Нажимая кнопку “Оформить” Вы даёте согласие на
-                        <NavLink to='' style={{color: `${program?.attributes?.bg_color}`}}
-                                 className='font-semibold'> обработку персональных
-                            данных</NavLink>
-                        &nbsp; и &nbsp;
-                        <NavLink to='' style={{color: `${program?.attributes?.bg_color}`}}
-                                 className='font-semibold'> соглашаетесь с публичной
-                            офертой</NavLink>
+                        <br/>
+                        <NavLink to={ROUTES.PRIVACY_POLICY} style={{color: `${program?.attributes?.bg_color}`}}
+                                 className='font-semibold hover:!text-[var(--oringe)] transition'
+                        >обработку персональных данных
+                        </NavLink>
                     </p>
                     <button
                         type='submit'
                         disabled={isSubmitting}
-                        className='bg-[var(--green)] px-20 py-5 rounded-full w-fit text-white'
+                        className='bg-[var(--green)] px-20 py-5 rounded-full w-fit text-white hover:!bg-[var(--oringe)] transition'
                         style={{backgroundColor: program?.attributes?.bg_color}}
                     >
                         {isSubmitting ? 'Отправка...' : 'Оформить'}

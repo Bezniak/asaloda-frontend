@@ -132,10 +132,12 @@ const OrderDetails = ({
                 </div>
             ) : (
                 <>
-                    <h2 className='py-8'>
+                    <h2 className='py-8 text-2xl'>
                         <span className='capitalize'>{userName}</span>, здравствуйте!
                         Вы заказали
-                        программу {programName} с {dayjs(startDate).format('DD.MM.YYYY')} по {dayjs(endDate).format('DD.MM.YYYY')}
+                        программу {programName} с <span
+                        className='font-bold'>{dayjs(startDate).format('DD.MM.YYYY')}</span> по <span
+                        className='font-bold'>{dayjs(endDate).format('DD.MM.YYYY')}</span>
                     </h2>
 
                     {filteredDates.map((date) => {
@@ -148,8 +150,12 @@ const OrderDetails = ({
 
                         return (
                             <div key={formattedDate} className="mb-6">
-                                <hr/>
-                                <h3 className="text-xl text-left py-3 uppercase">{weekday}, {formattedDate}</h3>
+
+
+                                <hr className="h-0.5 mt-8 mb-6 my-2 bg-gray-200 border-0 rounded w-full"/>
+
+
+                                <h3 className="text-xl text-left py-3 uppercase text-[var(--green)] font-bold">{weekday}, {formattedDate}</h3>
                                 <div className="flex justify-start items-start gap-10 flex-wrap">
                                     {dishesForTheDay.length > 0 ? (
                                         dishesForTheDay.map(dish => {
@@ -201,7 +207,7 @@ const OrderDetails = ({
                                         })
                                     ) : (
                                         <div className="text-gray-500 text-center text-sm py-4">
-                                            <p>Скоро будут обновления! Проверьте меню позже.</p>
+                                            <p>Блюда скоро будут добавлены. Пожалуйста, проверьте меню позже.</p>
                                         </div>
                                     )}
                                 </div>

@@ -44,7 +44,6 @@ const Discounts = ({ img, title, modalTitle, modalDescription, listTitle, list})
                         onClose={closeModal}
                         modalTitle={modalTitle}
                         modalDescription={modalDescription}
-                        img={img}
                         listTitle={listTitle}
                         list={list}
                         buttonContent={'Понятно'}

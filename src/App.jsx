@@ -19,6 +19,7 @@ import ProgramContainer from "./components/Program/ProgramContainer.jsx";
 import AllOrdersForAdmin from "./components/AllOrdersForAdmin/AllOrdersForAdmin.jsx";
 import MyOrders from "./components/MyOrders/MyOrders.jsx";
 import MyOrder from "./components/MyOrders/MyOrder.jsx";
+import PrivacyPolicy from "./components/PrivacyPolicy/PrivacyPolicy.jsx";
 
 const Layout = () => {
     return (
@@ -97,6 +98,10 @@ const router = createBrowserRouter([
             {
                 path: ROUTES.ORDER,
                 element: <MyOrder/>
+            },
+            {
+                path: ROUTES.PRIVACY_POLICY,
+                element: <PrivacyPolicy/>
             },
         ]
     },

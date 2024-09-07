@@ -9,25 +9,21 @@ import WhyAsalodaAfterFormContainer from "../WhyAsalodaAfterForm/WhyAsalodaAfter
 import FAQContainer from "../FAQ/FAQContainer.jsx";
 import dayjs from "dayjs";
 import OrderForm from "../Order/OrderForm.jsx";
+import useScrollToElement from "../../utils/useScrollToElement.jsx";
 
 const ProgramContainer = () => {
-
     const [updatedAllDishes, setUpdatedAllDishes] = useState([]);
     const [replacedDishes, setReplacedDishes] = useState({});
-
-
+    const [orderFormRef, scrollToOrderForm] = useScrollToElement();
+    const [dateCalendarRef, scrollToDateCalendar] = useScrollToElement(); // Реф для DateCalendar
     const {id} = useParams();
     const today = dayjs().format("YYYY-MM-DD");
-
     const {data, loading, error} = useFetchAllData(`/programs/${id}?populate=*`);
-
     const programType = encodeURIComponent(data?.attributes?.program_name || '');
-
-    const {data: allDish, loading: allDishLoading, error: allDishError} = useFetchAllData(
+    const {data: allDish, loading: allDishLoading} = useFetchAllData(
         `/dishes?filters[program_type][$eq]=${programType}&filters[date][$gte]=${today}&filters[changedDish][$eq]=false&populate=*`
     );
-
-    const {data: allChangeDish, loading: allChangeDishLoading, error: allChangeDishError} = useFetchAllData(
+    const {data: allChangeDish, loading: allChangeDishLoading} = useFetchAllData(
         `/dishes?filters[program_type][$eq]=${programType}&filters[date][$gte]=${today}&filters[changedDish][$eq]=true&populate=*`
     );
 
@@ -39,26 +35,29 @@ const ProgramContainer = () => {
         setUpdatedAllDishes(newUpdatedAllDishes);
     };
 
-
     if (loading || allDishLoading || allChangeDishLoading) return <Preloader/>;
 
     return (
         <div>
-            <WelcomeSection data={data}/>
+            <WelcomeSection data={data} onMenuButtonClick={scrollToDateCalendar}/> {/* Скролл до DateCalendar */}
             <DescriptionBlockContainer data={data}/>
-            <DateCalendar
-                allDish={allDish}
-                allChangeDish={allChangeDish}
-                replacedDishes={replacedDishes}
-                programType={data}
-                onUpdateDishes={handleUpdateDishes}
-                setUpdatedAllDishes={setUpdatedAllDishes}
-            />
-
-            <OrderForm
-                program={data}
-                userChosenDishes={updatedAllDishes.length > 0 ? updatedAllDishes : allDish}
-            />
+            <div ref={dateCalendarRef}>
+                <DateCalendar
+                    allDish={allDish}
+                    allChangeDish={allChangeDish}
+                    replacedDishes={replacedDishes}
+                    programType={data}
+                    onUpdateDishes={handleUpdateDishes}
+                    setUpdatedAllDishes={setUpdatedAllDishes}
+                    onOrderClick={scrollToOrderForm}
+                />
+            </div>
+            <div ref={orderFormRef}>
+                <OrderForm
+                    program={data}
+                    userChosenDishes={updatedAllDishes.length > 0 ? updatedAllDishes : allDish}
+                />
+            </div>
             <WhyAsalodaAfterFormContainer/>
             <FAQContainer/>
         </div>

@@ -1,6 +1,12 @@
 import React from 'react';
 
-const WelcomeSection = ({data}) => {
+const WelcomeSection = ({data, onMenuButtonClick}) => {
+
+    console.log('data WelcomeSection', data)
+
+    const oneDayPrice = data?.attributes?.one_day_price;
+
+
     return (
         <div className='w-full md:h-full xs:h-auto flex items-center justify-center'
              style={{backgroundColor: `${data?.attributes?.bg_color}`}}
@@ -17,23 +23,23 @@ const WelcomeSection = ({data}) => {
                     <div className='mt-10 flex md:flex-row md:items-center xs:flex-col mx-auto gap-10 '>
                         <button className='border py-2 px-6 pointer-events-none'>
                             <p className='text-sm text-gray-200 font-semibold mb-2'>Цена за день</p>
-                            <p className='text-base	font-bold text-white'>{data?.attributes?.daily_price} BYN</p>
+                            <p className='text-base	font-bold text-white'>{oneDayPrice} BYN</p>
                         </button>
                         <button className='border py-2 px-6 pointer-events-none'>
                             <p className='text-sm text-gray-200 font-semibold mb-2'>Цена за 1 неделю</p>
-                            <p className='text-base	font-bold text-white'>{data?.attributes?.one_week_price} BYN</p>
+                            <p className='text-base	font-bold text-white'>{oneDayPrice * 7} BYN</p>
                         </button>
                         <button className='border py-2 px-6 pointer-events-none'>
                             <p className='text-sm text-gray-200 font-semibold mb-2'>Цена за 2 недели</p>
-                            <p className='text-base	font-bold text-white'>{data?.attributes?.two_week_price} BYN</p>
+                            <p className='text-base	font-bold text-white'>{oneDayPrice * 14} BYN</p>
                         </button>
                         <button className='border py-2 px-6 pointer-events-none'>
                             <p className='text-sm text-gray-200 font-semibold mb-2'>Цена за 3 недели</p>
-                            <p className='text-base	font-bold text-white'>{data?.attributes?.three_week_price} BYN</p>
+                            <p className='text-base	font-bold text-white'>{oneDayPrice * 21} BYN</p>
                         </button>
                         <button className='border py-2 px-6 pointer-events-none'>
                             <p className='text-sm text-gray-200 font-semibold mb-2'>Цена за 4 недели</p>
-                            <p className='text-base	font-bold text-white'>{data?.attributes?.four_week_price} BYN</p>
+                            <p className='text-base	font-bold text-white'>{oneDayPrice * 28} BYN</p>
                         </button>
                     </div>
                     <div className="flex md:justify-start xs:justify-center md:space-x-10 xs:gap-4 mt-10">
@@ -45,7 +51,10 @@ const WelcomeSection = ({data}) => {
                             />
                         ))}
                     </div>
-                    <button className='mt-10 px-12 py-4 bg-white text-dark font-bold rounded-full'>
+                    <button
+                        className='mt-10 px-12 py-4 bg-white text-dark font-bold rounded-full'
+                        onClick={onMenuButtonClick}
+                    >
                         Смотреть меню
                     </button>
                 </div>

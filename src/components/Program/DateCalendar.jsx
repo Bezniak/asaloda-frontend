@@ -1,23 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
 import 'dayjs/locale/ru';
-import { FaCircle } from "react-icons/fa";
+import {FaCircle} from "react-icons/fa";
 import DishModalWindow from "./DishModalWindow.jsx";
 import ChangeDish from "./ChangeDish.jsx";
-import { calculator } from "../../utils/utils.js";
+import {calculator} from "../../utils/utils.js";
 
 dayjs.extend(localeData);
 dayjs.locale('ru');
 
-const DateCalendar = ({ allDish, allChangeDish, replacedDishes, programType, onUpdateDishes, setUpdatedAllDishes }) => {
+const DateCalendar = ({
+                          allDish,
+                          allChangeDish,
+                          replacedDishes,
+                          programType,
+                          onUpdateDishes,
+                          setUpdatedAllDishes,
+                          onOrderClick
+                      }) => {
     const [selectedDish, setSelectedDish] = useState(null);
     const [isAdditionalMenuVisible, setIsAdditionalMenuVisible] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [filteredDishes, setFilteredDishes] = useState([]);
     const today = dayjs();
     const [activeDate, setActiveDate] = useState(today.add(2, 'day'));
-    const dates = Array.from({ length: 8 }, (_, i) => today.add(i, 'day'));
+    const dates = Array.from({length: 8}, (_, i) => today.add(i, 'day'));
     const dayAbbreviations = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
 
     const eatingTypeOrder = {
@@ -105,7 +113,7 @@ const DateCalendar = ({ allDish, allChangeDish, replacedDishes, programType, onU
     }, []);
 
     return (
-        <div className='w-full max-w-7xl mx-auto md:mt-10 md:mb-20 xs:mt-10 xs:mb-10'>
+        <div className='w-full max-w-7xl mx-auto md:pt-14 md:pb-14 md:mt-20 md:mb-20 xs:mt-10 xs:mb-10'>
             {/* Оверлей */}
             {isAdditionalMenuVisible && (
                 <div className="fixed inset-0 bg-black bg-opacity-60 z-40"
@@ -145,9 +153,9 @@ const DateCalendar = ({ allDish, allChangeDish, replacedDishes, programType, onU
                                 {date.format('DD.MM')}
                             </div>
                             <div className='flex justify-center mt-2'>
-                                {isToday && <FaCircle className='text-xs fill-gray-400 pointer-events-none' />}
-                                {isTomorrow && <FaCircle className='text-xs fill-gray-400 pointer-events-none' />}
-                                {isFuture && <FaCircle className='text-xs fill-orange-400 pointer-events-none' />}
+                                {isToday && <FaCircle className='text-xs fill-gray-400 pointer-events-none'/>}
+                                {isTomorrow && <FaCircle className='text-xs fill-gray-400 pointer-events-none'/>}
+                                {isFuture && <FaCircle className='text-xs fill-orange-400 pointer-events-none'/>}
                             </div>
                         </div>
                     );
@@ -223,7 +231,7 @@ const DateCalendar = ({ allDish, allChangeDish, replacedDishes, programType, onU
                     <div className='flex flex-row justify-between border-b py-2'>
                         <h3 className="text-base text-gray-700 text-left">Жиры</h3>
                         <p className="text-base text-gray-700 text-right">
-                            {calculator(filteredDishes.map(dish => (dish?.attributes?.fats)))}
+                            {calculator(filteredDishes.map(dish => (dish?.attributes?.fats))).toFixed(2)}
                         </p>
                     </div>
                     <div className='flex flex-row justify-between border-b py-2'>
@@ -234,7 +242,8 @@ const DateCalendar = ({ allDish, allChangeDish, replacedDishes, programType, onU
                     </div>
                     <p className="text-4xl font-bold mt-8 mb-10">от {programType?.attributes?.one_day_price} руб/день</p>
                     <button
-                        className='rounded-full bg-[var(--green)] py-3 w-full text-white text-base mb-5 hover:!bg-green-600 transition'
+                        className='rounded-full bg-[var(--green)] py-3 w-full text-white text-base mb-5 hover:!bg-[var(--oringe)] transition'
+                        onClick={onOrderClick}
                     >
                         Заказать
                     </button>

@@ -14,4 +14,5 @@ export const ROUTES = {
     ORDER: "/order/:id",
     PROGRAM: "/program/:id",
     ALL_ORDER: "/all-orders",
+    PRIVACY_POLICY: "/privacy-policy",
 };
