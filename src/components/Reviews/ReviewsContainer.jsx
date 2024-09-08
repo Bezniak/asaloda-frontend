@@ -7,6 +7,8 @@ const ReviewsContainer = () => {
     const {data, loading, error} = useFetchAllData(`/reviews?populate=*`);
     const {data: programData, loading: programLoading, error: programError} = useFetchAllData(`/programs?populate=*`);
 
+    console.log('programData', programData)
+
     return (
         <div className=''>
             <Reviews data={data} loading={loading} error={error} programData={programData}/>

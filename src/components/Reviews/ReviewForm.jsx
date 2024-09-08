@@ -44,7 +44,7 @@ const CustomSelect = ({options, register, errors}) => {
                         <div
                             key={option.id}
                             className="py-2 px-2 bg-white hover:bg-green-500 hover:text-white cursor-pointer text-sm"
-                            onClick={() => handleOptionClick(option.attributes.name)}
+                            onClick={() => handleOptionClick(option.attributes.program_name)}
                         >
                             {option.attributes.name}
                         </div>
