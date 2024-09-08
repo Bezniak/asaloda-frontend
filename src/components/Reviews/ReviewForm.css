@@ -1,47 +1,90 @@
-.bg {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 80vh;
-    background: linear-gradient(135deg, #e0f7fa, #e0fce1, #ffe0e0);
-}
-
-.form-container {
-    height: 300px;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
 .input-field {
+    display: block;
+    padding: 0.625rem 0;
     width: 100%;
-    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    color: #1f2937; /* текст серый */
+    background-color: transparent;
+    border: 0;
+    border-bottom: 2px solid #d1d5db; /* граница серого цвета */
+    appearance: none;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.input-field:focus {
+    border-color: var(--green); /* цвет границы при фокусе */
+    box-shadow: none;
 }
 
 .input-label {
-    transition: all 0.2s ease;
+    position: absolute;
+    font-size: 0.875rem;
+    color: #6b7280; /* текст серый */
+    transition: transform 0.3s, font-size 0.3s;
+    top: 0.75rem;
+    left: 0;
+    pointer-events: none;
 }
 
-.error {
-    color: red;
-    font-size: 0.8rem;
+.input-field:focus + .input-label,
+.input-field:not(:placeholder-shown) + .input-label {
+    transform: translateY(-1.5rem) scale(0.75);
+    color: var(--green); /* цвет текста при фокусе */
 }
 
-.submit-button {
-    background-color: #4caf50;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
+.dropdown-selected {
+    display: block;
+    padding: 0.625rem 0;
+    width: 100%;
+    font-size: 0.875rem;
+    color: #6b7280; /* текст серый */
+    background-color: white;
+    border: 0;
+    border-bottom: 2px solid #d1d5db; /* граница серого цвета */
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+.dropdown-selected:hover {
+    border-color: var(--green); /* цвет границы при наведении */
+}
+
+.dropdown-menu {
+    position: absolute;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #d1d5db; /* граница серого цвета */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-height: 12rem;
+    overflow-y: auto;
+}
+
+.dropdown-item {
+    padding: 0.5rem 0.5rem;
+    background-color: white;
+    font-size: 0.875rem;
     cursor: pointer;
 }
 
-.relative.z-0.w-full.mb-5.group {
-    margin-bottom: 1.25rem;
+.dropdown-item:hover {
+    background-color: var(--green); /* цвет фона при наведении */
+    color: white; /* цвет текста при наведении */
 }
 
-textarea.input-field {
-    height: 11.85rem;
-    resize: none;
+.btn {
+    background-color: #34d399; /* основной цвет */
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #059669; /* цвет при наведении */
+}
+
+.bg {
+    background-color: #f9f9f9; /* фоновый цвет */
 }

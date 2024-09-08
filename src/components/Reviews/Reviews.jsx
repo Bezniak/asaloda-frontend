@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import Button from "../Button/Button.jsx";
 import {Preloader} from "../Preloader/Preloader.jsx";
 import Review from "./Review.jsx";
 import ReviewForm from "./ReviewForm.jsx";
@@ -24,17 +23,15 @@ const Reviews = ({data, loading, error, programData}) => {
                         и сервисе компании BeFit. Узнай почему у нас так вкусно!
                     </p>
                 </div>
-                <div className='flex-1 md:flex md:justify-end xs:text-center w-full'>
-                    <Button content={'Оставить отзыв'} color={'white'} bgColor={'#7ECA1D'}
-                            onClick={() => setIsFormVisible(!isFormVisible)}/>
-                </div>
+                <button className='btn' onClick={() => setIsFormVisible(!isFormVisible)}>
+                    Оставить отзыв
+                </button>
             </div>
             {isFormVisible && <ReviewForm data={data} programData={programData}/>}
             <h2 className='w-full max-w-7xl mx-auto p-3 text-3xl font-semibold mt-10'>
                 Отзывы о доставке готовой еды
             </h2>
             <Review data={data}/>
-
         </>
     );
 };
