@@ -10,6 +10,7 @@ export default {
                 '10vh': '10vh',
                 '50vh': '50vh',
                 '80vh': '80vh',
+                '90vh': '90vh',
                 '100vh': '100vh',
                 'h-110': '400px'
             },

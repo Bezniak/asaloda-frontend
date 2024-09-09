@@ -102,5 +102,20 @@ p {
 }
 
 
+.parallax-slide {
+    position: relative;
+    overflow: hidden;
+}
+
+.parallax-slide::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2); /* Уровень затемнения (0.5 — полупрозрачность) */
+    z-index: 1;
+}
 
 
