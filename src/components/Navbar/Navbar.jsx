@@ -4,16 +4,29 @@ import {ROUTES} from '../../config/routes.js';
 import {useAuth} from "../../context/AuthContext.jsx";
 import {FaSignInAlt, FaUserPlus} from "react-icons/fa";
 import useFetchAllData from "../../api/useFetchAllData.js";
+import useLanguage from "../../hooks/useLanguage.js";
+import {useTranslation} from "react-i18next";
+import {HiLanguage} from "react-icons/hi2";
+
+const languages = {
+    ru: 'Русский',
+    be: 'Беларуский',
+    en: 'English',
+};
 
 const Navbar = () => {
     const [isProgramDropdownVisible, setProgramDropdownVisible] = useState(false);
     const [isUserDropdownVisible, setUserDropdownVisible] = useState(false);
     const [isAboutUsDropdownVisible, setAboutUsDropdownVisible] = useState(false);
+    const [isLanguageDropdownVisible, setLanguageDropdownVisible] = useState(false);
     const [isMobileMenuVisible, setMobileMenuVisible] = useState(false);
+    const {t} = useTranslation();
+    const {currentLanguage, changeLanguage} = useLanguage();
 
     const dropdownRef = useRef(null);
     const dropdownUserRef = useRef(null);
     const dropdownAboutUsRef = useRef(null);
+    const dropdownLanguage = useRef(null);
 
     const {user, logout, role, theme, toggleTheme} = useAuth();
     const navigate = useNavigate();
@@ -38,6 +51,10 @@ const Navbar = () => {
         setAboutUsDropdownVisible(!isAboutUsDropdownVisible);
     };
 
+    const toggleLanguageDropdown = () => {
+        setLanguageDropdownVisible(!isLanguageDropdownVisible);
+    };
+
     const toggleMobileMenu = () => {
         setMobileMenuVisible(!isMobileMenuVisible);
     };
@@ -56,6 +73,10 @@ const Navbar = () => {
             setMobileMenuVisible(false);
         }
 
+        if (!event.target.closest('.mega-menu-full-dropdown-button-language') && isMobileMenuVisible) {
+            setMobileMenuVisible(false);
+        }
+
         // Close program dropdown if clicked outside of it
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setProgramDropdownVisible(false);
@@ -67,6 +88,10 @@ const Navbar = () => {
 
         if (dropdownAboutUsRef.current && !dropdownAboutUsRef.current.contains(event.target)) {
             setAboutUsDropdownVisible(false);
+        }
+
+        if (dropdownLanguage.current && !dropdownLanguage.current.contains(event.target)) {
+            setLanguageDropdownVisible(false);
         }
     };
 
@@ -92,9 +117,19 @@ const Navbar = () => {
         setMobileMenuVisible(false);
     };
 
+    const handleLanguageLinkClick = () => {
+        setLanguageDropdownVisible(false);
+        setMobileMenuVisible(false);
+    };
+
     const handleLogout = () => {
         logout();
     };
+
+    const handleNavigate = (path) => {
+        navigate(path);
+    };
+
 
     return (
         <nav className="bg-white border-gray-200 dark:border-gray-600 dark:bg-gray-900">
@@ -156,7 +191,7 @@ const Navbar = () => {
                                 onClick={toggleProgramDropdown}
                                 className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-green-500 md:dark:hover:bg-transparent dark:border-gray-700"
                             >
-                                Программы
+                                {t("programs")}
                                 <svg
                                     className="w-2.5 h-2.5 ms-2.5"
                                     aria-hidden="true"
@@ -206,7 +241,7 @@ const Navbar = () => {
                                 to=""
                                 id="mega-menu-full-dropdown-button-about-us"
                                 onClick={toggleAboutUsDropdown}
-                                className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-green-500 md:dark:hover:bg-transparent dark:border-gray-700"
+                                className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0"
                             >
                                 О нас
                                 <svg
@@ -226,8 +261,6 @@ const Navbar = () => {
                                 </svg>
                             </NavLink>
                         </li>
-
-
                         {user
                             ? (
                                 <li>
@@ -261,7 +294,7 @@ const Navbar = () => {
                                     <li>
                                         <NavLink
                                             to={ROUTES.LOGIN}
-                                            className="md:ml-10 flex items-center py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
+                                            className="md:ml-10 flex items-center py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0"
                                             onClick={() => setMobileMenuVisible(false)} // Close mobile menu
                                         >
                                             <FaSignInAlt className='mr-3 text-[var(--green)] text-2xl'/>
@@ -271,7 +304,7 @@ const Navbar = () => {
                                     <li>
                                         <NavLink
                                             to={ROUTES.REGISTER}
-                                            className="flex items-center py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
+                                            className="flex items-center py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0"
                                             onClick={() => setMobileMenuVisible(false)} // Close mobile menu
                                         >
                                             <FaUserPlus className='mr-3 text-[var(--green)] text-2xl'/>
@@ -280,15 +313,20 @@ const Navbar = () => {
                                     </li>
                                 </>
                             )
-
                         }
-
+                        <li>
+                            <NavLink
+                                to=""
+                                id="mega-menu-full-dropdown-button-language"
+                                onClick={toggleLanguageDropdown}
+                                className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0"
+                            >
+                                <HiLanguage className='text-3xl md:ml-5'/>
+                            </NavLink>
+                        </li>
                     </ul>
-
-
                 </div>
             </div>
-
             {isProgramDropdownVisible && (
                 <div
                     id="mega-menu-full-dropdown"
@@ -332,8 +370,6 @@ const Navbar = () => {
                     </div>
                 </div>
             )}
-
-
             {isAboutUsDropdownVisible && (
                 <div
                     id="mega-menu-full-dropdown-about-us"
@@ -385,8 +421,6 @@ const Navbar = () => {
                     </div>
                 </div>
             )}
-
-
             {isUserDropdownVisible && (
                 <div
                     id="mega-menu-user-dropdown"
@@ -418,7 +452,6 @@ const Navbar = () => {
                                 </li>
                             ) : null}
 
-                            {/*<hr/>*/}
                             <li onClick={handleLogout}>
                                 <NavLink
                                     to={ROUTES.HOME}
@@ -432,8 +465,59 @@ const Navbar = () => {
                     </div>
                 </div>
             )}
-
-
+            {isLanguageDropdownVisible && (
+                <div
+                    id="mega-menu-full-dropdown-language"
+                    ref={dropdownLanguage}
+                    className="border-gray-200 shadow-sm bg-gray-50 md:bg-white border-y"
+                >
+                    <div
+                        className="grid max-w-screen-xl px-4 py-1 mx-auto text-gray-900 dark:text-white sm:grid-cols-2 md:px-6"
+                    >
+                        <ul>
+                            <li onClick={() => setLanguageDropdownVisible(false)}>
+                                <button
+                                    onClick={() => {
+                                        changeLanguage('be');
+                                        handleLanguageLinkClick();
+                                    }}
+                                    className={`flex items-center space-x-2 ${
+                                        currentLanguage === 'be' ? 'font-bold' : ''
+                                    } text-[var(--green)] block w-full p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700`}
+                                >
+                                    BE
+                                </button>
+                            </li>
+                            <li onClick={() => setLanguageDropdownVisible(false)}>
+                                <button
+                                    onClick={() => {
+                                        changeLanguage('en');
+                                        handleLanguageLinkClick();
+                                    }}
+                                    className={`flex items-center space-x-2 ${
+                                        currentLanguage === 'us' ? 'font-bold' : ''
+                                    } text-[var(--green)] block w-full p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700`}
+                                >
+                                    EN
+                                </button>
+                            </li>
+                            <li onClick={() => setLanguageDropdownVisible(false)}>
+                                <button
+                                    onClick={() => {
+                                        changeLanguage('ru');
+                                        handleLanguageLinkClick();
+                                    }}
+                                    className={`flex items-center space-x-2 ${
+                                        currentLanguage === 'ru' ? 'font-bold' : ''
+                                    } text-[var(--green)] block w-full p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700`}
+                                >
+                                    RU
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            )}
         </nav>
     );
 };
