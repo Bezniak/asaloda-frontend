@@ -1,7 +1,7 @@
 import React from 'react';
-import { Parallax } from 'react-parallax';
+import {Parallax} from 'react-parallax';
 
-const Ration = ({ scrollToProgram }) => {
+const Ration = ({scrollToProgram}) => {
     return (
         <Parallax
             bgImage="/containerFood.jpg" // Изменённый фон
@@ -11,18 +11,12 @@ const Ration = ({ scrollToProgram }) => {
             <div className="max-w-7xl h-90vh mx-auto flex flex-col justify-center">
                 <div className="relative z-10 flex flex-col md:flex-row items-center justify-center">
                     <div className="relative flex flex-col justify-center items-center md:ml-16 p-4 md:pl-20">
-                        <h5 className="text-4xl font-bold text-white mb-4"
-                            style={{
-                                textShadow: '0px 0px 8px rgba(255, 255, 255, 1)', // Белая тень вокруг текста
-                            }}
-                        >
+                        <h5 className="text-4xl font-bold text-white mb-4">
                             Настройте свой рацион
                         </h5>
-                        <p className="text-white mb-6 text-base"
-                           style={{
-                               textShadow: '0px 0px 8px rgba(255, 255, 255, 1)', // Белая тень вокруг текста
-                           }}>
-                            Вы можете исключить любой ингредиент, блюдо или тип блюда по желанию. Укажите удобное время для
+                        <p className="text-white mb-6 text-base">
+                            Вы можете исключить любой ингредиент, блюдо или тип блюда по желанию. Укажите удобное время
+                            для
                             доставки готовых рационов правильного питания: по утрам или вечером.
                         </p>
                         <button

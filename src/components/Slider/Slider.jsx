@@ -26,17 +26,11 @@ const Slider = ({scrollToProgram}) => {
                 >
                     <div className="max-w-7xl h-90vh mx-auto flex flex-col justify-center">
                         <div className="relative z-10 flex flex-col">
-                            <h1 className="mb-5 text-4xl font-bold text-white"
-                                style={{
-                                    textShadow: '0px 0px 8px rgba(255, 255, 255, 1)', // Белая тень вокруг текста
-                                }}
+                            <h1 className="mb-5 text-4xl font-bold text-white z-50"
                             >
                                 Здоровое питание от AsalodaFood поможет вам:
                             </h1>
-                            <ul className="flex flex-col gap-5"
-                                style={{
-                                    textShadow: '0px 0px 8px rgba(255, 255, 255, 1)', // Белая тень вокруг текста списка
-                                }}>
+                            <ul className="flex flex-col gap-5">
                                 <li className='flex items-center gap-3'>
                                     <TiTickOutline className='text-4xl text-[var(--dark-blue)]'/>
                                     <span className="text-white">снизить массу тела</span>
@@ -58,10 +52,7 @@ const Slider = ({scrollToProgram}) => {
                                     <span className="text-white">экономить время на магазинах и готовке</span>
                                 </li>
                             </ul>
-                            <p className="mt-10 mb-10 text-left text-white"
-                               style={{
-                                   textShadow: '0px 0px 8px rgba(255, 255, 255, 1)', // Белая тень вокруг текста
-                               }}>
+                            <p className="mt-10 mb-10 text-left text-white">
                                 Напиши рационы правильного питания сделают путь к телу мечты лучше и ярче!
                             </p>
                             <button
@@ -83,10 +74,7 @@ const Slider = ({scrollToProgram}) => {
                     className="parallax-slide"
                 >
                     <div className=" max-w-7xl h-90vh mx-auto flex flex-col justify-center">
-                        <h1 className="mb-5 text-4xl font-bold text-white"
-                            style={{
-                                textShadow: '0px 0px 8px rgba(255, 255, 255, 1)', // Белая тень вокруг текста
-                            }}>
+                        <h1 className="mb-5 text-4xl font-bold text-white">
                             Худей легко
                         </h1>
                         <h1 className="mb-5 text-4xl font-bold text-white"
@@ -95,10 +83,7 @@ const Slider = ({scrollToProgram}) => {
                             }}>
                             Худей со вкусом
                         </h1>
-                        <p className="flex flex-col gap-5"
-                           style={{
-                               textShadow: '0px 0px 8px rgba(255, 255, 255, 1)', // Белая тень вокруг текста списка
-                           }}>
+                        <p className="flex flex-col gap-5">
                             Программы диетического питания от 1000 Ккал для желающих сбросить вес
                         </p>
                         <div className='text-center mt-10'>
@@ -120,22 +105,13 @@ const Slider = ({scrollToProgram}) => {
                     className="parallax-slide"
                 >
                     <div className=" max-w-7xl h-90vh mx-auto flex flex-col justify-center">
-                        <h1 className="mb-5 text-4xl font-bold text-white"
-                            style={{
-                                textShadow: '0px 0px 8px rgba(255, 255, 255, 1)', // Белая тень вокруг текста
-                            }}>
+                        <h1 className="mb-5 text-4xl font-bold text-white">
                             Худей легко
                         </h1>
-                        <h1 className="mb-5 text-4xl font-bold text-white"
-                            style={{
-                                textShadow: '0px 0px 8px rgba(255, 255, 255, 1)', // Белая тень вокруг текста
-                            }}>
+                        <h1 className="mb-5 text-4xl font-bold text-white">
                             Худей со вкусом
                         </h1>
-                        <p className="flex flex-col gap-5"
-                           style={{
-                               textShadow: '0px 0px 8px rgba(255, 255, 255, 1)', // Белая тень вокруг текста списка
-                           }}>
+                        <p className="flex flex-col gap-5">
                             Программы диетического питания от 1000 Ккал для желающих сбросить вес
                         </p>
                         <div className='text-center mt-10'>
@@ -157,22 +133,13 @@ const Slider = ({scrollToProgram}) => {
                     className="parallax-slide"
                 >
                     <div className=" max-w-7xl h-90vh mx-auto flex flex-col justify-center">
-                        <h1 className="mb-5 text-4xl font-bold text-white"
-                            style={{
-                                textShadow: '0px 0px 8px rgba(255, 255, 255, 1)', // Белая тень вокруг текста
-                            }}>
+                        <h1 className="mb-5 text-4xl font-bold text-white">
                             Худей легко
                         </h1>
-                        <h1 className="mb-5 text-4xl font-bold text-white"
-                            style={{
-                                textShadow: '0px 0px 8px rgba(255, 255, 255, 1)', // Белая тень вокруг текста
-                            }}>
+                        <h1 className="mb-5 text-4xl font-bold text-white">
                             Худей со вкусом
                         </h1>
-                        <p className="flex flex-col gap-5"
-                           style={{
-                               textShadow: '0px 0px 8px rgba(255, 255, 255, 1)', // Белая тень вокруг текста списка
-                           }}>
+                        <p className="flex flex-col gap-5">
                             Программы диетического питания от 1000 Ккал для желающих сбросить вес
                         </p>
                         <div className='text-center mt-10'>
@@ -186,8 +153,6 @@ const Slider = ({scrollToProgram}) => {
                     </div>
                 </Parallax>
             </SwiperSlide>
-
-
 
 
         </Swiper>

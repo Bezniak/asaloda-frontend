@@ -41,7 +41,7 @@ const ProgramContainer = () => {
         <div>
             <WelcomeSection data={data} onMenuButtonClick={scrollToDateCalendar}/> {/* Скролл до DateCalendar */}
             <DescriptionBlockContainer data={data}/>
-            <div ref={dateCalendarRef}>
+            <div ref={dateCalendarRef} className='mb-20 pt-10'>
                 <DateCalendar
                     allDish={allDish}
                     allChangeDish={allChangeDish}

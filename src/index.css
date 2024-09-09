@@ -103,19 +103,27 @@ p {
 
 
 .parallax-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     position: relative;
-    overflow: hidden;
 }
 
-.parallax-slide::before {
-    content: '';
+.parallax-slide::after {
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.2); /* Уровень затемнения (0.5 — полупрозрачность) */
+    background-color: rgba(0, 0, 0, 0.6);
     z-index: 1;
 }
+
+.parallax-slide img {
+    object-fit: cover;
+}
+
 
 

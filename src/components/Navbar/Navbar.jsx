@@ -8,11 +8,6 @@ import useLanguage from "../../hooks/useLanguage.js";
 import {useTranslation} from "react-i18next";
 import {HiLanguage} from "react-icons/hi2";
 
-const languages = {
-    ru: 'Русский',
-    be: 'Беларуский',
-    en: 'English',
-};
 
 const Navbar = () => {
     const [isProgramDropdownVisible, setProgramDropdownVisible] = useState(false);
@@ -188,7 +183,10 @@ const Navbar = () => {
                             <NavLink
                                 to=""
                                 id="mega-menu-full-dropdown-button"
-                                onClick={toggleProgramDropdown}
+                                onClick={(event) => {
+                                    event.preventDefault(); // предотвращает действие по умолчанию
+                                    toggleProgramDropdown(); // выполняет вашу функцию
+                                }}
                                 className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-green-500 md:dark:hover:bg-transparent dark:border-gray-700"
                             >
                                 {t("programs")}
@@ -240,7 +238,10 @@ const Navbar = () => {
                             <NavLink
                                 to=""
                                 id="mega-menu-full-dropdown-button-about-us"
-                                onClick={toggleAboutUsDropdown}
+                                onClick={(event) => {
+                                    event.preventDefault(); // предотвращает действие по умолчанию
+                                    toggleAboutUsDropdown(); // выполняет вашу функцию
+                                }}
                                 className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0"
                             >
                                 О нас
@@ -266,9 +267,12 @@ const Navbar = () => {
                                 <li>
                                     <NavLink
                                         to=""
-                                        id="mega-menu-full-dropdown-button"
-                                        onClick={toggleUserDropdown}
-                                        className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-green-500 md:dark:hover:bg-transparent dark:border-gray-700"
+                                        id="mega-menu-full-dropdown-button-about-us"
+                                        onClick={(event) => {
+                                            event.preventDefault(); // предотвращает действие по умолчанию
+                                            toggleAboutUsDropdown(); // выполняет вашу функцию
+                                        }}
+                                        className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0"
                                     >
                                         Аккаунт
                                         <svg
@@ -318,11 +322,15 @@ const Navbar = () => {
                             <NavLink
                                 to=""
                                 id="mega-menu-full-dropdown-button-language"
-                                onClick={toggleLanguageDropdown}
+                                onClick={(event) => {
+                                    event.preventDefault(); // предотвращает действие по умолчанию
+                                    toggleLanguageDropdown(); // выполняет вашу функцию
+                                }}
                                 className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0"
                             >
                                 <HiLanguage className='text-3xl md:ml-5'/>
                             </NavLink>
+
                         </li>
                     </ul>
                 </div>
