@@ -23,10 +23,8 @@ const AllOrdersForAdmin = () => {
                 const response = await axios.get(import.meta.env.VITE_API_URL + '/orders?populate=*');
                 const rawOrders = response.data.data;
 
-                console.log('rawOrders', rawOrders)
-
                 const processedOrders = rawOrders.flatMap(order => {
-                    const {startDate, endDate, duration, excludeSaturday, excludeSunday, dishes} = order.attributes;
+                    const {startDate, endDate, dishes} = order.attributes;
                     const start = parseISO(startDate);
                     const end = parseISO(endDate);
                     const dates = eachDayOfInterval({start, end});
@@ -40,16 +38,15 @@ const AllOrdersForAdmin = () => {
                             .map((dish, index) => {
                                 const {eating_type, dish_name, changedDish} = dish.attributes;
                                 return {
-                                    dish_info: `<strong>${eating_type}</strong>: ${dish_name}`,
-                                    eating_type,
+                                    dish_info: `${eating_type}: ${dish_name}`,
                                     changedDish
                                 };
                             })
-                            .sort((a, b) => (dishOrder[a.eating_type] || 99) - (dishOrder[b.eating_type] || 99)) // Сортировка блюд по порядку
+                            .sort((a, b) => (dishOrder[a.eating_type] || 99) - (dishOrder[b.eating_type] || 99))
                             .map(dish => {
                                 return `${dish.dish_info}${dish.changedDish ? ' (изменено)' : ''}`;
                             })
-                            .join('; '); // Преобразуем массив в строку
+                            .join('; ');
 
                         return {
                             ...order,
@@ -88,7 +85,7 @@ const AllOrdersForAdmin = () => {
     }, {});
 
     const columns = [
-        {Header: 'ID', accessor: 'id'},
+        {Header: 'Номер заказа', accessor: 'id'},
         {Header: 'Имя пользователя', accessor: 'username'},
         {Header: 'Адрес', accessor: 'address'},
         {Header: 'Название программы', accessor: 'programName'},
@@ -117,7 +114,7 @@ const AllOrdersForAdmin = () => {
                             const {formattedDishes, ...rest} = order;
                             return {
                                 ...rest,
-                                formattedDishes: formattedDishes.replace(/<\/?strong>/g, '').replace('; ', '\n'),
+                                formattedDishes: formattedDishes.replace(/<\/?strong>/g, '').replace('; ', '\n')
                             };
                         })}
                         headers={columns.map(col => ({label: col.Header, key: col.accessor}))}
