@@ -270,7 +270,7 @@ const Navbar = () => {
                                         id="mega-menu-full-dropdown-button-about-us"
                                         onClick={(event) => {
                                             event.preventDefault(); // предотвращает действие по умолчанию
-                                            toggleAboutUsDropdown(); // выполняет вашу функцию
+                                            toggleUserDropdown(); // выполняет вашу функцию
                                         }}
                                         className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0"
                                     >

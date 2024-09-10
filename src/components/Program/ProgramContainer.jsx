@@ -57,7 +57,7 @@ const ProgramContainer = () => {
                     program={data}
                     userChosenDishes={updatedAllDishes.length > 0 ? updatedAllDishes : allDish}
                 />
-            </div>
+s            </div>
             <WhyAsalodaAfterFormContainer/>
             <FAQContainer/>
         </div>

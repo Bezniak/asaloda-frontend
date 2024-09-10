@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {addDays, eachDayOfInterval, format, parseISO} from 'date-fns';
+import {eachDayOfInterval, format, parseISO} from 'date-fns';
 import {CSVLink} from 'react-csv';
 import {Preloader} from "../Preloader/Preloader.jsx";
 
@@ -9,7 +9,13 @@ const AllOrdersForAdmin = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // console.log('orders', orders);
+    const dishOrder = {
+        'Первый завтрак': 1,
+        'Второй завтрак': 2,
+        'Обед': 3,
+        'Полдник': 4,
+        'Ужин': 5
+    };
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -17,28 +23,48 @@ const AllOrdersForAdmin = () => {
                 const response = await axios.get(import.meta.env.VITE_API_URL + '/orders?populate=*');
                 const rawOrders = response.data.data;
 
+                console.log('rawOrders', rawOrders)
+
                 const processedOrders = rawOrders.flatMap(order => {
-                    const { startDate, duration, replacedDishes } = order.attributes;
+                    const {startDate, endDate, duration, excludeSaturday, excludeSunday, dishes} = order.attributes;
                     const start = parseISO(startDate);
-                    const end = addDays(start, duration - 1);
-                    const dates = eachDayOfInterval({ start, end });
+                    const end = parseISO(endDate);
+                    const dates = eachDayOfInterval({start, end});
 
                     return dates.map(date => {
                         const formattedDate = format(date, 'dd.MM.yyyy');
-                        const replacedDishesForDate = replacedDishes?.[formattedDate.replace(/\./g, '-')];
 
-                        // Format replaced dishes with numbering and eating_type
-                        const formattedReplacedDishes = replacedDishesForDate?.map((dish, index) => {
-                            return `${index + 1}. ${dish.attributes.eating_type}: ${dish.attributes.dish_name}`;
-                        }).join('\n') || 'Нет замен';
+                        // Формируем блюда только для текущей даты
+                        const formattedDishes = dishes.data
+                            .filter(dish => format(parseISO(dish.attributes.date), 'dd.MM.yyyy') === formattedDate)
+                            .map((dish, index) => {
+                                const {eating_type, dish_name, changedDish} = dish.attributes;
+                                return {
+                                    dish_info: `<strong>${eating_type}</strong>: ${dish_name}`,
+                                    eating_type,
+                                    changedDish
+                                };
+                            })
+                            .sort((a, b) => (dishOrder[a.eating_type] || 99) - (dishOrder[b.eating_type] || 99)) // Сортировка блюд по порядку
+                            .map(dish => {
+                                return `${dish.dish_info}${dish.changedDish ? ' (изменено)' : ''}`;
+                            })
+                            .join('; '); // Преобразуем массив в строку
 
                         return {
                             ...order,
                             date: formattedDate,
                             username: order.attributes.user?.data?.attributes?.username || order.attributes.userName || 'Не указано',
-                            userphone: order.attributes.user?.data?.attributes?.userphone || order.attributes.userPhone || 'Не указано',
-                            email: order.attributes.user?.data?.attributes?.email || order.attributes.userEmail || 'Не указано',
-                            replacedDishesForDate: formattedReplacedDishes
+                            address: order.attributes.address,
+                            programName: order.attributes.programName,
+                            duration: order.attributes.duration,
+                            deliveryTime: order.attributes.deliveryTime,
+                            excludeSaturday: order.attributes.excludeSaturday ? 'Да' : 'Нет',
+                            excludeSunday: order.attributes.excludeSunday ? 'Да' : 'Нет',
+                            promoCode: order.attributes.promoCodeValue,
+                            totalPrice: order.attributes.totalPrice,
+                            comment: order.attributes.comment,
+                            formattedDishes
                         };
                     });
                 });
@@ -62,69 +88,19 @@ const AllOrdersForAdmin = () => {
     }, {});
 
     const columns = [
-        {
-            Header: 'ID',
-            accessor: 'id',
-        },
-        {
-            Header: 'Имя пользователя',
-            accessor: 'username',
-        },
-        {
-            Header: 'Телефон',
-            accessor: 'userphone',
-        },
-        {
-            Header: 'Email',
-            accessor: 'email',
-        },
-        {
-            Header: 'Адрес',
-            accessor: 'attributes.address',
-        },
-        {
-            Header: 'Название программы',
-            accessor: 'attributes.programName',
-        },
-        {
-            Header: 'Дата начала',
-            accessor: 'attributes.startDate',
-            Cell: ({value}) => format(parseISO(value), 'dd.MM.yyyy'),
-        },
-        {
-            Header: 'Длительность',
-            accessor: 'attributes.duration',
-        },
-        {
-            Header: 'Время доставки',
-            accessor: 'attributes.deliveryTime',
-        },
-        {
-            Header: 'Исключить субботу',
-            accessor: 'attributes.excludeSaturday',
-            Cell: ({value}) => (value ? 'Да' : 'Нет'),
-        },
-        {
-            Header: 'Исключить воскресенье',
-            accessor: 'attributes.excludeSunday',
-            Cell: ({value}) => (value ? 'Да' : 'Нет'),
-        },
-        {
-            Header: 'Промокод',
-            accessor: 'attributes.promoCodeValue',
-        },
-        {
-            Header: 'Замененные блюда',
-            accessor: 'replacedDishesForDate',
-        },
-        {
-            Header: 'Комментарий',
-            accessor: 'attributes.comment',
-        },
-        {
-            Header: 'Общая стоимость',
-            accessor: 'attributes.totalPrice',
-        },
+        {Header: 'ID', accessor: 'id'},
+        {Header: 'Имя пользователя', accessor: 'username'},
+        {Header: 'Адрес', accessor: 'address'},
+        {Header: 'Название программы', accessor: 'programName'},
+        {Header: 'Дата', accessor: 'date'},
+        {Header: 'Длительность', accessor: 'duration'},
+        {Header: 'Время доставки', accessor: 'deliveryTime'},
+        {Header: 'Исключить субботу', accessor: 'excludeSaturday'},
+        {Header: 'Исключить воскресенье', accessor: 'excludeSunday'},
+        {Header: 'Промокод', accessor: 'promoCode'},
+        {Header: 'Комментарий', accessor: 'comment'},
+        {Header: 'Общая стоимость', accessor: 'totalPrice'},
+        {Header: 'Блюда', accessor: 'formattedDishes'}
     ];
 
     if (loading) return <Preloader/>;
@@ -137,10 +113,16 @@ const AllOrdersForAdmin = () => {
                 <div key={date} className="mb-8">
                     <h2 className="text-2xl text-left font-bold mb-4">{date}</h2>
                     <CSVLink
-                        data={orders}
+                        data={orders.map(order => {
+                            const {formattedDishes, ...rest} = order;
+                            return {
+                                ...rest,
+                                formattedDishes: formattedDishes.replace(/<\/?strong>/g, '').replace('; ', '\n'),
+                            };
+                        })}
                         headers={columns.map(col => ({label: col.Header, key: col.accessor}))}
                         filename={`orders_${date.replace(/\./g, '-')}.csv`}
-                        className="mb-4 inline-block bg-[var(--green)] text-dark px-3 py-3 rounded"
+                        className="mb-4 inline-block bg-green-500 text-white px-3 py-3 rounded"
                     >
                         Скачать меню на {date}
                     </CSVLink>
@@ -152,7 +134,7 @@ const AllOrdersForAdmin = () => {
                                     <th
                                         key={column.Header}
                                         className="border border-gray-300 px-2 py-1 text-left"
-                                        style={{minWidth: '100px'}} // Ensure minimum width for each column
+                                        style={{minWidth: '100px'}}
                                     >
                                         {column.Header}
                                     </th>
@@ -163,21 +145,22 @@ const AllOrdersForAdmin = () => {
                             {orders.map(order => (
                                 <tr key={order.id} className="hover:bg-gray-200">
                                     {columns.map(column => {
-                                        const cellValue = column.accessor
-                                            .split('.')
-                                            .reduce((obj, key) => (obj ? obj[key] : null), order);
+                                        const cellValue = column.accessor.split('.').reduce((obj, key) => (obj ? obj[key] : null), order);
                                         return (
                                             <td
                                                 key={column.Header}
-                                                className={`border border-gray-300 px-2 py-1 break-words whitespace-pre-line ${
-                                                    column.accessor === 'replacedDishesForDate' && cellValue !== 'Нет замен' ? 'bg-red-400' : ''
-                                                }`}
-                                                style={{minWidth: '100px', maxWidth: '200px'}} // Control column width
+                                                className="border border-gray-300 px-2 py-1 break-words whitespace-pre-line"
+                                                style={{minWidth: '100px', maxWidth: '200px'}}
                                             >
-                                                {column.Cell ? column.Cell({
-                                                    value: cellValue,
-                                                    row: {original: order}
-                                                }) : cellValue}
+                                                {column.accessor === 'formattedDishes'
+                                                    ? cellValue.split('; ').map((dish, index) => (
+                                                        <div
+                                                            key={index}
+                                                            dangerouslySetInnerHTML={{__html: dish}}
+                                                            style={{color: dish.includes('(изменено)') ? 'red' : 'inherit'}}
+                                                        />
+                                                    ))
+                                                    : cellValue}
                                             </td>
                                         );
                                     })}

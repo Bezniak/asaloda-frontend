@@ -602,6 +602,8 @@ const OrderForm = ({program, userChosenDishes}) => {
                     <p className='text-red-500'>{submissionMessage}</p>
                 </div>
             )}
+
+
         </div>
     );
 };
