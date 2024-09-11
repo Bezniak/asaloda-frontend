@@ -1,23 +1,36 @@
 import React from 'react';
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import useFetchAllData from "../../api/useFetchAllData.js";
-import { Preloader } from "../Preloader/Preloader.jsx";
+import {Preloader} from "../Preloader/Preloader.jsx";
+import {useAuth} from "../../context/AuthContext.jsx";
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 import OrderDetails from './OrderDetails.jsx';
+import {ROUTES} from "../../config/routes.js";
 
 const MyOrder = () => {
-    const { id } = useParams();  // Get the order ID from the URL params
-    const { data, loading, error } = useFetchAllData(`/orders/${id}?populate[dishes][populate]=*&populate[user][populate]=*`);
+    const {id} = useParams();  // Get the order ID from the URL params
+    const {
+        data,
+        loading,
+        error
+    } = useFetchAllData(`/orders/${id}?populate[dishes][populate]=*&populate[user][populate]=*`);
+    const {user} = useAuth(); // Get the current user
+    const navigate = useNavigate(); // For redirecting
 
-    console.log('data MyOrder', data)
-
-    if (loading) return <Preloader />;
+    if (loading) return <Preloader/>;
     if (error) return <div className="text-center mt-8 text-red-500">Ошибка: {error.message}</div>;
 
-    // Check if data and its nested properties exist
-    if (!data || !data.attributes || !data.attributes.dishes || !data.attributes.user) {
-        return <div className="text-center mt-8 text-red-500">Ошибка: данные отсутствуют или структура данных неправильная</div>;
+    // Проверяем, что данные пользователя есть
+    if (!data || !data.attributes || !data.attributes.user) {
+        return <div className="text-center mt-8 text-red-500">Ошибка: данные отсутствуют</div>;
+    }
+
+    // Проверяем, что пользователь может просматривать этот заказ
+    const orderUserId = data.attributes.user.data.id;
+    if (user?.id !== orderUserId) {
+        navigate(ROUTES.HOME);
+        return null;
     }
 
     const startDate = dayjs(data.attributes.startDate);
@@ -29,19 +42,12 @@ const MyOrder = () => {
     const programStartDate = dayjs(data.attributes.startDate).format('YYYY-MM-DD');
     const programEndDate = dayjs(data.attributes.endDate).format('YYYY-MM-DD');
 
-
-    // Extract all the dish dates, checking if dishes data exists
     const dishDates = data.attributes.dishes.data.map(dish => dayjs(dish.attributes.date));
-
-    // Find the latest date among the dishes
     const latestDishDate = dishDates.reduce((latest, current) => current.isAfter(latest) ? current : latest, dishDates[0]);
-
-    // Get the next day after the latest dish date
     const nextDay = latestDishDate.add(1, 'day').format("YYYY-MM-DD");
 
     const dates = [];
     let currentDate = startDate;
-
     while (currentDate.isBefore(endDate) || currentDate.isSame(endDate)) {
         dates.push(currentDate);
         currentDate = currentDate.add(1, 'day');

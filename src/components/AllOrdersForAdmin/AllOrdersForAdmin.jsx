@@ -3,8 +3,12 @@ import axios from 'axios';
 import {eachDayOfInterval, format, parseISO} from 'date-fns';
 import {CSVLink} from 'react-csv';
 import {Preloader} from "../Preloader/Preloader.jsx";
+import {useAuth} from "../../context/AuthContext.jsx";
+import {useNavigate} from "react-router-dom";
 
 const AllOrdersForAdmin = () => {
+    const {user, role} = useAuth();
+    const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -17,11 +21,21 @@ const AllOrdersForAdmin = () => {
         'Ужин': 5
     };
 
+
     useEffect(() => {
+
+        if (role !== 'admin') {
+            // Если роль пользователя не "admin", перенаправляем на главную страницу
+            navigate('/');
+            return;
+        }
+
         const fetchOrders = async () => {
             try {
                 const response = await axios.get(import.meta.env.VITE_API_URL + '/orders?populate=*');
                 const rawOrders = response.data.data;
+
+                console.log('rawOrders', rawOrders)
 
                 const processedOrders = rawOrders.flatMap(order => {
                     const {startDate, endDate, dishes} = order.attributes;
@@ -75,7 +89,7 @@ const AllOrdersForAdmin = () => {
         };
 
         fetchOrders();
-    }, []);
+    }, [role, navigate]);
 
     const groupedOrders = orders.reduce((acc, order) => {
         const {date} = order;
@@ -100,8 +114,9 @@ const AllOrdersForAdmin = () => {
         {Header: 'Блюда', accessor: 'formattedDishes'}
     ];
 
-    if (loading) return <Preloader/>;
+    if (loading) return <Preloader />;
     if (error) return <p className="text-center mt-4 text-red-500">{error}</p>;
+    if (!user || role !== 'admin') return <p className="text-center mt-4 text-red-500">Нет доступа</p>;
 
     return (
         <div className="container mx-auto px-4">

@@ -15,4 +15,5 @@ export const ROUTES = {
     PROGRAM: "/program/:id",
     ALL_ORDER: "/all-orders",
     PRIVACY_POLICY: "/privacy-policy",
+    NOT_ALLOWED: "/forbidden",
 };
