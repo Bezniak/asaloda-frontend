@@ -2,76 +2,63 @@ import React, {useState} from 'react';
 import {MdCircle} from "react-icons/md";
 import Map from "./Map.jsx";
 import Button from "../Button/Button.jsx";
+import {useTranslation} from "react-i18next";
 
 const Delivery = () => {
+    const {t} = useTranslation();
     const [isExpanded, setIsExpanded] = useState(false);
-
     const toggleText = () => {
         setIsExpanded(!isExpanded);
     };
+
+
     return (
         <>
             <div className='flex md:flex-row xs:flex-col'>
                 <div className='flex-1 md:pr-20'>
-                    <h2 className='text-4xl font-bold mb-10 text-left'>Доставка</h2>
+                    <h2 className='md:text-4xl font-bold mb-10 md:text-left xs:text-center'>
+                        {t("delivery")}
+                    </h2>
                     <p className='text-left mt-10 mb-10 text-gray-400 text-base'>
-                        Мы осуществляем доставку ПП еды регулярно (раз в два дня). Каждое утро или вечер — выбор за Вами
+                        {t("healthy_food_delivery_in_Grodno")}
                     </p>
                     <div className='flex flex-row justify-start items-center mb-4'>
                         <MdCircle className='fill-[var(--green)] mr-4'/>
-                        <p className='text-left font-bold text-base'>Доставляем бесплатно</p>
+                        <p className='text-left font-bold text-base'>
+                            {t("free_delivery")}
+                        </p>
                     </div>
                     <div className='flex flex-row justify-start items-center'>
                         <MdCircle className='fill-yellow-300 mr-4'/>
-                        <p className='text-left font-bold text-base'>Доставка платная</p>
+                        <p className='text-left font-bold text-base'>
+                            {t("payed_delivery")}
+                        </p>
                     </div>
                 </div>
                 <Map/>
             </div>
             <div className='md:mt-20 xs:mt-10'>
                 <p className='text-left mb-8 text-base'>
-                    Хотите разнообразить свой рацион и получить идеально подходящие блюда, учитывающие ваши пищевые
-                    предпочтения и цели? Сервис BeFit позволяет заказывать готовое питание, включающее разнообразные
-                    блюда на каждый день недели. Гарантируем, что каждое блюдо тщательно подсчитано по ккал, помогая вам
-                    контролировать потребление энергии и добиваться желаемых результатов.
+                    {t("asalodaFood_ready_to_offer")}
                     <br/>
                 </p>
                 <div
                     className={`transition-max-height duration-500 ease-in-out overflow-hidden ${isExpanded ? 'md:max-h-screen xs:max-h-fit' : 'max-h-0'}`}
                 >
                     <p className="mt-2 text-left mb-8 text-base">
-                        Наши профессиональные диетологи специализируются на составлении меню для легкого похудения. Наши
-                        повара разрабатывают балансированные рационы с учетом калорийности каждого блюда. Выбирайте
-                        специальные наборы, предназначенные для достижения ваших целей в сжатые сроки: детокс, набор
-                        мышечной массы, похудение либо поддержание спортивной формы.
+                        {t("varied_and_healthy_menu")}
                     </p>
 
                     <p className="mt-2 text-left mb-8 text-base">
-                        Заказывать у нас – легко и удобно. Просто посетите наш сайт, выберите интересующие вас блюда,
-                        укажите желаемые ккал и оформите заказ в несколько кликов. Вы можете заменить любое блюдо в
-                        заказе, и ккал автоматически пересчитаются. Доставляем заказы готового питания по городу в
-                        пределах МКАД с бесплатной доставкой. У вас есть возможность выбора удобного интервала в
-                        пределах 2 часов, а мы доставим заказ по адресу в удобных контейнерах. Оплатить заказ вы можете
-                        как по карте, так и наличными курьеру при получении.
+                        {t("professional_AsalodaFood_team")}
                     </p>
 
                     <p className="mt-2 text-left mb-8 text-base">
-                        Наша команда уверена в качестве предлагаемых блюд и предельно внимательно следит за тем, чтобы
-                        каждый заказанный у нас обед или ужин соответствовал вашим ожиданиям. Не упустите возможность
-                        наслаждаться вкусной и здоровой пищей, оформляйте заказ с бесплатной доставкой у нас на сайте
-                        уже сегодня!
-                    </p>
-
-                    <p className="mt-2 text-left mb-8 text-base">
-                        Каждый заказ – это не только свежий завтрак, обед и ужин, но также полдник и второй завтрак,
-                        которые вы получаете ежедневно. Заказать ПП блюда от Бифит легко! Выбирайте вариант рациона и
-                        оформляйте заявку онлайн! Мы доставляем правильную еду по всей Москве и в ряде городов
-                        Московской области, включая Красногорск, Химки, Долгопрудный, Мытищи, Пушкино, Ивантеевку,
-                        Королев, Щелково, Балашиху, Реутов, Люберцы, Видное, Коммунарку и Одинцово.
+                        {t("our_delivery_service")}
                     </p>
                 </div>
                 <div className='xs:text-center'>
-                    <Button onClick={toggleText} content={isExpanded ? 'Скрыть' : 'Показать далее'} color={'#7ECA1D'}
+                    <Button onClick={toggleText} content={isExpanded ? t("hide") : t("read_more")} color={'#7ECA1D'}
                             borderColor={'#7ECA1D'}/>
                 </div>
             </div>

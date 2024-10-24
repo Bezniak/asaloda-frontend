@@ -1,6 +1,9 @@
 import React from 'react';
+import {useTranslation} from "react-i18next";
 
 const DishModalWindow = ({dishData, onClose}) => {
+    const {t} = useTranslation();
+
 
     return (
         <div className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center px-4">
@@ -13,33 +16,37 @@ const DishModalWindow = ({dishData, onClose}) => {
                 <div className="flex flex-col items-center justify-between p-5">
                     <div className='flex flex-row justify-between w-full items-center'>
                         <h2 className='text-sm text-gray-500 font-medium'>{dishData?.attributes?.eating_type}</h2>
-                        <h2 className='text-sm text-gray-500 font-medium'>{dishData?.attributes?.kcal} Ккал</h2>
+                        <h2 className='text-sm text-gray-500 font-medium'>
+                            {dishData?.attributes?.kcal}
+                            &nbsp;
+                            {t("kcal")}
+                        </h2>
                     </div>
                     <h2 className='mt-5 mb-2 font-semibold text-lg text-left'>{dishData?.attributes?.dish_name}</h2>
                     <p className='text-base text-left'>{dishData?.attributes?.dish_description}</p>
                     <div className="mt-5 flex flex-row justify-around w-full">
                         <div className='text-base flex flex-col justify-center items-center border-r pr-10'>
                             <p>{dishData?.attributes?.kcal}</p>
-                            <p>Ккал</p>
+                            <p>{t("kcal")}</p>
                         </div>
                         <div className='text-base flex flex-col justify-center items-center border-r pr-10'>
                             <p>{dishData?.attributes?.squirrels}</p>
-                            <p>Белки</p>
+                            <p>{t("squirrels")}</p>
                         </div>
                         <div className='text-base flex flex-col justify-center items-center border-r pr-10'>
                             <p>{dishData?.attributes?.fats}</p>
-                            <p>Жиры</p>
+                            <p>{t("fat")}</p>
                         </div>
                         <div className='text-base flex flex-col justify-center items-center'>
                             <p>{dishData?.attributes?.carbohydrates}</p>
-                            <p>Углеводы</p>
+                            <p>{t("carbohydrates")}</p>
                         </div>
                     </div>
                     <button
-                        className='w-full border hover:!border-[var(--green)] transition rounded-full py-4 text-[var(--green)] font-bold mt-10'
+                        className='btn mt-10 w-4/5'
                         onClick={onClose}
                     >
-                        Понятно
+                        {t("it_clear")}
                     </button>
 
                     <button

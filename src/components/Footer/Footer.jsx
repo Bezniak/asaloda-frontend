@@ -4,10 +4,14 @@ import {ROUTES} from "../../config/routes.js";
 import dayjs from "dayjs";
 import useFetchAllData from "../../api/useFetchAllData.js";
 import {animateScroll as scroll} from "react-scroll";
+import {useTranslation} from "react-i18next";
+import {useAuth} from "../../context/AuthContext.jsx";
 
 const Footer = () => {
+    const {locale} = useAuth();
     const currentYear = dayjs().year();
-    const {data, loading, error} = useFetchAllData(`/programs?populate=*`);
+    const {t} = useTranslation();
+    const {data, loading, error} = useFetchAllData(`/programs?locale=${locale}&populate=*`);
 
     const handleClick = () => {
         // Smooth scroll to top using react-scroll
@@ -19,13 +23,15 @@ const Footer = () => {
 
     return (
         <footer className='bg-[var(--footer-bg)]'>
-            <div className="mx-auto w-full max-w-7xl pt-20 pb-10">
+            <div className="mx-auto w-full max-w-7xl pt-20 pb-10 p-3">
                 <div className="flex md:flex-row xs:flex-col justify-between">
                     <div>
-                        <h2 className="mb-6 text-base tracking-wider font-semibold text-white text-left uppercase">Программы</h2>
+                        <h2 className="mb-6 text-base tracking-wider font-semibold text-white text-left uppercase">
+                            {t("programs")}
+                        </h2>
                         <ul className="text-gray-400 text-lg">
                             <li className="mb-4">
-                                {data.map((item) => (
+                                {data?.map((item) => (
                                     <NavLink key={item.id} to={`${ROUTES.PROGRAM.replace(":id", item.id)}`}
                                              className="flex flex-col mb-4"
                                              onClick={handleClick}
@@ -38,45 +44,60 @@ const Footer = () => {
                     </div>
                     <div>
                         <h2 className="mb-6 text-base tracking-wider text-left font-semibold text-white uppercase">
-                            Клиентам
+                            {t("for_clients")}
                         </h2>
                         <ul className="text-gray-400 text-lg">
                             <li className="mb-4">
-                                <NavLink to={ROUTES.DISCOUNTS} onClick={handleClick}>Акции</NavLink>
+                                <NavLink to={ROUTES.DISCOUNTS} onClick={handleClick}>{t("discount")}</NavLink>
                             </li>
                             <li className="mb-4">
-                                <NavLink to={ROUTES.REVIEWS} onClick={handleClick}>Отзывы</NavLink>
+                                <NavLink to={ROUTES.REVIEWS} onClick={handleClick}>
+                                    {t("reviews")}
+                                </NavLink>
                             </li>
                             <li className="mb-4">
-                                <NavLink to={ROUTES.FAQ} onClick={handleClick}>Вопрос - ответ</NavLink>
+                                <NavLink to={ROUTES.FAQ} onClick={handleClick}>
+                                    {t("FAQ")}
+                                </NavLink>
                             </li>
                             <li className="mb-4">
-                                <NavLink to={ROUTES.PAYMENT_DELIVERY} onClick={handleClick}>Оплата и доставка</NavLink>
+                                <NavLink to={ROUTES.PAYMENT_DELIVERY}
+                                         onClick={handleClick}>
+                                    {t("payment_delivery")}
+                                </NavLink>
                             </li>
                         </ul>
                     </div>
                     <div>
-                        <h2 className="mb-6 text-base tracking-wider font-semibold text-white text-left uppercase">О нас</h2>
+                        <h2 className="mb-6 text-base tracking-wider font-semibold text-white text-left uppercase">
+                            {t("aboutUs")}
+                        </h2>
                         <ul className="text-gray-400 text-lg">
                             <li className="mb-4">
-                                <NavLink to={ROUTES.ABOUTUS} onClick={handleClick}>О нас</NavLink>
+                                <NavLink to={ROUTES.ABOUTUS} onClick={handleClick}>
+                                    {t("aboutUs")}
+                                </NavLink>
                             </li>
                             <li className="mb-4">
-                                <NavLink to={ROUTES.CONTACTS} onClick={handleClick}>Контакты</NavLink>
+                                <NavLink to={ROUTES.CONTACTS} onClick={handleClick}>
+                                    {t("contacts")}
+                                </NavLink>
                             </li>
                             <li className="mb-4">
-                                <NavLink to={ROUTES.PRIVACY_POLICY} onClick={handleClick}>Политика
-                                    конфиденциальности</NavLink>
+                                <NavLink to={ROUTES.PRIVACY_POLICY} onClick={handleClick}>
+                                    {t("privacy_policy")}
+                                </NavLink>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div className="text-center">
                     <div className="text-sm text-gray-400">
-                        © {currentYear}, AsalodaFood, все права защищены.
+                        © {currentYear}, AsalodaFood, {t("all_rights_reserved")}.
                     </div>
-                    <div className="text-sm text-gray-400 mt-5">Developed by &nbsp;
-                        <a href='https://www.linkedin.com/in/ivan-bezniak-2634a11a0/' target='_blank'>Ivan Bezniak</a>
+                    <div className="text-sm text-gray-400 mt-5">{t("developed_by")} &nbsp;
+                        <a href='https://www.linkedin.com/in/ivan-bezniak-2634a11a0/'
+                           target='_blank'>{t("ivan_bezniak")}</a>
                     </div>
                 </div>
             </div>

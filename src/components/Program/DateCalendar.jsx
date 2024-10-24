@@ -6,6 +6,9 @@ import {FaCircle} from "react-icons/fa";
 import DishModalWindow from "./DishModalWindow.jsx";
 import ChangeDish from "./ChangeDish.jsx";
 import {calculator} from "../../utils/utils.js";
+import {Preloader} from "../Preloader/Preloader.jsx";
+import {useTranslation} from "react-i18next";
+import {useAuth} from "../../context/AuthContext.jsx";
 
 dayjs.extend(localeData);
 dayjs.locale('ru');
@@ -17,8 +20,11 @@ const DateCalendar = ({
                           programType,
                           onUpdateDishes,
                           setUpdatedAllDishes,
-                          onOrderClick
+                          onOrderClick,
+                          allDishLoading,
+                          allChangeDishLoading
                       }) => {
+    const {locale} = useAuth();
     const [selectedDish, setSelectedDish] = useState(null);
     const [isAdditionalMenuVisible, setIsAdditionalMenuVisible] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -26,14 +32,46 @@ const DateCalendar = ({
     const today = dayjs();
     const [activeDate, setActiveDate] = useState(today.add(2, 'day'));
     const dates = Array.from({length: 8}, (_, i) => today.add(i, 'day'));
-    const dayAbbreviations = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
+    const {t} = useTranslation();
+    const dayAbbreviations = [
+        t("Su"),
+        t("Mo"),
+        t("Tu"),
+        t("We"),
+        t("Th"),
+        t("Fr"),
+        t("Sa")
+    ];
+
+    const findOneDayPriceByProgramName = (dishes, programType) => {
+        // Ensure programType is not empty and has attributes
+        if (Array.isArray(programType) && programType.length > 0) {
+            const matchedProgram = programType.find(program => program?.attributes?.program_name === dishes?.attributes?.program_type);
+            return matchedProgram ? matchedProgram.attributes.one_day_price : null;
+        }
+        return null;
+    };
 
     const eatingTypeOrder = {
-        'Первый завтрак': 1,
-        'Второй завтрак': 2,
-        'Обед': 3,
-        'Полдник': 4,
-        'Ужин': 5
+        ru: {
+            'Первый завтрак': 1,
+            'Второй завтрак': 2,
+            'Обед': 3,
+            'Полдник': 4,
+            'Ужин': 5
+        },
+        en: {
+            'Breakfast': 1,
+            'Lunch': 2,
+            'Dinner': 3
+        },
+        be: {
+            'Першы сняданак': 1,
+            'Другі сняданак': 2,
+            'Абед': 3,
+            'Падвячорак': 4,
+            'Вячэра': 5
+        }
     };
 
     const handleDateClick = (date) => {
@@ -52,11 +90,11 @@ const DateCalendar = ({
         }
 
         newFilteredDishes.sort((a, b) => {
-            return (eatingTypeOrder[a.attributes.eating_type] || 0) - (eatingTypeOrder[b.attributes.eating_type] || 0);
+            return (eatingTypeOrder[locale][a.attributes.eating_type] || 0) - (eatingTypeOrder[locale][b.attributes.eating_type] || 0);
         });
 
         setFilteredDishes(newFilteredDishes);
-    }, [allDish, activeDate, replacedDishes]);
+    }, [allDish, activeDate, replacedDishes, locale]);
 
     const openModal = (dish) => {
         setSelectedDish(dish);
@@ -112,29 +150,34 @@ const DateCalendar = ({
         };
     }, []);
 
+
+    if (allDishLoading || allChangeDishLoading) return <Preloader/>
+
     return (
-        <div className='w-full max-w-7xl mx-auto'>
+        <div className='w-full max-w-7xl mx-auto p-3'>
             {/* Оверлей */}
             {isAdditionalMenuVisible && (
                 <div className="fixed inset-0 bg-black bg-opacity-60 z-40"
                      onClick={() => setIsAdditionalMenuVisible(false)}></div>
             )}
             <div className='flex items-center md:justify-start xs:justify-center gap-10 mb-5'>
-                <div className='flex flex-row justify-start items-center gap-3'>
+                <div
+                    className='flex flex-row justify-start items-center gap-3 xs:text-base xs:flex-col-reverse md:flex-row'>
                     <FaCircle className='text-xs fill-gray-400 pointer-events-none'/>
                     <p className='text-gray-400 font-semibold'>
-                        Уже готовим
+                        {t("cooking")}
                     </p>
                 </div>
-                <div className='flex flex-row justify-start items-center gap-3'>
+                <div
+                    className='flex flex-row justify-start items-center gap-3 xs:text-base xs:flex-col-reverse md:flex-row'>
                     <FaCircle className='text-xs fill-orange-400 pointer-events-none'/>
                     <p className='font-semibold'>
-                        Можно менять
+                        {t("dishes_replace")}
                     </p>
                 </div>
             </div>
 
-            <div className='flex gap-2'>
+            <div className='flex gap-2 xs:flex-col md:flex-row'>
                 {dates.map(date => {
                     const isToday = date.isSame(today, 'day');
                     const isTomorrow = date.isSame(today.add(1, 'day'), 'day');
@@ -143,7 +186,7 @@ const DateCalendar = ({
                     return (
                         <div
                             key={date.format('YYYY-MM-DD')}
-                            className={`p-4 mb-5 cursor-pointer text-center rounded-lg ${date.isSame(activeDate, 'day') ? 'bg-green-500 text-white' : 'bg-gray-200'}`}
+                            className={`p-4 px-5 mb-5 cursor-pointer ml-2 text-center rounded-full ${date.isSame(activeDate, 'day') ? 'bg-[var(--green)] text-white' : 'bg-gray-200'}`}
                             onClick={() => handleDateClick(date)}
                         >
                             <div className="font-bold text-sm mb-2">
@@ -195,7 +238,7 @@ const DateCalendar = ({
                                                 console.log('Matching change dishes:', matchingDishes);
                                             }}
                                     >
-                                        Заменить
+                                        {t("replace")}
                                     </button>
                                 )}
                             </div>
@@ -215,37 +258,65 @@ const DateCalendar = ({
                     </div>
                 ))}
 
-                <div className="p-5 w-full border border-gray-200 rounded-lg shadow">
+                <div className="p-5 w-fit border border-gray-200 rounded-lg shadow">
                     <div className='flex flex-row justify-between border-b py-2'>
-                        <h3 className="text-base text-gray-700 text-left">Ккал</h3>
+                        <h3 className="text-base text-gray-700 text-left">
+                            {t("kcal")}
+                        </h3>
                         <p className="text-base text-gray-700 text-right">
-                            {calculator(filteredDishes.map(dish => (dish?.attributes?.kcal)))}
+                            {calculator(filteredDishes.map(dish => (dish?.attributes?.kcal))).toFixed(0)}
                         </p>
                     </div>
                     <div className='flex flex-row justify-between border-b py-2'>
-                        <h3 className="text-base text-gray-700 text-left">Белки</h3>
+                        <h3 className="text-base text-gray-700 text-left">
+                            {t("squirrels")}
+                        </h3>
                         <p className="text-base text-gray-700 text-right">
-                            {calculator(filteredDishes.map(dish => (dish?.attributes?.squirrels))).toFixed(1)}
+                            {calculator(filteredDishes.map(dish => (dish?.attributes?.squirrels))).toFixed(0)}
                         </p>
                     </div>
                     <div className='flex flex-row justify-between border-b py-2'>
-                        <h3 className="text-base text-gray-700 text-left">Жиры</h3>
+                        <h3 className="text-base text-gray-700 text-left">
+                            {t("fat")}
+                        </h3>
                         <p className="text-base text-gray-700 text-right">
-                            {calculator(filteredDishes.map(dish => (dish?.attributes?.fats))).toFixed(2)}
+                            {calculator(filteredDishes.map(dish => (dish?.attributes?.fats))).toFixed(0)}
                         </p>
                     </div>
                     <div className='flex flex-row justify-between border-b py-2'>
-                        <h3 className="text-base text-gray-700 text-left">Углеводы</h3>
+                        <h3 className="text-base text-gray-700 text-left">
+                            {t("carbohydrates")}
+                        </h3>
                         <p className="text-base text-gray-700 text-right">
-                            {calculator(filteredDishes.map(dish => (dish?.attributes?.carbohydrates)))}
+                            {calculator(filteredDishes.map(dish => (dish?.attributes?.carbohydrates))).toFixed(0)}
                         </p>
                     </div>
-                    <p className="text-4xl font-bold mt-8 mb-10">от {programType?.attributes?.one_day_price} руб/день</p>
+                    {
+                        programType.length > 1
+                            ? (
+                                <p className="text-4xl font-bold mt-8 mb-10">
+                                    {t("form")}
+                                    &nbsp;
+                                    {findOneDayPriceByProgramName(allDish[0], programType)}
+                                    &nbsp;
+                                    {t("rub_per_day")}
+                                </p>
+                            )
+                            : (
+                                <p className="text-4xl font-bold mt-8 mb-10">
+                                    {t("form")}
+                                    &nbsp;
+                                    {programType?.attributes?.one_day_price}
+                                    &nbsp;
+                                    {t("rub_per_day")}
+                                </p>
+                            )
+                    }
                     <button
                         className='rounded-full bg-[var(--green)] py-3 w-full text-white text-base mb-5 hover:!bg-[var(--oringe)] transition'
                         onClick={onOrderClick}
                     >
-                        Заказать
+                        {t("order")}
                     </button>
                 </div>
             </div>

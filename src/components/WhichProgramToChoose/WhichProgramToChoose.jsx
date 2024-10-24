@@ -3,8 +3,10 @@ import {useForm} from 'react-hook-form';
 import axios from 'axios';
 import ModalWindow from "../ModalWindow/ModalWindow.jsx";
 import dayjs from 'dayjs';
+import {useTranslation} from "react-i18next";
 
 const WhichProgramToChoose = () => {
+    const {t} = useTranslation();
     const [isFormSend, setIsFormSend] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState({
@@ -48,17 +50,17 @@ const WhichProgramToChoose = () => {
             });
             setIsFormSend(true);
             setModalContent({
-                title: 'Ваш запрос отправлен!',
-                description: 'Мы свяжемся с Вами в ближайшее время',
-                buttonContent: 'Хорошо'
+                title: t("your_request_sent"),
+                description: t("we_contact_shortly"),
+                buttonContent: t("fine"),
             });
             openModal();
         } catch (error) {
             console.error('Ошибка отправки сообщения в Telegram:', error);
             setModalContent({
-                title: 'Ошибка!',
-                description: 'Не удалось отправить сообщение, попробуйте позже.',
-                buttonContent: 'Закрыть'
+                title: t("error"),
+                description: t("failed_to_send_message"),
+                buttonContent: t("close"),
             });
             openModal();
         }
@@ -89,15 +91,15 @@ const WhichProgramToChoose = () => {
         <div
             className="flex flex-col items-center justify-center w-full max-w-7xl mx-auto md:mt-32 md:mb-20 xs:mt-12 xs:mb-12">
             <div className="flex w-full flex-col md:flex-row">
-                <div className="flex-1 w-full md:w-1/2 p-4 flex justify-center">
-                    <img className="object-cover w-full max-w-md rounded-lg" src="/circle-food-2.webp" alt="Food"/>
+                <div className="w-full md:w-4/5 p-4 flex justify-center">
+                    <img src="/which_program_to_choose.jpg" alt="which_program_to_choose" className="object-cover"/>
                 </div>
-                <div className="flex-1 flex flex-col justify-center p-6">
-                    <h2 className="mb-8 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white text-left">
-                        Не знаете какую программу выбрать?
+                <div className="flex flex-col justify-center p-6">
+                    <h2 className="mb-8 md:text-4xl font-extrabold md:text-left xs:text-center">
+                        {t("need_help_choosing_program")}
                     </h2>
-                    <p className="font-normal text-gray-700 dark:text-gray-400 text-left">
-                        Оставьте телефон и наш менеджер поможет подобрать рацион
+                    <p className="font-normal text-gray-700 dark:text-gray-400 md:text-left xs:text-center">
+                        {t("leave_your_number")}
                     </p>
                     <form onSubmit={handleSubmit(onSubmit)} className='mt-14 flex flex-col gap-5'>
                         <div className="flex flex-col gap-4">
@@ -105,23 +107,23 @@ const WhichProgramToChoose = () => {
                                 type="text"
                                 id="name"
                                 {...register('name', {
-                                    required: 'Имя обязательно'
+                                    required: t("name_required")
                                 })}
-                                placeholder="Имя"
+                                placeholder={t("name")}
                                 className={`block w-full h-16 px-3 py-2 border ${errors.name ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-600 sm:text-sm`}
                             />
-
+                            {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
                             <input
                                 type="tel"
                                 id="phone"
                                 {...register('phone', {
-                                    required: 'Номер телефона обязателен',
+                                    required: t("phone_required"),
                                     pattern: {
                                         value: /^\+375[0-9]{9}$/,
-                                        message: 'Неверный формат номер телефона (+375XXXXXXXXX)',
+                                        message: t("invalid_phone_number_format"),
                                     }
                                 })}
-                                placeholder="Телефон"
+                                placeholder={t("telephone")}
                                 className={`block w-full h-16 px-3 py-2 border ${errors.phone ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-600 sm:text-sm`}
                             />
                         </div>
@@ -133,7 +135,7 @@ const WhichProgramToChoose = () => {
                                 className={`btn ${!isValid ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 disabled={!isValid}
                         >
-                            Отправить
+                            {t("send")}
                         </button>
                     </form>
                 </div>

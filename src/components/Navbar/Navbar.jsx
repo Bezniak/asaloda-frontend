@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {NavLink, useNavigate} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import {ROUTES} from '../../config/routes.js';
 import {useAuth} from "../../context/AuthContext.jsx";
 import {FaSignInAlt, FaUserPlus} from "react-icons/fa";
@@ -10,12 +10,13 @@ import {HiLanguage} from "react-icons/hi2";
 
 
 const Navbar = () => {
+    const {user, logout, role, locale} = useAuth();
+    const {t} = useTranslation();
     const [isProgramDropdownVisible, setProgramDropdownVisible] = useState(false);
     const [isUserDropdownVisible, setUserDropdownVisible] = useState(false);
     const [isAboutUsDropdownVisible, setAboutUsDropdownVisible] = useState(false);
     const [isLanguageDropdownVisible, setLanguageDropdownVisible] = useState(false);
     const [isMobileMenuVisible, setMobileMenuVisible] = useState(false);
-    const {t} = useTranslation();
     const {currentLanguage, changeLanguage} = useLanguage();
 
     const dropdownRef = useRef(null);
@@ -23,16 +24,7 @@ const Navbar = () => {
     const dropdownAboutUsRef = useRef(null);
     const dropdownLanguage = useRef(null);
 
-    const {user, logout, role, theme, toggleTheme} = useAuth();
-    const navigate = useNavigate();
-
-    const {data, loading, error} = useFetchAllData(`/programs?populate=*`);
-    const {
-        data: additional_programs_data,
-        loading: additional_programs_loading,
-        error: additional_programs_error
-    } = useFetchAllData(`/additional-programs?populate=*`);
-
+    const {data, loading, error} = useFetchAllData(`/programs?locale=${locale}&populate=*`);
 
     const toggleProgramDropdown = () => {
         setProgramDropdownVisible(!isProgramDropdownVisible);
@@ -121,10 +113,6 @@ const Navbar = () => {
         logout();
     };
 
-    const handleNavigate = (path) => {
-        navigate(path);
-    };
-
 
     return (
         <nav className="bg-white border-gray-200 dark:border-gray-600 dark:bg-gray-900">
@@ -140,7 +128,7 @@ const Navbar = () => {
                     <button
                         data-collapse-toggle="mega-menu-full"
                         type="button"
-                        className="inline-flex items-center p-2 w-10 h-10 justify-end text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                        className="inline-flex items-center p-2 w-10 h-10 justify-end text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
                         aria-controls="mega-menu-full"
                         aria-expanded={isMobileMenuVisible}
                         onClick={toggleMobileMenu}
@@ -184,8 +172,8 @@ const Navbar = () => {
                                 to=""
                                 id="mega-menu-full-dropdown-button"
                                 onClick={(event) => {
-                                    event.preventDefault(); // предотвращает действие по умолчанию
-                                    toggleProgramDropdown(); // выполняет вашу функцию
+                                    event.preventDefault();
+                                    toggleProgramDropdown();
                                 }}
                                 className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-green-500 md:dark:hover:bg-transparent dark:border-gray-700"
                             >
@@ -213,7 +201,7 @@ const Navbar = () => {
                                 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
                                 onClick={() => setMobileMenuVisible(false)} // Close mobile menu
                             >
-                                Акции
+                                {t("discount")}
                             </NavLink>
                         </li>
                         <li>
@@ -222,7 +210,7 @@ const Navbar = () => {
                                 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
                                 onClick={() => setMobileMenuVisible(false)} // Close mobile menu
                             >
-                                Оплата и доставка
+                                {t("payment_delivery")}
                             </NavLink>
                         </li>
                         <li>
@@ -231,7 +219,7 @@ const Navbar = () => {
                                 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
                                 onClick={() => setMobileMenuVisible(false)} // Close mobile menu
                             >
-                                Сотрудничество
+                                {t("partnership")}
                             </NavLink>
                         </li>
                         <li>
@@ -239,12 +227,12 @@ const Navbar = () => {
                                 to=""
                                 id="mega-menu-full-dropdown-button-about-us"
                                 onClick={(event) => {
-                                    event.preventDefault(); // предотвращает действие по умолчанию
-                                    toggleAboutUsDropdown(); // выполняет вашу функцию
+                                    event.preventDefault();
+                                    toggleAboutUsDropdown();
                                 }}
                                 className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0"
                             >
-                                О нас
+                                {t("aboutUs")}
                                 <svg
                                     className="w-2.5 h-2.5 ms-2.5"
                                     aria-hidden="true"
@@ -269,12 +257,12 @@ const Navbar = () => {
                                         to=""
                                         id="mega-menu-full-dropdown-button-about-us"
                                         onClick={(event) => {
-                                            event.preventDefault(); // предотвращает действие по умолчанию
-                                            toggleUserDropdown(); // выполняет вашу функцию
+                                            event.preventDefault();
+                                            toggleUserDropdown();
                                         }}
                                         className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0"
                                     >
-                                        Аккаунт
+                                        {t("account")}
                                         <svg
                                             className="w-2.5 h-2.5 ms-2.5"
                                             aria-hidden="true"
@@ -299,20 +287,20 @@ const Navbar = () => {
                                         <NavLink
                                             to={ROUTES.LOGIN}
                                             className="md:ml-10 flex items-center py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0"
-                                            onClick={() => setMobileMenuVisible(false)} // Close mobile menu
+                                            onClick={() => setMobileMenuVisible(false)}
                                         >
                                             <FaSignInAlt className='mr-3 text-[var(--green)] text-2xl'/>
-                                            Войти
+                                            {t("login")}
                                         </NavLink>
                                     </li>
                                     <li>
                                         <NavLink
                                             to={ROUTES.REGISTER}
                                             className="flex items-center py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0"
-                                            onClick={() => setMobileMenuVisible(false)} // Close mobile menu
+                                            onClick={() => setMobileMenuVisible(false)}
                                         >
                                             <FaUserPlus className='mr-3 text-[var(--green)] text-2xl'/>
-                                            Зарегистрироваться
+                                            {t("register")}
                                         </NavLink>
                                     </li>
                                 </>
@@ -323,8 +311,8 @@ const Navbar = () => {
                                 to=""
                                 id="mega-menu-full-dropdown-button-language"
                                 onClick={(event) => {
-                                    event.preventDefault(); // предотвращает действие по умолчанию
-                                    toggleLanguageDropdown(); // выполняет вашу функцию
+                                    event.preventDefault();
+                                    toggleLanguageDropdown();
                                 }}
                                 className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0"
                             >
@@ -358,23 +346,6 @@ const Navbar = () => {
                                 ))}
                             </li>
                         </ul>
-                        <ul>
-                            <li>
-                                {additional_programs_data.map((item) => (
-                                    <NavLink to={item.id}
-                                             className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                                             onClick={handleProgramLinkClick}
-                                             key={item.id}
-                                    >
-                                        <div className="font-semibold">{item.attributes.name}</div>
-                                        <span className="text-sm text-gray-500 dark:text-gray-400">
-                                            {item.attributes.desc}
-                                        </span>
-
-                                    </NavLink>
-                                ))}
-                            </li>
-                        </ul>
                     </div>
                 </div>
             )}
@@ -393,7 +364,7 @@ const Navbar = () => {
                                     className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
                                     onClick={handleAboutUsLinkClick}
                                 >
-                                    <div className="font-semibold">О компании</div>
+                                    <div className="font-semibold">{t("aboutCompany")}</div>
                                 </NavLink>
                             </li>
                             <li>
@@ -402,7 +373,7 @@ const Navbar = () => {
                                     className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
                                     onClick={handleAboutUsLinkClick}
                                 >
-                                    <div className="font-semibold">Отзывы</div>
+                                    <div className="font-semibold">{t("reviews")}</div>
                                 </NavLink>
                             </li>
                             <li>
@@ -411,7 +382,7 @@ const Navbar = () => {
                                     className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
                                     onClick={handleAboutUsLinkClick}
                                 >
-                                    <div className="font-semibold">Вопрос-ответ</div>
+                                    <div className="font-semibold">{t("FAQ")}</div>
                                 </NavLink>
                             </li>
                         </ul>
@@ -422,7 +393,7 @@ const Navbar = () => {
                                     className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
                                     onClick={handleAboutUsLinkClick}
                                 >
-                                    <div className="font-semibold">Контакты</div>
+                                    <div className="font-semibold">{t("contacts")}</div>
                                 </NavLink>
                             </li>
                         </ul>
@@ -445,7 +416,7 @@ const Navbar = () => {
                                         className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
                                         onClick={handleUserInfoLinkClick}
                                     >
-                                        <div className="font-semibold">Все заказы</div>
+                                        <div className="font-semibold">{t("all_orders")}</div>
                                     </NavLink>
                                 </li>
                             ) : role === 'authenticated' ? (
@@ -455,7 +426,7 @@ const Navbar = () => {
                                         className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
                                         onClick={handleUserInfoLinkClick}
                                     >
-                                        <div className="font-semibold">Мои заказы</div>
+                                        <div className="font-semibold">{t("my_orders")}</div>
                                     </NavLink>
                                 </li>
                             ) : null}
@@ -466,7 +437,7 @@ const Navbar = () => {
                                     className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
                                     onClick={handleUserInfoLinkClick}
                                 >
-                                    <div className="font-semibold">Выйти</div>
+                                    <div className="font-semibold">{t("logout")}</div>
                                 </NavLink>
                             </li>
                         </ul>
@@ -493,7 +464,7 @@ const Navbar = () => {
                                         currentLanguage === 'be' ? 'font-bold' : ''
                                     } text-[var(--green)] block w-full p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700`}
                                 >
-                                    BE
+                                    {t("BE")}
                                 </button>
                             </li>
                             <li onClick={() => setLanguageDropdownVisible(false)}>
@@ -506,7 +477,7 @@ const Navbar = () => {
                                         currentLanguage === 'us' ? 'font-bold' : ''
                                     } text-[var(--green)] block w-full p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700`}
                                 >
-                                    EN
+                                    {t("EN")}
                                 </button>
                             </li>
                             <li onClick={() => setLanguageDropdownVisible(false)}>
@@ -519,7 +490,7 @@ const Navbar = () => {
                                         currentLanguage === 'ru' ? 'font-bold' : ''
                                     } text-[var(--green)] block w-full p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700`}
                                 >
-                                    RU
+                                    {t("RU")}
                                 </button>
                             </li>
                         </ul>

@@ -2,15 +2,15 @@
 .swiper-pagination-custom,
 .swiper-horizontal > .swiper-pagination-bullets,
 .swiper-pagination-bullets.swiper-pagination-horizontal {
-    bottom: var(--swiper-pagination-bottom, 40px);
+    bottom: var(--swiper-pagination-bottom, 30px);
     top: var(--swiper-pagination-top, auto);
     left: 0;
     width: 100%;
 }
 
 .swiper-pagination-bullet {
-    width: var(--swiper-pagination-bullet-width, var(--swiper-pagination-bullet-size, 25px));
-    height: var(--swiper-pagination-bullet-height, var(--swiper-pagination-bullet-size, 25px));
+    width: var(--swiper-pagination-bullet-width, var(--swiper-pagination-bullet-size, 20px));
+    height: var(--swiper-pagination-bullet-height, var(--swiper-pagination-bullet-size, 20px));
     display: inline-block;
     border-radius: var(--swiper-pagination-bullet-border-radius, 50%);
     background: var(--white);

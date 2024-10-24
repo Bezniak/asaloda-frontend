@@ -1,6 +1,7 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import Cookies from 'js-cookie';
 import api from "../api/api.js";
+import i18n from "i18next";
 
 const AuthContext = createContext();
 
@@ -8,6 +9,7 @@ export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const [role, setRole] = useState(null);
     const [theme, setTheme] = useState(Cookies.get('theme') || 'light');
+    const [locale, setLocale] = useState(Cookies.get('i18nextLng') || 'ru'); // Добавляем локаль
 
     useEffect(() => {
         const jwt = Cookies.get('JWT');
@@ -19,7 +21,6 @@ export const AuthProvider = ({children}) => {
                 if (parsedUser.role && parsedUser.role.type) {
                     setRole(parsedUser.role.type);
                 } else {
-                    // Fetch user role if not present in cookie
                     fetchUserRole();
                 }
             } catch (error) {
@@ -33,12 +34,16 @@ export const AuthProvider = ({children}) => {
         Cookies.set('theme', theme, {expires: 365});
     }, [theme]);
 
+    useEffect(() => {
+        i18n.changeLanguage(locale); // Обновляем язык в i18next
+        Cookies.set('i18nextLng', locale, {expires: 365}); // Обновляем куку локали
+    }, [locale]);
+
     const fetchUserRole = async () => {
         try {
             const res = await api.get(`/users/me?populate=*`);
             if (res.role && res.role.type) {
                 setRole(res.role.type);
-                // Update cookie with the role
                 Cookies.set('me', JSON.stringify(res), {expires: 30});
                 setUser(res);
             }
@@ -50,11 +55,10 @@ export const AuthProvider = ({children}) => {
     const login = async (userData) => {
         try {
             Cookies.set('JWT', userData.jwt, {expires: 30});
-            // Fetch full user data with role
             const res = await api.get(`/users/me?populate=*`);
             if (res?.role?.type) {
                 setRole(res.role.type);
-                userData.user.role = res.role; // Ensure role is included in userData
+                userData.user.role = res.role;
             }
             Cookies.set('me', JSON.stringify(userData.user), {expires: 30});
             setUser(userData.user);
@@ -83,8 +87,12 @@ export const AuthProvider = ({children}) => {
         setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
     };
 
+    const changeLocale = (newLocale) => {
+        setLocale(newLocale); // Изменяем локаль
+    };
+
     return (
-        <AuthContext.Provider value={{user, role, login, logout, updateRole, theme, toggleTheme}}>
+        <AuthContext.Provider value={{user, role, login, logout, updateRole, theme, toggleTheme, locale, changeLocale}}>
             {children}
         </AuthContext.Provider>
     );

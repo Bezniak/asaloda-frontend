@@ -1,36 +1,38 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Controller, useForm} from "react-hook-form";
-import {NavLink} from "react-router-dom";
+import {NavLink, useOutletContext} from "react-router-dom";
 import Select from 'react-select'
 import dayjs from "dayjs";
 import {useAuth} from "../../context/AuthContext.jsx";
 import api from "../../api/api.js";
 import {ROUTES} from "../../config/routes.js";
+import {customStyles} from "../../utils/customOrderFormStyles.jsx";
+import {useTranslation} from "react-i18next";
+
+import 'dayjs/locale/ru';
+import 'dayjs/locale/be';
+import 'dayjs/locale/en';
+
 
 const OrderForm = ({program, userChosenDishes}) => {
-
-    console.log('program', program)
-
-    const programName = program?.attributes?.program_name;
+    const {t} = useTranslation();
+    const {locale} = useAuth();
+    const {userClickedProgram} = useOutletContext(); // Получаем контекст
+    const [currentProgram, setCurrentProgram] = useState(null)
     const today = dayjs();
     const [isFocused, setIsFocused] = useState(false);
     const {user, role} = useAuth();
-
     const [showInputPromoCode, setShowInputPromoCode] = useState(false);
     const [promoCodeValue, setPromoCodeValue] = useState("");
     const [discount, setDiscount] = useState(null);
     const [promoCodeMessage, setPromoCodeMessage] = useState("");
-
     const [showComment, setShowComment] = useState(false);
     const [commentValue, setCommentValue] = useState("");
-
     const [excludeSaturday, setExcludeSaturday] = useState(false);
     const [excludeSunday, setExcludeSunday] = useState(false);
-
     const [isSubmitting, setIsSubmitting] = useState(false);  // For disabling the button
     const [submissionMessage, setSubmissionMessage] = useState("");  // For success/error messages
     const [formSubmitted, setFormSubmitted] = useState(false);  // To track form submission
-
     const {
         register,
         handleSubmit,
@@ -39,8 +41,29 @@ const OrderForm = ({program, userChosenDishes}) => {
         trigger,
     } = useForm();
 
-    const oneDayPrice = program?.attributes?.one_day_price;
-    const bonusesForOrdering = program?.attributes?.bonuses_for_ordering;
+
+// Универсальная функция для получения программы по имени или массиву имен
+    const getProgramByUserChoice = (program, userClickedProgram) => {
+        if (Array.isArray(program)) {
+            // Если program массив, то продолжаем поиск по массиву
+            return program.find(item => item.attributes.program_name === userClickedProgram);
+        } else if (program?.attributes) {
+            // Если program — это объект, сравниваем напрямую
+            return program;
+        } else {
+            console.error('Program data is not in the expected format:', program);
+            return null; // Вернем null, если формат данных неожиданный
+        }
+    };
+
+// useEffect для отслеживания изменений userClickedProgram и program
+    useEffect(() => {
+        if (program && userClickedProgram) {
+            const chosenProgram = getProgramByUserChoice(program, userClickedProgram);
+            setCurrentProgram(chosenProgram); // Обновляем состояние с выбранной программой
+        }
+    }, [userClickedProgram, program]); // Перезапуск при изменении userClickedProgram или program
+
 
     const calculateEffectiveDays = (startDate, duration, excludeSaturday, excludeSunday) => {
         let effectiveDays = 0;
@@ -59,7 +82,7 @@ const OrderForm = ({program, userChosenDishes}) => {
 
     const calculateTotalPrice = (startDate, duration, discount, excludeSaturday, excludeSunday) => {
         const effectiveDays = calculateEffectiveDays(startDate, duration, excludeSaturday, excludeSunday);
-        const basePrice = oneDayPrice * effectiveDays;
+        const basePrice = currentProgram?.attributes?.one_day_price * effectiveDays;
         return discount
             ? (basePrice * (1 - discount / 100)).toFixed(2)
             : basePrice.toFixed(2);
@@ -67,13 +90,13 @@ const OrderForm = ({program, userChosenDishes}) => {
 
     const calculateDiscountAmount = (startDate, duration, discount, excludeSaturday, excludeSunday) => {
         const effectiveDays = calculateEffectiveDays(startDate, duration, excludeSaturday, excludeSunday);
-        const basePrice = oneDayPrice * effectiveDays;
+        const basePrice = currentProgram?.attributes?.one_day_price * effectiveDays;
         return discount ? ((basePrice * discount) / 100).toFixed(2) : 0;
     };
 
-    const getBonuses = (duration) => {
-        return duration >= 14 ? bonusesForOrdering * (duration / 7) : 0;
-    };
+    // const getBonuses = (duration) => {
+    //     return duration >= 14 ? bonusesForOrdering * (duration / 7) : 0;
+    // };
 
     const filterDishesByDateAndDay = (dishes, startDate, duration, excludeSaturday, excludeSunday) => {
         const start = dayjs(startDate);
@@ -113,7 +136,7 @@ const OrderForm = ({program, userChosenDishes}) => {
                     duration: String(data.duration.value),
                     excludeSaturday: excludeSaturday,
                     excludeSunday: excludeSunday,
-                    programName: programName,
+                    programName: currentProgram?.attributes?.program_name,
                     promoCode: showInputPromoCode ? promoCodeValue : '',
                     startDate: data.startDate.value,
                     endDate: endDateFormatted,
@@ -129,7 +152,7 @@ const OrderForm = ({program, userChosenDishes}) => {
             await api.post(import.meta.env.VITE_API_URL + '/orders', payload);
 
             setFormSubmitted(true);  // Mark form as submitted
-            setSubmissionMessage("Ваш заказ принят!");
+            setSubmissionMessage(t("order_accepted"));
         } catch (error) {
             setIsSubmitting(false);  // Re-enable the submit button in case of an error
             if (error.response) {
@@ -147,58 +170,25 @@ const OrderForm = ({program, userChosenDishes}) => {
         return {value: date.format('YYYY-MM-DD'), label: date.format('DD MMMM')};
     });
 
-    const customStyles = {
-        control: (provided, state) => ({
-            ...provided,
-            padding: '10px',
-            border: `1px solid ${state.isFocused ? '#7ECA1D' : '#ccc'}`,
-            boxShadow: state.isFocused ? '0 0 0 1px #7ECA1D' : provided.boxShadow,
-            '&:hover': {
-                border: `1px solid ${state.isFocused ? '#7ECA1D' : '#ccc'}`,
-            },
-        }),
-        option: (provided, state) => ({
-            ...provided,
-            backgroundColor: state.isSelected
-                ? '#7ECA1D'  // Зеленый для выбранного элемента
-                : state.isFocused
-                    ? '#7ECA1D'  // Зеленый для фокуса
-                    : state.isActive
-                        ? '#7ECA1D'  // Зеленый при нажатии и удержании
-                        : provided.backgroundColor,
-            color: state.isSelected || state.isFocused || state.isActive
-                ? '#fff'  // Белый текст для выбранного, фокуса или при удержании
-                : provided.color,
-            '&:active': {
-                backgroundColor: '#7ECA1D',  // Зеленый для состояния active (нажатие мыши)
-            },
-        }),
-        menu: (provided) => ({
-            ...provided,
-            padding: '12px',
-        }),
-    };
-
-
     const timeOptions = [
         {value: '18:00 - 20:00', label: '18:00 - 20:00'},
         {value: '21:00 - 23:00', label: '21:00 - 23:00'},
     ];
 
     const durations = [
-        {value: 1, label: '1 день'},
-        {value: 2, label: '2 дня'},
-        {value: 3, label: '3 дня'},
-        {value: 4, label: '4 дня'},
-        {value: 5, label: '5 дней'},
-        {value: 6, label: '6 дней'},
-        {value: 7, label: '1 неделя (7 дней)'},
-        {value: 14, label: '2 недели (14 дней)'},
-        {value: 21, label: '3 недели (21 день)'},
-        {value: 28, label: '4 недели (28 дней)'},
+        {value: 1, label: t("one_Day")},
+        {value: 2, label: t("two_Days")},
+        {value: 3, label: t("three_Days")},
+        {value: 4, label: t("fore_Days")},
+        {value: 5, label: t("five_Days")},
+        {value: 6, label: t("six_Days")},
+        {value: 7, label: t("one_Week")},
+        {value: 14, label: t("two_Weeks")},
+        {value: 21, label: t("three_Weeks")},
+        {value: 28, label: t("fore_Weeks")},
     ];
 
-    const [selectedDuration, setSelectedDuration] = useState(durations[6]);
+    const [selectedDuration, setSelectedDuration] = useState(durations[0]);
     const [selectedStartDate, setSelectedStartDate] = useState(dateOptions[0]);
 
     const applyPromoCode = async () => {
@@ -207,20 +197,21 @@ const OrderForm = ({program, userChosenDishes}) => {
             const data = await response.json();
 
             if (data.data.length === 0 || data.data[0].attributes.code !== promoCodeValue) {
-                setPromoCodeMessage("Промокод недействительный или срок действия истек");
+                setPromoCodeMessage(t("invalid_promoCode"));
                 setDiscount(null);
             } else {
-                setDiscount(data.data[0].attributes.discount);
-                setPromoCodeMessage(`Промокод применен: скидка ${data.data[0].attributes.discount}%`);
+                setDiscount(data.data[0].attributes.discount); // Здесь устанавливается discount
+                setPromoCodeMessage(`${t("promoCode_applied_discount")} " " ${data.data[0].attributes.discount}%`);
+
             }
         } catch (error) {
             console.error("Ошибка при проверке промокода:", error);
-            setPromoCodeMessage("Произошла ошибка при проверке промокода");
+            setPromoCodeMessage(t("error_checking_promoCode"));
         }
     };
 
     const generateCalendarDates = () => {
-        const startDate = dayjs(selectedStartDate.value);
+        const startDate = dayjs(selectedStartDate.value).locale(locale); // Устанавливаем локаль
         const duration = selectedDuration.value;
         const dates = [];
 
@@ -229,8 +220,8 @@ const OrderForm = ({program, userChosenDishes}) => {
             const isSaturday = date.day() === 6;
             const isSunday = date.day() === 0;
             dates.push({
-                date: date.format('DD MMMM'),
-                dayOfWeek: date.format('dddd'), // Add this line
+                date: date.format('DD MMMM'), // Форматирует дату в зависимости от локали
+                dayOfWeek: date.format('dddd'), // День недели в зависимости от локали
                 isExcluded: (isSaturday && excludeSaturday) || (isSunday && excludeSunday),
                 isSaturday,
                 isSunday,
@@ -252,33 +243,29 @@ const OrderForm = ({program, userChosenDishes}) => {
     return (
         <div className='bg'>
             <form onSubmit={handleSubmit(onSubmit)}
-                  className='w-full max-w-5xl mx-auto md:mt-20 md:mb-20 xs:mt-10 xs:mb-10 bg-white p-10 flex flex-col gap-5'>
-                <div className='flex flex-row justify-around items-center rounded-lg'
-                     style={{backgroundColor: `${program?.attributes?.bg_color}`}}
-                >
-                    <div>
-                        <h2 className='uppercase text-white font-bold text-4xl'>Заказать {program?.attributes?.program_name}</h2>
-                    </div>
-                    <div>
-                        <img className='w-64 h-auto'
-                             src={import.meta.env.VITE_UPLOAD_URL + program?.attributes?.order_img?.data?.attributes?.url}
-                             alt={program?.attributes?.order_img?.data?.attributes?.name}
-                        />
-                    </div>
+                  className='w-full max-w-5xl mx-auto md:mt-20 md:mb-20 xs:mt-10 xs:mb-10 bg-white md:p-10 xs:p-3 flex flex-col gap-5'>
+                <div className='min-h-40 flex flex-row justify-around items-center rounded-lg bg-[var(--green)]'>
+                    <h2 className='uppercase text-white font-bold md:text-4xl'>
+                        {t("order")}
+                        &nbsp;
+                        «{userChosenDishes[0]?.attributes?.program_type}»</h2>
                 </div>
                 <div className='mb-4'>
+                    <p className='text-left mt-4 mb-2 font-bold'>
+                        {t("program_duration")}
+                    </p>
                     <Controller
                         name="duration"
                         control={control}
-                        defaultValue={durations[6]}
+                        defaultValue={durations[0]}
                         rules={{required: true}}
                         render={({field}) => (
                             <Select
                                 {...field}
                                 options={durations}
                                 styles={customStyles}
-                                className='w-full'
-                                placeholder='Выберите продолжительность программы'
+                                className='w-full xs:text-base md:text-lg'
+                                placeholder={t("program_duration")}
                                 onFocus={() => setIsFocused(true)}
                                 onBlur={() => {
                                     setIsFocused(false);
@@ -291,12 +278,16 @@ const OrderForm = ({program, userChosenDishes}) => {
                             />
                         )}
                     />
-                    {errors.duration && <span className='text-red-500'>Выберите продолжительность программы</span>}
+                    {errors.duration &&
+                        <span className='text-red-500 xs:text-base md:text-lg'>
+                            {t("program_duration")}
+                        </span>
+                    }
                 </div>
 
                 <hr className='h-0.5 my-2 bg-gray-200 border-0'/>
 
-                <div className='flex justify-between items-center gap-5'>
+                <div className='flex md:flex-row xs:flex-col justify-between items-center gap-5'>
                     <div className='border w-full p-3 flex justify-start items-center gap-5 rounded'>
                         <input
                             type="checkbox"
@@ -310,7 +301,9 @@ const OrderForm = ({program, userChosenDishes}) => {
                             }}
                             className='w-6 h-6 appearance-none border-2 border-gray-300 rounded checked:bg-[var(--green)] checked:border-[var(--green)] focus:outline-none'
                         />
-                        <label htmlFor="excludeSaturday">Исключить субботу</label>
+                        <label htmlFor="excludeSaturday" className='xs:text-base md:text-lg'>
+                            {t("exclude_saturday")}
+                        </label>
                     </div>
 
                     <div className='border w-full p-3 flex justify-start items-center gap-5 rounded'>
@@ -326,7 +319,9 @@ const OrderForm = ({program, userChosenDishes}) => {
                             }}
                             className='w-6 h-6 appearance-none border-2 border-gray-300 rounded checked:bg-[var(--green)] checked:border-[var(--green)] focus:outline-none'
                         />
-                        <label htmlFor="excludeSunday">Исключить воскресенье</label>
+                        <label htmlFor="excludeSunday" className='xs:text-base md:text-lg'>
+                            {t("exclude_sunday")}
+                        </label>
                     </div>
                 </div>
 
@@ -342,12 +337,14 @@ const OrderForm = ({program, userChosenDishes}) => {
                         onChange={() => setShowInputPromoCode(!showInputPromoCode)}
                         className='w-6 h-6 appearance-none border-2 border-gray-300 rounded checked:bg-[var(--green)] checked:border-[var(--green)] focus:outline-none'
                     />
-                    <label htmlFor="promoCode">У меня есть промокод</label>
+                    <label htmlFor="promoCode" className='xs:text-base md:text-lg'>
+                        {t("i_have_promo_code")}
+                    </label>
                 </div>
 
 
                 {showInputPromoCode && (
-                    <div className='flex items-center gap-5'>
+                    <div className='flex xs:flex-col md:flex-row items-center gap-5'>
                         <input
                             type="text"
                             name='promoCodeValue'
@@ -355,40 +352,45 @@ const OrderForm = ({program, userChosenDishes}) => {
                             {...register('promoCodeValue', {required: showInputPromoCode})}
                             value={promoCodeValue}
                             onChange={(e) => setPromoCodeValue(e.target.value)}
-                            className='w-full border p-3 rounded outline-none'
-                            placeholder='Введите промокод'
+                            className='w-full border p-3 rounded outline-none xs:text-base md:text-lg'
+                            placeholder={t("enter_promoCode")}
                         />
                         <button
                             type="button"
                             onClick={applyPromoCode}
-                            className='bg-[var(--green)] px-12 py-3 rounded-full text-white hover:!bg-[var(--oringe)] transition'
+                            className='bg-[var(--green)] px-12 py-3 rounded-full text-white hover:!bg-[var(--oringe)] transition xs:text-base md:text-lg'
                         >
-                            Применить
+                            {t("apply")}
                         </button>
                     </div>
                 )}
 
                 {promoCodeMessage && (
-                    <div className='bg-gray-200 p-3 rounded'>
+                    <div className='bg-green-100 p-3 rounded'>
                         <p>{promoCodeMessage}</p>
                     </div>
                 )}
 
                 <hr className='h-0.5 my-2 bg-gray-200 border-0'/>
 
-                <h2 className='text-3xl text-left text-bold'>Доставка</h2>
-                <div className='flex gap-5'>
+                <h2 className='text-left text-bold md:text-4xl'>
+                    {t("delivery")}
+                </h2>
+                <div className='flex xs:flex-col md:flex-row gap-5'>
 
                     <div className='flex flex-col w-full'>
                         <input type="text"
                                name='userName'
                                id='userName'
                                {...register('userName', {required: true})}
-                               placeholder='Имя'
-                               className={`w-full border p-3 border-gray-200 rounded outline-none ${errors.userName ? 'border-red-500' : ''}`}
+                               placeholder={t("name")}
+                               className={`w-full border p-3 border-gray-200 rounded outline-none ${errors.userName ? 'border-red-500' : ''} xs:text-base md:text-lg`}
                                onBlur={() => trigger("userName")}
                         />
-                        {errors.userName && <span className='text-red-500 mt-2 mb-2 text-sm'>Введите имя</span>}
+                        {errors.userName &&
+                            <span className='text-red-500 mt-2 mb-2 xs:text-base md:text-lg'>
+                                {t("enter_your_name")}
+                            </span>}
                     </div>
 
                     <div className='flex flex-col w-full'>
@@ -401,26 +403,33 @@ const OrderForm = ({program, userChosenDishes}) => {
                                    minLength: 10,
                                    maxLength: 15
                                })}
-                               placeholder='Телефон'
-                               className={`w-full border p-3 border-gray-200 rounded outline-none ${errors.userPhone ? 'border-red-500' : ''}`}
+                               placeholder={t("telephone")}
+                               className={`w-full border p-3 border-gray-200 rounded outline-none ${errors.userPhone ? 'border-red-500' : ''} xs:text-base md:text-lg`}
                                onBlur={() => trigger("userPhone")}
                         />
                         {errors.userPhone &&
-                            <span className='text-red-500 mt-2 mb-2 text-sm'>Введите правильный номер телефона</span>}
+                            <span className='text-red-500 mt-2 mb-2 xs:text-base md:text-lg'>
+                                {t("valid_phone_number")}
+                            </span>
+                        }
                     </div>
                 </div>
-                <div className='flex gap-5'>
+                <div className='flex xs:flex-col md:flex-row gap-5'>
 
                     <div className='flex flex-col w-full'>
                         <input type="email"
                                name='email'
                                id='email'
                                {...register('email', {required: true})}
-                               placeholder='Email (обязательно)'
-                               className={`w-full border p-3 border-gray-200 rounded outline-none ${errors.email ? 'border-red-500' : ''}`}
+                               placeholder={t("email_required")}
+                               className={`w-full border p-3 border-gray-200 rounded outline-none ${errors.email ? 'border-red-500' : ''} xs:text-base md:text-lg`}
                                onBlur={() => trigger("email")}
                         />
-                        {errors.email && <span className='text-red-500 mt-2 mb-2 text-sm'>Введите email</span>}
+                        {errors.email &&
+                            <span className='text-red-500 mt-2 mb-2 xs:text-base md:text-lg'>
+                                {t("enter_email")}
+                            </span>
+                        }
                     </div>
 
                     <div className='flex flex-col w-full'>
@@ -428,15 +437,19 @@ const OrderForm = ({program, userChosenDishes}) => {
                                name='address'
                                id='address'
                                {...register('address', {required: true})}
-                               placeholder='Улица, номер дома, номер квартиры'
-                               className={`w-full border p-3 border-gray-200 rounded outline-none ${errors.address ? 'border-red-500' : ''}`}
+                               placeholder={t("street_houseNumber_apartment_number")}
+                               className={`w-full border p-3 border-gray-200 rounded outline-none ${errors.address ? 'border-red-500' : ''} xs:text-base md:text-lg `}
                                onBlur={() => trigger("address")}
                         />
-                        {errors.address && <span className='text-red-500 mt-2 mb-2 text-sm'>Введите адрес</span>}
+                        {errors.address &&
+                            <span className='text-red-500 mt-2 mb-2 xs:text-base md:text-lg'>
+                                {t("enter_address")}
+                            </span>
+                        }
                     </div>
                 </div>
 
-                <div className='flex gap-5'>
+                <div className='flex xs:flex-col md:flex-row gap-5'>
 
                     <div className='mb-4 w-full'>
                         <Controller
@@ -448,8 +461,8 @@ const OrderForm = ({program, userChosenDishes}) => {
                                     {...field}
                                     options={dateOptions}
                                     styles={customStyles}
-                                    className='w-full'
-                                    placeholder='Выберите дату начала'
+                                    className='w-full xs:text-base md:text-lg'
+                                    placeholder={t("start_date")}
                                     onFocus={() => setIsFocused(true)}
                                     onBlur={() => {
                                         setIsFocused(false);
@@ -462,7 +475,11 @@ const OrderForm = ({program, userChosenDishes}) => {
                                 />
                             )}
                         />
-                        {errors.startDate && <span className='text-red-500'>Выберите дату начала</span>}
+                        {errors.startDate &&
+                            <span className='text-red-500 xs:text-base md:text-lg'>
+                                {t("start_date")}
+                            </span>
+                        }
                     </div>
 
                     <div className='mb-4 w-full'>
@@ -475,8 +492,8 @@ const OrderForm = ({program, userChosenDishes}) => {
                                     {...field}
                                     options={timeOptions}
                                     styles={customStyles}
-                                    className='w-full'
-                                    placeholder='Выберите время доставки'
+                                    className='w-full xs:text-base md:text-lg'
+                                    placeholder={t("delivery_time")}
                                     onFocus={() => setIsFocused(true)}
                                     onBlur={() => {
                                         setIsFocused(false);
@@ -486,7 +503,11 @@ const OrderForm = ({program, userChosenDishes}) => {
                                 />
                             )}
                         />
-                        {errors.deliveryTime && <span className='text-red-500'>Выберите время доставки</span>}
+                        {errors.deliveryTime &&
+                            <span className='text-red-500 xs:text-base md:text-lg'>
+                        {t("delivery_time")}
+                            </span>
+                        }
                     </div>
                 </div>
 
@@ -500,9 +521,11 @@ const OrderForm = ({program, userChosenDishes}) => {
                         {...register('comment')}
                         checked={showComment}
                         onChange={() => setShowComment(!showComment)}
-                        className='w-6 h-6 appearance-none border-2 border-gray-300 rounded checked:bg-[var(--green)] checked:border-[var(--green)] focus:outline-none'
+                        className='w-6 h-6 appearance-none border-2 border-gray-300 rounded checked:bg-[var(--green)] checked:border-[var(--green)] focus:outline-none xs:text-base md:text-lg'
                     />
-                    <label htmlFor="comment">Добавить комментарий к заказу</label>
+                    <label htmlFor="comment" className='xs:text-base md:text-lg'>
+                        {t("add_comment_to_order")}
+                    </label>
                 </div>
 
 
@@ -514,8 +537,8 @@ const OrderForm = ({program, userChosenDishes}) => {
                             {...register('comment')}
                             value={commentValue}
                             onChange={(e) => setCommentValue(e.target.value)}
-                            className='w-full border p-3 rounded outline-none resize-none md:h-60 xs:h-36'
-                            placeholder='Комментарий'
+                            className='w-full border p-3 rounded outline-none resize-none md:h-60 xs:h-36 xs:text-base md:text-lg'
+                            placeholder={t("comment")}
                         />
                     </div>
                 )}
@@ -524,86 +547,88 @@ const OrderForm = ({program, userChosenDishes}) => {
 
                 <div className='flex flex-col gap-5'>
                     <div className='flex justify-between items-center border-b border-dashed pb-3'>
-                        <p className='text-gray-400'>Стоимость программы: {programName}</p>
-                        <p className='font-medium'
-                           style={{color: `${program?.attributes?.bg_color}`}}
-                        >
-                            {oneDayPrice * selectedDuration.value} BYN
+                        <p className='text-gray-400 text-left xs:text-base md:text-lg'>
+                            {t("program_cost")}:
+                        </p>
+                        <p className='font-medium xs:text-base md:text-lg'>
+                            {currentProgram?.attributes?.one_day_price * selectedDuration.value} BYN
                         </p>
                     </div>
 
                     {discount && (
                         <>
                             <div className='flex justify-between items-center border-b border-dashed pb-3'>
-                                <p className='text-gray-400'>Скидка по промокоду</p>
-                                <p className='font-medium'
-                                   style={{color: `${program?.attributes?.bg_color}`}}>{discount} %</p>
+                                <p className='text-gray-400 xs:text-base md:text-lg'>
+                                    {t("promoCode_discount")}
+                                </p>
+                                <p className='font-medium xs:text-base md:text-lg'>
+                                    {discount} %
+                                </p>
                             </div>
                             <div className='flex justify-between items-center border-b border-dashed pb-3'>
-                                <p className='text-gray-400'>Сумма скидки</p>
-                                <p className='font-medium' style={{color: `${program?.attributes?.bg_color}`}}>
-                                    {calculateDiscountAmount(selectedDuration.value, discount)} BYN
+                                <p className='text-gray-400 xs:text-base md:text-lg'>
+                                    {t("discount_amount")}
+                                </p>
+                                <p className='font-medium xs:text-base md:text-lg'>
+                                    {calculateDiscountAmount(selectedStartDate.value, selectedDuration.value, discount, excludeSaturday, excludeSunday)} BYN
                                 </p>
                             </div>
                         </>
                     )}
 
-                    {getBonuses(selectedDuration.value) > 0 && (
-                        <div className='flex justify-between items-center border-b border-dashed pb-3'>
-                            <h2 className='text-gray-400'>Будет начислено бонусов</h2>
-                            <p className='font-medium'
-                               style={{color: `${program?.attributes?.bg_color}`}}
-                            >
-                                {getBonuses(selectedDuration.value)} Б
-                            </p>
-                        </div>
-                    )}
+                    {/*{getBonuses(selectedDuration.value) > 0 && (*/}
+                    {/*    <div className='flex justify-between items-center border-b border-dashed pb-3'>*/}
+                    {/*        <h2 className='text-gray-400 xs:text-base md:text-lg'>Будет начислено бонусов</h2>*/}
+                    {/*        <p className='font-medium xs:text-base md:text-lg'>*/}
+                    {/*            {getBonuses(selectedDuration.value)} Б*/}
+                    {/*        </p>*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
 
                     <div className='flex justify-between items-center border-b border-dashed pb-3'>
-                        <p className='font-extrabold text-gray-400'>Итоговая сумма:</p>
-                        <p className='font-extrabold' style={{color: `${program?.attributes?.bg_color}`}}>
+                        <p className='font-extrabold xs:text-lg md:text-2xl'>{t("total_amount")}:</p>
+                        <p className='font-extrabold xs:text-lg md:text-2xl'>
                             {calculateTotalPrice(selectedStartDate.value, selectedDuration.value, discount, excludeSaturday, excludeSunday)} BYN
                         </p>
                     </div>
                 </div>
 
-                <h2 className='mt-5 text-2xl text-left'>Расписание программы</h2>
+                <h2 className='mt-5 text-left xs:text-base md:text-lg'>
+                    {t("program_schedule")}
+                </h2>
                 <div className='flex flex-wrap gap-5 justify-evenly items-center'>
                     {generateCalendarDates().map((dateObj, index) => (
                         <div key={index}
-                             className={`p-2 text-center rounded border text-base ${dateObj.isExcluded ? 'line-through text-gray-400' : ''}`}>
-                            <div>{dateObj.date}</div>
-                            <div>{dateObj.dayOfWeek}</div>
+                             className={`p-2 text-center rounded border text-base ${dateObj.isExcluded ? 'line-through text-gray-400' : ''} `}>
+                            <div className='xs:text-sm md:text-lg'>{dateObj.date}</div>
+                            <div className='xs:text-sm md:text-lg'>{dateObj.dayOfWeek}</div>
                         </div>
                     ))}
                 </div>
 
-                <div className='flex justify-between items-center gap-10 mt-10'>
-                    <p>Нажимая кнопку “Оформить” Вы даёте согласие на
+                <div className='flex xs:flex-col md:flex-row justify-between items-center gap-10 mt-10'>
+                    <p className='xs:text-base md:text-lg'>
+                        {t("checkout_button_agree")}
                         <br/>
-                        <NavLink to={ROUTES.PRIVACY_POLICY} style={{color: `${program?.attributes?.bg_color}`}}
-                                 className='font-semibold hover:!text-[var(--oringe)] transition'
-                        >обработку персональных данных
+                        <NavLink to={ROUTES.PRIVACY_POLICY}
+                                 className='font-semibold hover:!text-[var(--oringe)] transition xs:text-base md:text-lg'>
+                            {t("processing_of_personal_data")}
                         </NavLink>
                     </p>
                     <button
                         type='submit'
                         disabled={isSubmitting}
-                        className='bg-[var(--green)] px-20 py-5 rounded-full w-fit text-white hover:!bg-[var(--oringe)] transition'
-                        style={{backgroundColor: program?.attributes?.bg_color}}
+                        className='bg-[var(--green)] md:px-20 xs:px-12 md:py-5 xs:py-2 rounded-full w-fit text-white hover:!bg-[var(--oringe)] transition xs:text-base md:text-lg'
                     >
-                        {isSubmitting ? 'Отправка...' : 'Оформить'}
+                        {isSubmitting ? t("sending") : t("place_an_order")}
                     </button>
-
                 </div>
             </form>
             {submissionMessage && (
-                <div className='mt-5'>
-                    <p className='text-red-500'>{submissionMessage}</p>
+                <div className='mt-5 xs:h-10vh md:h-80vh'>
+                    <p className='text-red-500 xs:text-base md:text-lg'>{submissionMessage}</p>
                 </div>
             )}
-
-
         </div>
     );
 };

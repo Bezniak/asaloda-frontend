@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import dayjs from 'dayjs';
-import { MdClose } from "react-icons/md";
+import {MdClose} from "react-icons/md";
 import {Preloader} from "../Preloader/Preloader.jsx";
+import {useTranslation} from "react-i18next";
 
-const ChangeDish = ({ dishes, eatingType, onSelectDish, currentDish, onClose }) => {
+const ChangeDish = ({dishes, eatingType, onSelectDish, currentDish, onClose}) => {
+    const {t} = useTranslation();
     const [filteredChangeDishes, setFilteredChangeDishes] = useState(null);
-    const [newDate, setNewDate] = useState('');
 
     useEffect(() => {
         if (dishes.length > 0 && currentDish) {
@@ -19,8 +20,7 @@ const ChangeDish = ({ dishes, eatingType, onSelectDish, currentDish, onClose }) 
             setFilteredChangeDishes([]);
         }
 
-        const dateTwoDaysLater = dayjs().add(2, 'day').format('DD.MM.YYYY');
-        setNewDate(dateTwoDaysLater);
+        // const dateTwoDaysLater = dayjs().add(2, 'day').format('DD.MM.YYYY');
     }, [dishes, eatingType, currentDish]);
 
     const handleSelect = (dish) => {
@@ -36,35 +36,33 @@ const ChangeDish = ({ dishes, eatingType, onSelectDish, currentDish, onClose }) 
         >
             <button
                 onClick={onClose}
-                className="absolute top-14 right-14 text-gray-500 hover:text-gray-800 focus:outline-none"
+                className="absolute top-12 right-14 text-gray-500 hover:text-gray-800 focus:outline-none"
                 aria-label="Close"
             >
                 <MdClose size={30}/>
             </button>
 
-            <h2 id="drawer-right-label" className="mt-5 text-4xl text-left mb-3 font-semibold">
-                Выберите замену
+            <h2 id="drawer-right-label" className="mt-5 md:text-4xl text-center mb-10 font-semibold">
+                {t("select_replacement")}
             </h2>
-            <p className='text-left text-gray-500 mb-10'>
-                Доставка будет изменена c {newDate}!
-            </p>
 
             <div className="mb-10">
-                <div className="mt-2 flex flex-row w-full items-center bg-gray-200 border border-gray-200 rounded-lg shadow">
+                <div
+                    className="mt-2 flex lg:flex-row xs:flex-col w-full items-center bg-green-50 border border-green-100 rounded-lg shadow">
                     <img
-                        className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 xs:w-1/3 xs:h-auto md:rounded-none md:rounded-s-lg"
+                        className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 xs:w-full xs:h-auto md:rounded-none md:rounded-s-lg"
                         src={import.meta.env.VITE_UPLOAD_URL + currentDish?.attributes?.main_img?.data?.attributes?.url}
                         alt={currentDish?.attributes?.dish_name}
                     />
                     <div className="ml-5 mr-5 w-full flex flex-col justify-between p-4 leading-normal">
                         <div className='flex flex-row justify-between mb-5 text-gray-600 text-sm'>
-                            <div className='flex flex-row justify-evenly'>
-                                <p>Б {currentDish?.attributes?.squirrels}</p> &nbsp;
-                                <p>Ж {currentDish?.attributes?.fats}</p> &nbsp;
-                                <p>У {currentDish?.attributes?.carbohydrates}</p> &nbsp;
+                            <div className='flex flex-row justify-evenly md:gap-5 sx:gap-2'>
+                                <p>{t("squirrels")} &nbsp; {currentDish?.attributes?.squirrels}</p> &nbsp;
+                                <p>{t("fat")} &nbsp; {currentDish?.attributes?.fats}</p> &nbsp;
+                                <p>{t("carbohydrates")} &nbsp; {currentDish?.attributes?.carbohydrates}</p> &nbsp;
                             </div>
                             <div className='text-left'>
-                                ККАЛ {currentDish?.attributes?.kcal}
+                                {t("kcal")} &nbsp; {currentDish?.attributes?.kcal}
                             </div>
                         </div>
                         <h2 className='text-base text-left'>{currentDish?.attributes?.dish_name}</h2>
@@ -72,6 +70,9 @@ const ChangeDish = ({ dishes, eatingType, onSelectDish, currentDish, onClose }) 
                 </div>
             </div>
 
+            <h2 className='text-2xl text-left mt-5 mb-10'>
+                {t("replacement_options")}:
+            </h2>
             <div className="flex flex-wrap gap-6 justify-evenly">
                 {filteredChangeDishes === null ? (
                     <Preloader/>
@@ -79,7 +80,7 @@ const ChangeDish = ({ dishes, eatingType, onSelectDish, currentDish, onClose }) 
                     filteredChangeDishes.map((dish) => (
                         <div
                             key={dish.id}
-                            className="w-64 bg-white border border-gray-200 rounded-lg shadow mb-6 cursor-pointer"
+                            className="w-72 bg-white border border-gray-200 rounded-lg shadow mb-6 cursor-pointer"
                             onClick={() => handleSelect(dish)}
                         >
                             <img
@@ -89,13 +90,13 @@ const ChangeDish = ({ dishes, eatingType, onSelectDish, currentDish, onClose }) 
                             />
                             <div className="p-4">
                                 <div className='flex flex-row justify-between mb-4 text-gray-600 text-sm'>
-                                    <div className='flex flex-row justify-evenly'>
-                                        <p>Б {dish?.attributes?.squirrels}</p> &nbsp;
-                                        <p>Ж {dish?.attributes?.fats}</p> &nbsp;
-                                        <p>У {dish?.attributes?.carbohydrates}</p> &nbsp;
+                                    <div className='flex flex-row justify-evenly md:gap-5 sx:gap-2'>
+                                        <p>{t("squirrels")} {dish?.attributes?.squirrels}</p> &nbsp;
+                                        <p>{t("fat")} {dish?.attributes?.fats}</p> &nbsp;
+                                        <p>{t("carbohydrates")} {dish?.attributes?.carbohydrates}</p> &nbsp;
                                     </div>
                                     <div>
-                                        ККАЛ {dish?.attributes?.kcal}
+                                        {t("kcal")} &nbsp; {dish?.attributes?.kcal}
                                     </div>
                                 </div>
                                 <p className="text-base font-normal text-gray-700 dark:text-gray-400">
@@ -105,7 +106,9 @@ const ChangeDish = ({ dishes, eatingType, onSelectDish, currentDish, onClose }) 
                         </div>
                     ))
                 ) : (
-                    <p className="text-center text-gray-500">Нет доступных замен на выбранную дату.</p>
+                    <p className="text-center text-gray-500">
+                        {t("no_available_substitutions")}
+                    </p>
                 )}
             </div>
         </div>

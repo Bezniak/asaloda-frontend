@@ -1,67 +1,56 @@
 import React from 'react';
-import { FiCheck } from 'react-icons/fi';
-import { Parallax } from 'react-parallax';
+import {Parallax} from 'react-parallax';
+import {FaRegThumbsUp} from "react-icons/fa";
+import {useTranslation} from "react-i18next";
 
 const WhyAsalodaFood = () => {
+    const {t} = useTranslation();
+
+
     return (
-        <div className='w-full max-w-7xl mx-auto md:mt-32 md:mb-32'>
-            <h2 className="text-5xl font-bold mb-6 md:text-left">Почему AsalodaFood?</h2>
-            <div className="flex flex-col md:flex-row items-start md:items-center">
-                {/* Параллакс-эффект для изображения */}
-                <Parallax bgImage="/circle-food-3.webp" strength={900} className="w-full md:w-1/2 p-4 flex justify-center">
-                    <div className="h-80 md:h-auto flex justify-center items-center">
-                        <img
-                            className="object-cover w-full max-w-md rounded-lg"
-                            src="/circle-food-3.webp" alt=""
-                        />
-                    </div>
-                </Parallax>
-
-                <div className="w-full md:w-1/2 p-4">
-                    <div className="mb-6">
-                        <h5 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                            <span className="bg-[#7ECA1D] text-white rounded-full p-3 mr-5">
-                                <FiCheck />
-                            </span>
-                            Контроль качества
-                        </h5>
-                        <p className="text-gray-700 mb-2 flex items-center text-left">
-                            — Только проверенные поставщики
+        <div className='w-full max-w-7xl mx-auto md:mt-32 md:mb-32 xs:mt-10 p-3'>
+            <h2 className="md:text-4xl font-bold mb-12 md:text-left">
+                {t("why_choose_AsalodaFood")}
+            </h2>
+            <div className="flex flex-col md:flex-col lg:flex-row items-start md:items-center gap-8">
+                <div className="w-full">
+                    <Parallax
+                        bgImage="/why_asaloda_food.jpg"
+                        strength={800}
+                        bgImageStyle={{objectFit: 'cover', height: '100%', width: '100%'}}
+                    >
+                        <div className="parallax-content"></div>
+                    </Parallax>
+                </div>
+                <div className="w-full md:w-2/3 p-4">
+                    <div className="mb-6 flex flex-col gap-3">
+                        <p className="text-gray-700 mb-2 flex items-center text-left xs:text-sm md:text-lg">
+                            <FaRegThumbsUp className='text-1xl text-[var(--green)] mr-5'/>
+                            {t("fresh_healthy_products")}
                         </p>
-                        <p className="text-gray-700 mb-2 flex items-center text-left">
-                            — Все продукты подтверждены сертификатом качества
+                        <p className="text-gray-700 mb-2 flex items-center text-left xs:text-sm md:text-lg">
+                            <FaRegThumbsUp className='text-1xl text-[var(--green)] mr-5'/>
+                            {t("cook_without_preservatives")}
                         </p>
-                        <p className="text-gray-700 mb-2 flex items-center text-left">
-                            — Не используем консервантов или другой химии
+                        <p className="text-gray-700 flex items-center text-left xs:text-sm md:text-lg">
+                            <FaRegThumbsUp className='text-1xl text-[var(--green)] mr-5'/>
+                            {t("maintain_balance_proteins")}
                         </p>
-                        <p className="text-gray-700 flex items-center text-left">
-                            — Используем натуральный сахарозаменитель
+                        <p className="text-gray-700 mb-2 flex items-center text-left xs:text-sm md:text-lg">
+                            <FaRegThumbsUp className='text-1xl text-[var(--green)] mr-5'/>
+                            {t("preparation_on_day_order")}
                         </p>
-                    </div>
-
-                    <div className="mb-14 mt-14">
-                        <h5 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                            <span className="bg-[#7ECA1D] text-white rounded-full p-3 mr-5">
-                                <FiCheck />
-                            </span>
-                            Технология Smart frost
-                        </h5>
-                        <p className="text-gray-700 text-left">
-                            Делаем заготовки овощей и мяса, готовим салаты и молочные блюда в
-                            охлажденном до 8 градусов помещении, где поддерживается постоянная температура. Эта
-                            технология позволяет сохранить максимум полезности и витаминов.
+                        <p className="text-gray-700 mb-2 flex items-center text-left xs:text-sm md:text-lg">
+                            <FaRegThumbsUp className='text-1xl text-[var(--green)] mr-5'/>
+                            {t("work_with_trusted_suppliers")}
                         </p>
-                    </div>
-
-                    <div>
-                        <h5 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                            <span className="bg-[#7ECA1D] text-white rounded-full p-3 mr-5">
-                                <FiCheck />
-                            </span>
-                            Переработка пластика
-                        </h5>
-                        <p className="text-gray-700 text-left">
-                            Мы заботимся об окружающей среде. Курьер может забрать нашу упаковку на переработку.
+                        <p className="text-gray-700 mb-2 flex items-center text-left xs:text-sm md:text-lg">
+                            <FaRegThumbsUp className='text-1xl text-[var(--green)] mr-5'/>
+                            {t("quality_control_at_all_stages")}
+                        </p>
+                        <p className="text-gray-700 mb-2 flex items-center text-left xs:text-sm md:text-lg">
+                            <FaRegThumbsUp className='text-1xl text-[var(--green)] mr-5'/>
+                            {t("care_about_the_environment")}
                         </p>
                     </div>
                 </div>

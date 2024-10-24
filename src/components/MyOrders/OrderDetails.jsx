@@ -1,11 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
+import 'dayjs/locale/en';
+import 'dayjs/locale/be';
 import useFetchAllData from "../../api/useFetchAllData.js";
 import DishModalWindow from "../Program/DishModalWindow.jsx";
 import ChangeDish from "../Program/ChangeDish.jsx";
 import api from '../../api/api.js';
 import {Preloader} from "../Preloader/Preloader.jsx";
+import {useTranslation} from "react-i18next";
+import {useAuth} from "../../context/AuthContext.jsx";
 
 const OrderDetails = ({
                           userName,
@@ -21,6 +25,8 @@ const OrderDetails = ({
                           programStartDate,
                           programEndDate
                       }) => {
+    const {locale} = useAuth();  // Получаем текущий язык из контекста
+    const {t} = useTranslation();
     const [selectedDish, setSelectedDish] = useState(null);
     const [isAdditionalMenuVisible, setIsAdditionalMenuVisible] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -112,7 +118,12 @@ const OrderDetails = ({
         return true;
     });
 
-    const eatingTypeOrder = ['Первый завтрак', 'Второй завтрак', 'Обед', 'Полдник', 'Ужин'];
+    // Определяем типы приема пищи в зависимости от языка
+    const eatingTypeOrder = locale === 'en'
+        ? ['Breakfast', 'Lunch', 'Dinner']
+        : locale === 'be'
+            ? ['Першы сняданак', 'Другі сняданак', 'Абед', 'Падвячорак', 'Вячэра']
+            : ['Первый завтрак', 'Второй завтрак', 'Обед', 'Полдник', 'Ужин'];
 
     const sortedDishes = updatedDishes.sort((a, b) => {
         const typeA = a.attributes.eating_type;
@@ -121,27 +132,30 @@ const OrderDetails = ({
     });
 
     return (
-        <div className="container mx-auto p-4 mt-10">
+        <div className="mx-auto xs:p-4 md:p-12">
             {allDishLoading || allChangeDishLoading ? (
-                <Preloader/> // Показать Preloader при загрузке
+                <Preloader/>
             ) : allDishError || allChangeDishError ? (
                 <div className="text-red-500">
-                    <p>Ошибка загрузки данных:</p>
+                    <p>{t("error_loading_data")}</p>
                     {allDishError && <p>{allDishError.message}</p>}
                     {allChangeDishError && <p>{allChangeDishError.message}</p>}
                 </div>
             ) : (
                 <>
                     <h2 className='py-8 text-2xl'>
-                        <span className='capitalize'>{userName}</span>, здравствуйте!
-                        Вы заказали
-                        программу {programName} с <span
-                        className='font-bold'>{dayjs(startDate).format('DD.MM.YYYY')}</span> по <span
-                        className='font-bold'>{dayjs(endDate).format('DD.MM.YYYY')}</span>
+                        <span className='capitalize'>
+                            {userName}
+                        </span>, {t("hello")} &nbsp;
+                        {t("you_ordered_program")}  {programName}  {t("from")} &nbsp;
+                        <span className='font-bold'>{dayjs(startDate).format('DD.MM.YYYY')}</span>
+                        &nbsp; {t("to")} &nbsp;
+                        <span className='font-bold'>{dayjs(endDate).format('DD.MM.YYYY')}</span>
                     </h2>
 
                     {filteredDates.map((date) => {
-                        const weekday = date.locale('ru').format('dddd');
+                        // Устанавливаем локаль для названия недели
+                        const weekday = date.locale(locale === 'be' ? 'be' : locale === 'en' ? 'en' : 'ru').format('dddd');
                         const formattedDate = date.format('DD.MM.YYYY');
 
                         const dishesForTheDay = sortedDishes.filter(dish =>
@@ -150,11 +164,7 @@ const OrderDetails = ({
 
                         return (
                             <div key={formattedDate} className="mb-6">
-
-
                                 <hr className="h-0.5 mt-8 mb-6 my-2 bg-gray-200 border-0 rounded w-full"/>
-
-
                                 <h3 className="text-xl text-left py-3 uppercase text-[var(--green)] font-bold">{weekday}, {formattedDate}</h3>
                                 <div className="flex justify-start items-start gap-10 flex-wrap">
                                     {dishesForTheDay.length > 0 ? (
@@ -170,10 +180,15 @@ const OrderDetails = ({
                                                     <img
                                                         src={imageUrl}
                                                         alt={dish.attributes.dish_name}
-                                                        className="rounded-t-lg object-cover h-2/3"
+                                                        className="rounded-t-lg object-cover h-2/3 cursor-pointer"
+                                                        onClick={() => openModal(dish)}
                                                     />
                                                     <div className='flex flex-col h-full'>
-                                                        <h4 className="text-lg py-3 px-4">{dish.attributes.dish_name}</h4>
+                                                        <h4 className="text-lg py-3 px-4 cursor-pointer hover:text-[var(--green)]"
+                                                            onClick={() => openModal(dish)}
+                                                        >
+                                                            {dish.attributes.dish_name}
+                                                        </h4>
                                                         <div
                                                             className='mt-auto flex justify-between items-center px-4 py-2'>
                                                             <p className='text-left text-base py-3'>{dish.attributes.eating_type}</p>
@@ -185,36 +200,38 @@ const OrderDetails = ({
                                                                         setIsAdditionalMenuVisible(true);
                                                                     }}
                                                                 >
-                                                                    Заменить
+                                                                    {t("replace")}
                                                                 </button>
                                                             )}
                                                         </div>
                                                     </div>
-                                                    {showModal && selectedDish?.id === dish.id && (
-                                                        <DishModalWindow onClose={closeModal} dishData={selectedDish}/>
-                                                    )}
-                                                    {isAdditionalMenuVisible && selectedDish?.id === dish.id && (
-                                                        <ChangeDish
-                                                            dishes={availableReplacementDishes}
-                                                            eatingType={dish.attributes.eating_type}
-                                                            onSelectDish={handleDishReplace}
-                                                            currentDish={selectedDish}
-                                                            onClose={() => setIsAdditionalMenuVisible(false)}
-                                                        />
-                                                    )}
                                                 </div>
                                             );
                                         })
                                     ) : (
-                                        <div className="text-gray-500 text-center text-sm py-4">
-                                            <p>Блюда скоро будут добавлены. Пожалуйста, проверьте меню позже.</p>
-                                        </div>
+                                        <p>{t("no_dishes")}</p>
                                     )}
                                 </div>
                             </div>
                         );
                     })}
                 </>
+            )}
+            {showModal && selectedDish && (
+                <DishModalWindow
+                    dish={selectedDish}
+                    availableReplacementDishes={availableReplacementDishes}
+                    onClose={closeModal}
+                    onDishReplace={handleDishReplace}
+                />
+            )}
+            {isAdditionalMenuVisible && selectedDish && (
+                <ChangeDish
+                    selectedDish={selectedDish}
+                    availableReplacementDishes={availableReplacementDishes}
+                    onClose={() => setIsAdditionalMenuVisible(false)}
+                    onDishReplace={handleDishReplace}
+                />
             )}
         </div>
     );

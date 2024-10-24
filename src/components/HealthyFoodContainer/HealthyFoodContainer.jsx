@@ -1,40 +1,41 @@
 import React from 'react';
 import HealthyFood from "./HealthyFood.jsx";
+import {useTranslation} from "react-i18next";
+import {PiCarrotBold} from "react-icons/pi";
+import {GiBeet, GiCorn} from "react-icons/gi";
 
 const HealthyFoodContainer = () => {
+    const {t} = useTranslation();
+
+
     return (
-        <div className='mt-20 mb-10 w-full max-w-7xl mx-auto'>
-            <h1 className='text-5xl font-bold mb-10 md:text-left'>Здоровое питание от AsalodaFood</h1>
+        <div className='mt-20 mb-10 w-full max-w-7xl mx-auto p-3'>
+            <h1 className='font-bold mb-10 md:text-center xs:text-base md:text-4xl'>
+                {t("eat_right_with_AsalodaFood")}
+            </h1>
             <div
-                className=' flex flex-col md:flex-row items-stretch justify-between gap-10 px-4'
+                className='flex lg:flex-row md:flex-col xs:flex-col items-stretch justify-between gap-10 px-4'
             >
-                <HealthyFood img={'/icon1.svg'} title={'На здоровье!'}
-                             description={'Без консервантов, усилителей вкуса и химии'}
-                             additionalInfoClick={'Всегда свежее, качественное и вкусное питание из натуральных продуктов - залог отличного самочувствия и крепкого здоровья.'}
-                             modalTitle={'С AsalodaFood быть здоровым просто'}
-                             modalDescription={'Всегда свежее, качественное и вкусное питание из натуральных продуктов - залог отличного самочувствия и крепкого здоровья'}
+                <HealthyFood title={t("taking_care_of_your_health")}
+                             description={t("we_cook_from_fresh_quality_products")}
+                             modalTitle={t("being_healthy_easy")}
+                             modalDescription={t("we_offer_balanced_delicious_meals")}
                              isButtonShow={true}
+                             svg={PiCarrotBold}
                 />
-                <HealthyFood img={'/icon1.svg'} title={'Ешь и худей!'}
-                             description={'Придерживайся питания AsalodaFood и сбрасывай от 2 до 5 кг за неделю!'}
-                             additionalInfoClick={'Придерживайся питания BeFit и сбрасывай от 2 до 5 кг за неделю!'}
-                             modalTitle={'Ешь и худей!'}
-                             modalDescription={'Придерживайся питания AsalodaFood и сбрасывай от 2 до 5 кг за неделю!'}
+                <HealthyFood title={t("save_time")}
+                             description={t("take_time_for_yourself")}
+                             modalTitle={t("save_time")}
+                             modalDescription={t("enjoy_life_without_thinking")}
                              isButtonShow={true}
+                             svg={GiCorn}
                 />
-                <HealthyFood img={'/icon1.svg'} title={'+14 часов свободы от кухни, магазинов и мыслей о еде'}
-                             description={'Доверь заботу о своем питании профессионалам'}
-                             additionalInfoClick={'Освободи время для по-настоящему важных дел, а заботу о питании возьмет на себя AsalodaFood'}
-                             modalTitle={'Экономь 2 часа ежедневно на походе в магазин, готовке и мытье посуды.'}
-                             modalDescription={'Освободи время для по-настоящему важных дел, а заботу о питании возьмет на себя BeFit.'}
+                <HealthyFood title={t("achieve_your_goals")}
+                             description={t("eating_plans_help_you")}
+                             modalTitle={t("achieve_your_goals")}
+                             modalDescription={t("lose_weight_stay_fit")}
                              isButtonShow={true}
-                />
-                <HealthyFood img={'/icon1.svg'} title={'Здоровое питание с заботой об экологии.'}
-                             description={'Наши курьеры принимают использованные контейнеры в переработку'}
-                             additionalInfoClick={'Поэтому Все наши клиенты могут передать использованные, предварительно очищенные от остатков пищи, контейнеры нашему курьеру, а он передаст их в переработку'}
-                             modalTitle={'Нам на самом деле не все равно, куда девается пластик из-под наших рационов.'}
-                             modalDescription={'Поэтому Все наши клиенты могут передать использованные, предварительно очищенные от остатков пищи, контейнеры нашему курьеру, а он передаст их в переработку.'}
-                             isButtonShow={true}
+                             svg={GiBeet}
                 />
             </div>
         </div>

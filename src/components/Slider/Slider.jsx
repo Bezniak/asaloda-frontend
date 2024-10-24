@@ -7,8 +7,11 @@ import {Navigation, Pagination} from 'swiper/modules';
 import {Parallax} from 'react-parallax';
 import './slider.css';
 import {TiTickOutline} from "react-icons/ti";
+import {useTranslation} from "react-i18next";
 
 const Slider = ({scrollToProgram}) => {
+    const {t} = useTranslation();
+
     return (
         <Swiper
             spaceBetween={50}
@@ -20,46 +23,86 @@ const Slider = ({scrollToProgram}) => {
         >
             <SwiperSlide>
                 <Parallax
-                    bgImage="/main_img_1.jpg"
+                    bgImage="/selmon_1.jpg"
                     strength={800}
                     className="parallax-slide"
                 >
-                    <div className="max-w-7xl h-90vh mx-auto flex flex-col justify-center">
+                    <div className="max-w-7xl h-90vh mx-auto flex flex-col justify-center md:p-6 xs:p-3">
                         <div className="relative z-10 flex flex-col">
-                            <h1 className="mb-5 text-4xl font-bold text-white z-50"
+                            <h1 className="mb-5 font-bold text-white z-50 md:text-left xs:text-center xs:text-base md:text-4xl"
                             >
-                                Здоровое питание от AsalodaFood поможет вам:
+                                {t("healthy_help_you")}
                             </h1>
-                            <ul className="flex flex-col gap-5">
+                            <ul className="flex flex-col md:gap-5 xs:pag-2">
                                 <li className='flex items-center gap-3'>
-                                    <TiTickOutline className='text-4xl text-[var(--dark-blue)]'/>
-                                    <span className="text-white">снизить массу тела</span>
+                                    <TiTickOutline className='text-[var(--green)] cursor-default'/>
+                                    <span className="text-white xs:text-base md:text-2xl">
+                                        {t("reduce_body_weight")}
+                                    </span>
                                 </li>
                                 <li className='flex items-center gap-3'>
-                                    <TiTickOutline className='text-4xl text-[var(--dark-blue)]'/>
-                                    <span className="text-white">поддержать форму</span>
+                                    <TiTickOutline className='text-[var(--green)] cursor-default'/>
+                                    <span className="text-white xs:text-base md:text-2xl">
+                                        {t("keep_in_shape")}
+                                    </span>
                                 </li>
                                 <li className='flex items-center gap-3'>
-                                    <TiTickOutline className='text-4xl text-[var(--dark-blue)]'/>
-                                    <span className="text-white">набрать мышечную массу</span>
+                                    <TiTickOutline className='text-[var(--green)] cursor-default'/>
+                                    <span className="text-white xs:text-base md:text-2xl">
+                                        {t("gain_muscle_mass")}
+                                    </span>
                                 </li>
                                 <li className='flex items-center gap-3'>
-                                    <TiTickOutline className='text-4xl text-[var(--dark-blue)]'/>
-                                    <span className="text-white">питаться вкусно и здорово</span>
+                                    <TiTickOutline className='text-[var(--green)] cursor-default'/>
+                                    <span
+                                        className="text-white xs:text-base md:text-2xl">
+                                        {t("eat_tasty_and_healthy")}
+                                    </span>
                                 </li>
                                 <li className='flex items-center gap-3'>
-                                    <TiTickOutline className='text-4xl text-[var(--dark-blue)]'/>
-                                    <span className="text-white">экономить время на магазинах и готовке</span>
+                                    <TiTickOutline className='text-[var(--green)] cursor-default'/>
+                                    <span className="text-white xs:text-base md:text-2xl">
+                                        {t("save_time_shopping_cooking")}
+                                    </span>
                                 </li>
                             </ul>
-                            <p className="mt-10 mb-10 text-left text-white">
-                                Напиши рационы правильного питания сделают путь к телу мечты лучше и ярче!
+                            <p className="mt-10 md:mb-10 md:text-left text-white xs:text-center xs:text-base md:text-2xl">
+                                {t("diet_plans_make_path")}
                             </p>
+                            <div className='md:text-left xs:text-center'>
+                                <button
+                                    className='text-center font-bold py-3 bg-white rounded-full px-12 w-fit hover:bg-[var(--oringe)] hover:text-white transition relative z-10 xs:mt-5 xs:text-base'
+                                    onClick={scrollToProgram}
+                                >
+                                    {t("choose_program")}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </Parallax>
+            </SwiperSlide>
+
+
+            <SwiperSlide>
+                <Parallax
+                    bgImage="/citrus_2.jpg"
+                    strength={800}
+                    className="parallax-slide"
+                >
+                    <div
+                        className="max-w-7xl h-90vh mx-auto  flex flex-col justify-center xs:px-14 xs:gap-2 md:gap-5 lg:gap-5 xs:text-lg md:text-2xl lg:text-4xl">
+                        <h1 className="mb-5 font-bold text-white z-50 xs:text-base md:text-4xl text-left">
+                            {t("lose_weight_easily_deliciously")}
+                        </h1>
+                        <p className="flex flex-col gap-5 z-50 text-white xs:text-base md:text-2xl text-left">
+                            {t("try_healthy_eating_programs_from_1000_kcal")}
+                        </p>
+                        <div className='text-left mt-10'>
                             <button
-                                className='text-center font-bold py-3 bg-white rounded-full px-12 w-fit hover:bg-[var(--oringe)] hover:text-white transition relative z-10'
+                                className='text-center font-bold py-3 bg-white rounded-full px-12 w-fit hover:bg-[var(--oringe)] hover:text-white transition relative z-10 xs:mt-5 xs:text-base'
                                 onClick={scrollToProgram}
                             >
-                                Выбрать программу
+                                {t("choose_program")}
                             </button>
                         </div>
                     </div>
@@ -69,85 +112,51 @@ const Slider = ({scrollToProgram}) => {
 
             <SwiperSlide>
                 <Parallax
-                    bgImage="/food2.jpg"
-                    strength={500}
+                    bgImage="/shrimp_3.jpg"
+                    strength={800}
                     className="parallax-slide"
                 >
-                    <div className=" max-w-7xl h-90vh mx-auto flex flex-col justify-center">
-                        <h1 className="mb-5 text-4xl font-bold text-white">
-                            Худей легко
+                    <div
+                        className="max-w-7xl h-90vh mx-auto  flex flex-col justify-center xs:px-14 xs:gap-2 md:gap-5 lg:gap-5 xs:text-lg md:text-2xl lg:text-4xl">
+                        <h1 className="mb-5 font-bold text-white z-50 xs:text-base md:text-4xl text-left">
+                            {t("harmony_on_plate")}
                         </h1>
-                        <h1 className="mb-5 text-4xl font-bold text-white"
-                            style={{
-                                textShadow: '0px 0px 8px rgba(255, 255, 255, 1)', // Белая тень вокруг текста
-                            }}>
-                            Худей со вкусом
-                        </h1>
-                        <p className="flex flex-col gap-5">
-                            Программы диетического питания от 1000 Ккал для желающих сбросить вес
+                        <p className="flex flex-col gap-5 z-50 text-white xs:text-base md:text-2xl text-left">
+                            {t("healthy_nutrition_from_2000_kcal")}
                         </p>
-                        <div className='text-center mt-10'>
+                        <div className='text-left mt-10'>
                             <button
-                                className='text-center font-bold py-3 bg-white rounded-full px-12 w-fit hover:bg-[var(--oringe)] hover:text-white transition relative z-10'
+                                className='text-center font-bold py-3 bg-white rounded-full px-12 w-fit hover:bg-[var(--oringe)] hover:text-white transition relative z-10 xs:mt-5 xs:text-base'
                                 onClick={scrollToProgram}
                             >
-                                Выбрать программу
+                                {t("choose_program")}
                             </button>
                         </div>
                     </div>
                 </Parallax>
             </SwiperSlide>
 
-            <SwiperSlide>
-                <Parallax
-                    bgImage="/food2.jpg"
-                    strength={500}
-                    className="parallax-slide"
-                >
-                    <div className=" max-w-7xl h-90vh mx-auto flex flex-col justify-center">
-                        <h1 className="mb-5 text-4xl font-bold text-white">
-                            Худей легко
-                        </h1>
-                        <h1 className="mb-5 text-4xl font-bold text-white">
-                            Худей со вкусом
-                        </h1>
-                        <p className="flex flex-col gap-5">
-                            Программы диетического питания от 1000 Ккал для желающих сбросить вес
-                        </p>
-                        <div className='text-center mt-10'>
-                            <button
-                                className='text-center font-bold py-3 bg-white rounded-full px-12 w-fit hover:bg-[var(--oringe)] hover:text-white transition relative z-10'
-                                onClick={scrollToProgram}
-                            >
-                                Выбрать программу
-                            </button>
-                        </div>
-                    </div>
-                </Parallax>
-            </SwiperSlide>
 
             <SwiperSlide>
                 <Parallax
-                    bgImage="/food2.jpg"
-                    strength={500}
+                    bgImage="/chicken_4.jpg"
+                    strength={800}
                     className="parallax-slide"
                 >
-                    <div className=" max-w-7xl h-90vh mx-auto flex flex-col justify-center">
-                        <h1 className="mb-5 text-4xl font-bold text-white">
-                            Худей легко
+                    <div
+                        className="max-w-7xl h-90vh mx-auto  flex flex-col justify-center xs:px-14 xs:gap-2 md:gap-5 lg:gap-5 xs:text-lg md:text-2xl lg:text-4xl">
+                        <h1 className="mb-5 font-bold text-white z-50 xs:text-base md:text-4xl text-left">
+                            {t("increase_muscle_mass")}
                         </h1>
-                        <h1 className="mb-5 text-4xl font-bold text-white">
-                            Худей со вкусом
-                        </h1>
-                        <p className="flex flex-col gap-5">
-                            Программы диетического питания от 1000 Ккал для желающих сбросить вес
+                        <p className="flex flex-col gap-5 z-50 text-white xs:text-base md:text-2xl text-left">
+                            {t("healthy_nutrition_programs")}
                         </p>
-                        <div className='text-center mt-10'>
+                        <div className='text-left mt-10'>
                             <button
-                                className='text-center font-bold py-3 bg-white rounded-full px-12 w-fit hover:bg-[var(--oringe)] hover:text-white transition relative z-10'
+                                className='text-center font-bold py-3 bg-white rounded-full px-12 w-fit hover:bg-[var(--oringe)] hover:text-white transition relative z-10 xs:mt-5 xs:text-base'
                                 onClick={scrollToProgram}
                             >
-                                Выбрать программу
+                                {t("choose_program")}
                             </button>
                         </div>
                     </div>

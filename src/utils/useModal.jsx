@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import {useEffect, useState} from 'react';
 
 const useModal = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,7 +19,7 @@ const useModal = () => {
         };
     }, [isModalOpen]);
 
-    return { isModalOpen, openModal, closeModal };
+    return {isModalOpen, openModal, closeModal};
 };
 
 export default useModal;

@@ -1,7 +1,11 @@
 import React from 'react';
 import {LuCircle} from "react-icons/lu";
+import {useTranslation} from "react-i18next";
 
 const ModalWindow = ({onClose, modalTitle, modalDescription, img, listTitle, list}) => {
+    const {t} = useTranslation();
+
+
     return (
         <div className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center px-4">
             <div className="fixed inset-0 bg-black opacity-70"></div>
@@ -50,7 +54,7 @@ const ModalWindow = ({onClose, modalTitle, modalDescription, img, listTitle, lis
                     <button className='btn'
                             onClick={onClose}
                     >
-                        Понятно
+                        {t("it_clear")}
                     </button>
                 </div>
             </div>

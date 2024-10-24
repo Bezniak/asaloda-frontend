@@ -3,8 +3,6 @@ import {Preloader} from '../Preloader/Preloader.jsx';
 
 const FaqDetails = ({data, loading, error}) => {
     const [openIndex, setOpenIndex] = useState(null);
-
-
     const handleToggle = (index) => {
         setOpenIndex(openIndex === index ? null : index);
     };

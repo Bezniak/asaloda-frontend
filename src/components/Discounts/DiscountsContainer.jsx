@@ -1,10 +1,16 @@
 import React from 'react';
 import Discounts from "./Discounts.jsx";
+import {useTranslation} from "react-i18next";
 
 const DiscountsContainer = () => {
+    const {t} = useTranslation();
+
+
     return (
-        <div className='w-full max-w-7xl mx-auto md:mt-20 md:mb-20 xs:mb-10'>
-            <h1 className='text-5xl font-bold mb-10 md:text-left'>Акции</h1>
+        <div className='w-full max-w-7xl mx-auto md:mt-20 md:mb-20 xs:mb-10 p-3'>
+            <h1 className='md:text-4xl xs:text-2xl font-bold mb-10 md:text-left'>
+                {t("discount")}
+            </h1>
             <div
                 className='flex flex-col md:flex-row items-stretch justify-between gap-10 px-4'
             >

@@ -1,11 +1,11 @@
-import { useRef } from 'react';
+import {useRef} from 'react';
 
 const useScrollToElement = () => {
     const elementRef = useRef(null);
 
     const scrollToElement = () => {
         if (elementRef.current) {
-            elementRef.current.scrollIntoView({ behavior: 'smooth' });
+            elementRef.current.scrollIntoView({behavior: 'smooth'});
         }
     };
 

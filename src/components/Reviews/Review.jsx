@@ -1,8 +1,11 @@
 import React from 'react';
 import {formatDate} from "../../utils/utils.js";
+import {useAuth} from "../../context/AuthContext.jsx";
+import {useTranslation} from "react-i18next";
 
 const Review = ({data}) => {
-
+    const {locale} = useAuth();
+    const {t} = useTranslation();
     const sortedData = [...data].sort((a, b) => new Date(b.attributes.publishedAt) - new Date(a.attributes.publishedAt));
 
     return (
@@ -23,9 +26,9 @@ const Review = ({data}) => {
                                 </div>
                                 <div className='flex flex-col'>
                                     <h3 className='text-left font-semibold ml-4'>
-                                        {u.attributes.username || 'Не зарегистрированный пользователь'}
+                                        {u.attributes.username || t("not_registered_user")}
                                     </h3>
-                                    <p className='text-left text-sm text-gray-500 ml-4'>{formatDate(user?.attributes?.publishedAt)}</p>
+                                    <p className='text-left text-sm text-gray-500 ml-4'>{formatDate(user?.attributes?.publishedAt, locale)}</p>
                                 </div>
                             </div>
                         ))
@@ -42,9 +45,9 @@ const Review = ({data}) => {
                             </div>
                             <div className='flex flex-col'>
                                 <h3 className='text-left font-semibold ml-4'>
-                                    Аноним
+                                    {t("anonymous")}
                                 </h3>
-                                <p className='text-left text-sm text-gray-500 ml-4'>{formatDate(user?.attributes?.publishedAt)}</p>
+                                <p className='text-left text-sm text-gray-500 ml-4'>{formatDate(user?.attributes?.publishedAt, locale)}</p>
                             </div>
                         </div>
                     )}
@@ -56,6 +59,5 @@ const Review = ({data}) => {
         </div>
     );
 };
-
 
 export default Review;
