@@ -1,5 +1,8 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/asalodaf/public_html
-    - /bin/cp -R build/* $DEPLOYPATH
+    - echo "Starting Deployment"
+    - npm install
+    - npm run build
+    - rsync -av --delete build/ /home/asalodaf/public_html/
+    - echo "Deployment Finished"
