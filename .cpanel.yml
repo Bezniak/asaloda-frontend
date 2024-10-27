@@ -2,7 +2,8 @@
 deployment:
   tasks:
     - echo "Starting Deployment"
+    - export DEPLOYPATH=/home/asalodaf/public_html/
     - npm install
     - npm run build
-    - rsync -av --delete build/ /home/asalodaf/public_html/
+    - rsync -av --delete build/ $DEPLOYPATH
     - echo "Deployment Finished"
