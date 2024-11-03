@@ -58,19 +58,19 @@ const ProgramSelector = ({changeProgramName}) => {
                     </p>
                 </button>
 
-                <button
-                    onClick={() => handleProgramChange(t("drinks"))}
+                {/*<button*/}
+                {/*    onClick={() => handleProgramChange(t("drinks"))}*/}
 
-                    className={classNames(
-                        'w-48 h-48 rounded p-3 transition flex flex-col justify-around',
-                        activeProgram === t("drinks") ? 'bg-[var(--green)] text-white' : 'bg-green-100 hover:bg-[var(--green)]'
-                    )}
-                >
-                    <img src="/juice.png" alt="juice" className='w-16 h-auto'/>
-                    <p className={classNames('transition text-base text-left', activeProgram === t("drinks") && 'text-white')}>
-                        {t("drinks")}
-                    </p>
-                </button>
+                {/*    className={classNames(*/}
+                {/*        'w-48 h-48 rounded p-3 transition flex flex-col justify-around',*/}
+                {/*        activeProgram === t("drinks") ? 'bg-[var(--green)] text-white' : 'bg-green-100 hover:bg-[var(--green)]'*/}
+                {/*    )}*/}
+                {/*>*/}
+                {/*    <img src="/juice.png" alt="juice" className='w-16 h-auto'/>*/}
+                {/*    <p className={classNames('transition text-base text-left', activeProgram === t("drinks") && 'text-white')}>*/}
+                {/*        {t("drinks")}*/}
+                {/*    </p>*/}
+                {/*</button>*/}
             </div>
         </div>
     );

@@ -201,7 +201,7 @@ const ReviewForm = ({programData}) => {
                     </div>
                 </div>
 
-                <div className="w-full flex md:flex-row justify-evenly md:items-center xs:flex-col xs:gap-5 mt-10 mb-5">
+                <div className="w-full flex md:flex-row justify-evenly md:items-center xs:flex-col xs:items-center xs:gap-5 mt-10 mb-5">
                     <p className='text-base md:text-left md:w-1/2 xs:w-full xs:text-center'>
                         {t("clicking_checkout_button")}
                         &nbsp;

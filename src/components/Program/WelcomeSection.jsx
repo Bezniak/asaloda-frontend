@@ -14,14 +14,14 @@ const WelcomeSection = ({data, onMenuButtonClick}) => {
             className="parallax-slide">
             <div
                 className='container h-90vh flex flex-col justify-center p-3'>
-                <h1 className='mb-5 md:text-4xl font-bold text-white text-left z-50'>
+                <h1 className='mb-5 md:text-4xl xs:text-3xl font-bold text-white md:text-left xs:text-center z-50'>
                     {data?.attributes?.program_name}
                 </h1>
-                <p className='mb-5 text-2xl font-bold text-white text-left z-50'>
+                <p className='mb-5 md:text-2xl xs:text-lg font-bold text-white md:text-left xs:text-center z-50'>
                     {data?.attributes?.kcal} {t("kcal")}
                 </p>
 
-                <div className='mt-10 flex md:flex-row xs:flex-col justify-start gap-10 z-50'>
+                <div className='md:mt-10 xs:mt-5 flex md:flex-row xs:flex-col justify-start md:gap-10 xs:gap-3 z-50'>
                     <div className='border py-2 px-6 pointer-events-none'>
                         <p className='text-sm text-white font-semibold mb-2'>
                             {t("price_per_day")}

@@ -46,7 +46,7 @@ const Register = () => {
 
     return (
         <div className="h-100vh flex items-center justify-center">
-            <form onSubmit={handleSubmit(onSubmit)} className="w-1/4 mx-auto">
+            <form onSubmit={handleSubmit(onSubmit)} className="md:w-1/4 xs:w-full xs:px-4 mx-auto">
                 <div className="relative z-0 w-full mb-5 group">
                     <input
                         type="text"

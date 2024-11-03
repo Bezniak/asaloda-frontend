@@ -40,14 +40,14 @@ const Contacts = () => {
                         <h3 className='mb-5 md:text-4xl font-bold md:text-left xs:text-center'>AsalodaFood</h3>
                         <ul className='flex flex-col gap-5 mt-10'>
                             <li className='flex flex-row gap-4 justify-start items-center'>
-                                <a href="tel:+375297714179" className='flex items-center gap-4'>
-                                    <FaPhone className='text-2xl text-[var(--green)]'/> +375 (29) 771-41-79
+                                <a href="tel:+375259108473" className='flex items-center gap-4'>
+                                    <FaPhone className='text-2xl text-[var(--green)]'/> +375 25 910-84-73
                                 </a>
                             </li>
                             <li className='flex flex-row gap-4 justify-start items-center'>
-                                <a href="https://wa.me/375297714179" target="_blank" rel="noopener noreferrer"
+                                <a href="https://wa.me/375259108473" target="_blank" rel="noopener noreferrer"
                                    className='flex items-center gap-4'>
-                                    <BsWhatsapp className='text-2xl text-[var(--green)]'/> +375 (29) 771-41-79
+                                    <BsWhatsapp className='text-2xl text-[var(--green)]'/>+375 25 910-84-73
                                 </a>
                             </li>
                             <li className='flex flex-row gap-4 justify-start items-center'>

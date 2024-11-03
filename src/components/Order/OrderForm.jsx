@@ -611,7 +611,7 @@ const OrderForm = ({program, userChosenDishes}) => {
                         {t("checkout_button_agree")}
                         <br/>
                         <NavLink to={ROUTES.PRIVACY_POLICY}
-                                 className='font-semibold hover:!text-[var(--oringe)] transition xs:text-base md:text-lg'>
+                                 className='font-semibold hover:!text-[var(--oringe)] text-[var(--green)] transition xs:text-base md:text-lg'>
                             {t("processing_of_personal_data")}
                         </NavLink>
                     </p>

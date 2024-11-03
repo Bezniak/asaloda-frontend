@@ -42,7 +42,7 @@ const Login = () => {
 
     return (
         <div className="h-100vh flex items-center justify-center">
-            <form className="w-1/4 mx-auto" onSubmit={handleSubmit(onSubmit)}>
+            <form className="md:w-1/3 xs:w-full xs:px-5 mx-auto" onSubmit={handleSubmit(onSubmit)}>
                 <div className="relative z-0 w-full mb-5 group">
                     <input
                         type="email"

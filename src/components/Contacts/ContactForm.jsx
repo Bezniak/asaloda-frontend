@@ -79,7 +79,7 @@ const ContactForm = () => {
 
                     <button
                         type="submit"
-                        className={`btn ${!isValid ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[var(--oringe)]'} w-1/3 mt-5 mx-auto `}
+                        className={`btn ${!isValid ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[var(--oringe)]'} w-fit mt-5 mx-auto `}
                         disabled={!isValid}
                     >
                         {t("send")}

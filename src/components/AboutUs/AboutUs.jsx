@@ -1,10 +1,17 @@
 import React from 'react';
-import {FaRegThumbsUp} from "react-icons/fa";
+import { FaRegThumbsUp } from "react-icons/fa";
 import HowItWorks from "../HowItWorks/HowItWorks.jsx";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 const AboutUs = () => {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
+
+    const advantages = [
+        "produce_supply_healthy_nutrition",
+        "save_your_time",
+        "monitor_quality",
+        "use_best_products"
+    ];
 
     return (
         <div className="w-full max-w-7xl mx-auto mt-10 mb-20 px-3">
@@ -16,18 +23,10 @@ const AboutUs = () => {
                     <img src="/logoWhite.svg" alt="aboutCompany" className='w-3/5'/>
                 </div>
                 <div className='flex-1 text-base text-justify flex flex-col gap-5'>
-                    <p className='text-justify'>
-                        {t("company_producing_delivering_food")}
-                    </p>
-                    <p className='text-justify'>
-                        {t("professional_team_employees_works")}
-                    </p>
-                    <p className='text-justify'>
-                        {t("carefully_develop_recipe")}
-                    </p>
-                    <p className='text-justify'>
-                        {t("try_diets_from_AsalodaFood")}
-                    </p>
+                    <p>{t("company_producing_delivering_food")}</p>
+                    <p>{t("professional_team_employees_works")}</p>
+                    <p>{t("carefully_develop_recipe")}</p>
+                    <p>{t("try_diets_from_AsalodaFood")}</p>
                 </div>
             </div>
             <h2 className='md:text-4xl font-extrabold text-left mt-20 mb-10'>
@@ -35,18 +34,10 @@ const AboutUs = () => {
             </h2>
             <div className='flex lg:flex-row xs:flex-col gap-10 md:items-center'>
                 <div className='flex-1 text-base text-justify flex flex-col gap-5'>
-                    <p className='text-justify'>
-                        {t("asalodaFood_created_inspire")}
-                    </p>
-                    <p className='text-justify'>
-                        {t("we_strive_to_make_accessible")}
-                    </p>
-                    <p className='text-justify'>
-                        {t("aim_to_be_nutritional_assistant")}
-                    </p>
-                    <p className='text-justify'>
-                        {t("start_changing_yourself")}
-                    </p>
+                    <p>{t("asalodaFood_created_inspire")}</p>
+                    <p>{t("we_strive_to_make_accessible")}</p>
+                    <p>{t("aim_to_be_nutritional_assistant")}</p>
+                    <p>{t("start_changing_yourself")}</p>
                 </div>
                 <div className='flex-1'>
                     <img src="/aboutCompany.jpg" alt="aboutCompany" className='rounded-3xl'/>
@@ -81,23 +72,37 @@ const AboutUs = () => {
                     <h2 className='md:text-4xl font-extrabold mb-10'>
                         {t("our_advantages")}
                     </h2>
-                    <ul className='flex flex-col gap-10'>
-                        <li className='flex justify-start items-center gap-3'>
-                            <FaRegThumbsUp className='text-1xl text-[var(--green)] mr-5'/>
-                            {t("produce_supply_healthy_nutrition")}
-                        </li>
-                        <li className='flex justify-start items-center gap-3'>
-                            <FaRegThumbsUp className='text-1xl text-[var(--green)] mr-5'/>
-                            {t("save_your_time")}
-                        </li>
-                        <li className='flex justify-start items-center gap-3'>
-                            <FaRegThumbsUp className='text-1xl text-[var(--green)] mr-5'/>
-                            {t("monitor_quality")}
-                        </li>
-                        <li className='flex justify-start items-center gap-3'>
-                            <FaRegThumbsUp className='text-1xl text-[var(--green)] mr-5'/>
-                            {t("use_best_products")}
-                        </li>
+                    <ul className='flex flex-col gap-6'>
+                        {advantages.map((advantage, index) => (
+                            <li
+                                key={index}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    minHeight: '50px',
+                                    padding: '8px 0'
+                                }}
+                            >
+                                <FaRegThumbsUp
+                                    style={{
+                                        fontSize: '24px',
+                                        color: 'var(--green)',
+                                        marginRight: '16px',
+                                        minWidth: '24px',
+                                        textAlign: 'center'
+                                    }}
+                                />
+                                <span style={{
+                                    fontSize: '16px',
+                                    color: 'gray',
+                                    lineHeight: '1.5',
+                                    flex: '1',
+                                    textAlign: 'left'
+                                }}>
+                                    {t(advantage)}
+                                </span>
+                            </li>
+                        ))}
                     </ul>
                 </div>
             </div>
