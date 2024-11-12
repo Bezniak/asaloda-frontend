@@ -24,7 +24,7 @@ const Payment = () => {
                     </p>
                 </div>
                 <div className="md:w-1/2 w-full md:pl-10 mt-5 md:mt-0">
-                    <img src="/card.png" alt="credit-card-different-angles"/>
+                    <img src="/line-color.png" alt="credit-card-different-angles"/>
                 </div>
             </div>
         </div>

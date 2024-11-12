@@ -11,7 +11,7 @@ const FaqDetails = ({data, loading, error}) => {
 
     return (
         <div id="accordion-flush" data-accordion="collapse"
-             data-active-classes="bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+             data-active-classes="bg-white text-gray-900"
              data-inactive-classes="text-gray-500 dark:text-gray-400"
              className='p-3'
         >
@@ -19,19 +19,19 @@ const FaqDetails = ({data, loading, error}) => {
                 <div key={item.id}>
                     <h2
                         id={`accordion-flush-heading-${index}`}
-                        className={`bg-white dark:bg-gray-900 text-gray-900 dark:text-white md:text-left xs:text-left 
-                            ${openIndex === index ? 'text-customGreen' : 'text-gray-500 dark:text-gray-400'}`}
+                        className={`bg-white text-gray-900 md:text-left xs:text-left 
+                            ${openIndex === index ? 'text-customGreen' : 'text-gray-500'}`}
                         style={{color: openIndex === index ? '#7ECA1D' : '#333'}}
                     >
                         <button
                             type="button"
-                            className={`flex items-center justify-between w-full py-5 font-medium rtl:text-right border-gray-200 dark:border-gray-700 gap-3`}
+                            className={`flex items-center justify-between w-full py-5 font-medium rtl:text-right border-gray-200 gap-3`}
                             data-accordion-target={`#accordion-flush-body-${index}`}
                             aria-expanded={openIndex === index}
                             aria-controls={`accordion-flush-body-${index}`}
                             onClick={() => handleToggle(index)}
                         >
-                            <span className='md:text-left xs:text-left'>{item.attributes.ask}</span>
+                            <span className='text-left md:text-lg xs:text-base'>{item.attributes.ask}</span>
                             <svg
                                 data-accordion-icon
                                 className={`w-3 h-3 shrink-0 transition-transform`}
@@ -57,7 +57,7 @@ const FaqDetails = ({data, loading, error}) => {
                         style={openIndex === index ? {maxHeight: '1000px'} : {maxHeight: '0'}}
                     >
                         <div className="py-5 border-gray-200 dark:border-gray-700">
-                            <p className="mb-2 text-gray-500 dark:text-gray-400 text-left">
+                            <p className="mb-2 text-gray-500 text-left md:text-lg xs:text-base">
                                 {item.attributes.answer}
                             </p>
                         </div>

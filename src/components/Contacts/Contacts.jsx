@@ -5,6 +5,7 @@ import {TbLocation} from "react-icons/tb";
 import {FiClock} from "react-icons/fi";
 import ContactForm from "./ContactForm.jsx";
 import {useTranslation} from "react-i18next";
+import {CgMail} from "react-icons/cg";
 
 const Contacts = () => {
     const {t} = useTranslation();
@@ -49,6 +50,12 @@ const Contacts = () => {
                                    className='flex items-center gap-4'>
                                     <BsWhatsapp className='text-2xl text-[var(--green)]'/>+375 25 910-84-73
                                 </a>
+                            </li>
+                            <li className='flex flex-row gap-4 justify-start items-center'>
+                                <a href="mailto:asalodafood@gmail.com" className='flex items-center gap-4'>
+                                    <CgMail className='text-2xl text-[var(--green)]'/> asalodafood@gmail.com
+                                </a>
+
                             </li>
                             <li className='flex flex-row gap-4 justify-start items-center'>
                                 <a href="https://www.google.com/maps/search/?api=1&query=г.+Гродно,+ул.+М.+Горького,+91А"

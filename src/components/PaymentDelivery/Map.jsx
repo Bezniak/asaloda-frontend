@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 
 const Map = () => {
     useEffect(() => {
@@ -6,17 +6,16 @@ const Map = () => {
         script.type = 'text/javascript';
         script.charset = 'utf-8';
         script.async = true;
-        script.src = 'https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A59f35aa3703d13997e08ce5dd9f8824fbd1c23662862406c08f61d522c4c881f&amp;width=1170&amp;height=720&amp;lang=ru_RU&amp;scroll=true';
+        script.src = 'https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A41831567bfe4080211db3882f7b3ceffd950c52488f08f2aeeb4ad9529b5cf2a&width=100%25&height=100%25&lang=ru_RU&scroll=true';
 
-        // Append the script to the container element
+        // Добавляем скрипт в контейнер
         const container = document.getElementById('yandex-map-container');
         if (container) {
             container.appendChild(script);
         }
 
-        // Cleanup function
+        // Функция очистки
         return () => {
-            // Check if script is still a child of container before removing
             if (container && container.contains(script)) {
                 container.removeChild(script);
             }
@@ -24,9 +23,11 @@ const Map = () => {
     }, []);
 
     return (
-        <div id="yandex-map-container" className='md:w-3/5 md:min-h-96 xs:h-50vh xs:mt-10'/>
+        <div
+            id="yandex-map-container"
+            className="w-full md:w-3/4 lg:w-1/2 h-[50vh] md:h-[60vh] lg:h-[70vh] mt-10"
+        />
     );
 };
 
 export default Map;
-

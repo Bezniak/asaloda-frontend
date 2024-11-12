@@ -23,15 +23,8 @@ const Delivery = () => {
                         {t("healthy_food_delivery_in_Grodno")}
                     </p>
                     <div className='flex flex-row justify-start items-center mb-4'>
-                        <MdCircle className='fill-[var(--green)] mr-4'/>
                         <p className='text-left font-bold text-base'>
                             {t("free_delivery")}
-                        </p>
-                    </div>
-                    <div className='flex flex-row justify-start items-center'>
-                        <MdCircle className='fill-yellow-300 mr-4'/>
-                        <p className='text-left font-bold text-base'>
-                            {t("payed_delivery")}
                         </p>
                     </div>
                 </div>

@@ -36,7 +36,7 @@ const ChangeDish = ({dishes, eatingType, onSelectDish, currentDish, onClose}) =>
         >
             <button
                 onClick={onClose}
-                className="absolute top-12 right-14 text-gray-500 hover:text-gray-800 focus:outline-none"
+                className="absolute top-10 right-8 text-gray-500 hover:text-gray-800 focus:outline-none"
                 aria-label="Close"
             >
                 <MdClose size={30}/>

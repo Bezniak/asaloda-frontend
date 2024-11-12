@@ -24,7 +24,7 @@ const FaqContainer = () => {
 
     return (
         <div className='w-full max-w-7xl mx-auto md:mt-10 md:mb-20 xs:mt-10 xs:mb-10 p-3'>
-            <h1 className='mb-5 md:text-4xl xs:text-base font-bold md:text-left xs:text-center'>
+            <h1 className='mb-5 md:text-4xl xs:text-lg font-bold md:text-left xs:text-center'>
                 {t("FAQ")}
             </h1>
             <FAQ handleProgramClick={handleProgramClick}/>

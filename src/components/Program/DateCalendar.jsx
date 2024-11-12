@@ -177,7 +177,7 @@ const DateCalendar = ({
                 </div>
             </div>
 
-            <div className='flex gap-2 xs:flex-col md:flex-row'>
+            <div className='flex gap-2 flex-wrap md:flex-row'>
                 {dates.map(date => {
                     const isToday = date.isSame(today, 'day');
                     const isTomorrow = date.isSame(today.add(1, 'day'), 'day');
@@ -227,19 +227,21 @@ const DateCalendar = ({
                                     {dish?.attributes?.eating_type}
                                 </p>
                                 {dayjs(dish.attributes.date).isAfter(today.add(1, 'day')) && (
-                                    <button className='border-0 text-base text-[var(--oringe)]'
-                                            onClick={() => {
-                                                const matchingDishes = allChangeDish.filter(changeDish =>
-                                                    dayjs(changeDish.attributes.date).isSame(dish.attributes.date, 'day') &&
-                                                    changeDish.attributes.eating_type === dish.attributes.eating_type
-                                                );
-                                                setSelectedDish(dish);
-                                                setIsAdditionalMenuVisible(!isAdditionalMenuVisible);
-                                                console.log('Matching change dishes:', matchingDishes);
-                                            }}
+                                    <button
+                                        className='border-0 text-base text-[var(--oringe)]'
+                                        onClick={() => {
+                                            setSelectedDish(dish);
+                                            setIsAdditionalMenuVisible(prevState => !prevState);
+
+                                            allChangeDish.filter(changeDish =>
+                                                dayjs(changeDish.attributes.date).isSame(dish.attributes.date, 'day') &&
+                                                changeDish.attributes.eating_type === dish.attributes.eating_type
+                                            );
+                                        }}
                                     >
                                         {t("replace")}
                                     </button>
+
                                 )}
                             </div>
                         </div>

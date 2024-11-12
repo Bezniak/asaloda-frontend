@@ -25,15 +25,15 @@ const DishModalWindow = ({dishData, onClose}) => {
                     <h2 className='mt-5 mb-2 font-semibold text-lg text-left'>{dishData?.attributes?.dish_name}</h2>
                     <p className='text-base text-left'>{dishData?.attributes?.dish_description}</p>
                     <div className="mt-5 flex flex-row justify-around w-full">
-                        <div className='text-base flex flex-col justify-center items-center border-r pr-10'>
+                        <div className='text-base flex flex-col justify-center items-center border-r md:pr-10 xs:pr-5'>
                             <p>{dishData?.attributes?.kcal}</p>
                             <p>{t("kcal")}</p>
                         </div>
-                        <div className='text-base flex flex-col justify-center items-center border-r pr-10'>
+                        <div className='text-base flex flex-col justify-center items-center border-r pr-10 xs:pr-5'>
                             <p>{dishData?.attributes?.squirrels}</p>
                             <p>{t("squirrels")}</p>
                         </div>
-                        <div className='text-base flex flex-col justify-center items-center border-r pr-10'>
+                        <div className='text-base flex flex-col justify-center items-center border-r pr-10 xs:pr-5'>
                             <p>{dishData?.attributes?.fats}</p>
                             <p>{t("fat")}</p>
                         </div>
