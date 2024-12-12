@@ -6,6 +6,7 @@ import {FiClock} from "react-icons/fi";
 import ContactForm from "./ContactForm.jsx";
 import {useTranslation} from "react-i18next";
 import {CgMail} from "react-icons/cg";
+import MetaTags from "../../utils/MetaTags.jsx";
 
 const Contacts = () => {
     const {t} = useTranslation();
@@ -31,6 +32,7 @@ const Contacts = () => {
 
     return (
         <div>
+            <MetaTags page="contacts" />
             <div className='w-full max-w-7xl mx-auto md:mt-10 md:mb-10 xs:mb-10 p-3'>
                 <h1 className='mb-5 md:text-4xl font-bold md:text-left xs:text-center'>
                     {t("contacts")}

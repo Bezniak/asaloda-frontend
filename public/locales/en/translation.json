@@ -252,5 +252,15 @@
   "price_for_2_weeks": "Price for 2 weeks",
   "price_for_3_weeks": "Price for 3 weeks",
   "price_for_4_weeks": "Price for 4 weeks",
-  "view_menu": "View menu"
+  "view_menu": "View menu",
+  "meta": {
+    "home": {
+      "title": "Proper nutrition - home delivery of ready-made meals",
+      "description": "Готовые рационы правильного питания. Детокс соки/смузи. Доставка 24/7. Для похудения и набора веса. Веганское меню."
+    },
+    "aboutUs": {
+      "title": "О нас – Компания правильного питания",
+      "description": "Мы предлагаем разнообразные программы правильного питания, подходящие для всех целей: похудения, набора массы или поддержания здоровья. Узнайте больше о нашей компании."
+    }
+  }
 }

@@ -84,7 +84,7 @@ const App = () => {
                 },
                 {
                     path: ROUTES.FAQ,
-                    element: <FaqContainer/>
+                    element: <FaqContainer page='faq'/>
                 },
                 {
                     path: ROUTES.ABOUTUS,
