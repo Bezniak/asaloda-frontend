@@ -27,6 +27,8 @@ const ProgramContainer = () => {
 
     const programType = encodeURIComponent(data?.attributes?.program_name || "");
 
+    console.log(data)
+
     const { data: allDish, loading: allDishLoading } = useFetchAllData(
         `/dishes?filters[program_type][$eq]=${programType}&filters[date][$gte]=${today}&filters[changedDish][$eq]=false&locale=${locale}&populate=*`
     );
@@ -49,8 +51,8 @@ const ProgramContainer = () => {
             {/* Добавление мета-тегов для программы */}
             {!loading && data && data.attributes && (
                 <MetaTags
-                    syncTitle={data.attributes.meta_title}  // Используем мета-данные программы
-                    syncDescription={data.attributes.meta_description}  // Используем мета-описание программы
+                    syncTitle={data?.attributes?.meta_title}  // Используем мета-данные программы
+                    syncDescription={data?.attributes?.meta_description}  // Используем мета-описание программы
                 />
             )}
 

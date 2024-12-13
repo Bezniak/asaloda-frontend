@@ -10,7 +10,7 @@ const HealthyFood = ({title, description, modalTitle, modalDescription, isButton
 
     return (
         <div
-            className="flex flex-col justify-between p-3 w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            className="flex flex-col justify-between p-3 w-full bg-white border border-gray-200 rounded-lg shadow ">
             <div className='flex justify-center'>
                 <SvgIcon className="text-5xl text-[var(--green)]"/>
             </div>

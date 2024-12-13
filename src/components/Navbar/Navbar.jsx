@@ -115,7 +115,7 @@ const Navbar = () => {
 
 
     return (
-        <nav className="bg-white border-gray-200 dark:border-gray-600 dark:bg-gray-900">
+        <nav className="bg-white border-gray-200 ">
             <div className="flex flex-wrap justify-between items-center mx-auto max-w-fit">
                 <div className="flex justify-between items-center h-10vh w-screen ml-5 mr-5 md:hidden ">
                     <NavLink to={ROUTES.HOME} className="flex items-center">
@@ -166,7 +166,7 @@ const Navbar = () => {
                         />
                     </NavLink>
 
-                    <ul className="flex flex-col p-4 md:p-0 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                    <ul className="flex flex-col p-4 md:p-0 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
                         <li>
                             <NavLink
                                 to=""
@@ -175,7 +175,7 @@ const Navbar = () => {
                                     event.preventDefault();
                                     toggleProgramDropdown();
                                 }}
-                                className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-green-500 md:dark:hover:bg-transparent dark:border-gray-700"
+                                className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded md:w-auto hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-[var(--green)] md:p-0"
                             >
                                 {t("programs")}
                                 <svg
@@ -198,7 +198,7 @@ const Navbar = () => {
                         <li>
                             <NavLink
                                 to={ROUTES.DISCOUNTS}
-                                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
+                                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0"
                                 onClick={() => setMobileMenuVisible(false)} // Close mobile menu
                             >
                                 {t("discount")}
@@ -207,7 +207,7 @@ const Navbar = () => {
                         <li>
                             <NavLink
                                 to={ROUTES.PAYMENT_DELIVERY}
-                                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
+                                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0"
                                 onClick={() => setMobileMenuVisible(false)} // Close mobile menu
                             >
                                 {t("payment_delivery")}
@@ -216,7 +216,7 @@ const Navbar = () => {
                         <li>
                             <NavLink
                                 to={ROUTES.PARTNERSHIP}
-                                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent dark:border-gray-700"
+                                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0"
                                 onClick={() => setMobileMenuVisible(false)} // Close mobile menu
                             >
                                 {t("partnership")}
@@ -327,20 +327,20 @@ const Navbar = () => {
                 <div
                     id="mega-menu-full-dropdown"
                     ref={dropdownRef}
-                    className="border-gray-200 shadow-sm bg-gray-50 md:bg-white border-y dark:bg-gray-800 dark:border-gray-600"
+                    className="border-gray-200 shadow-sm bg-gray-50 md:bg-white border-y"
                 >
                     <div
-                        className="grid max-w-screen-xl px-4 py-1 mx-auto text-gray-900 dark:text-white sm:grid-cols-2 md:px-6">
+                        className="grid max-w-screen-xl px-4 py-1 mx-auto text-gray-900 sm:grid-cols-2 md:px-6">
                         <ul>
                             <li>
                                 {data.map((item) => (
                                     <NavLink to={`${ROUTES.PROGRAM.replace(":id", item.id)}`}
-                                             className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                             className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100"
                                              onClick={handleProgramLinkClick}
                                              key={item.id}
                                     >
                                         <div className="font-semibold">{item.attributes.program_name}</div>
-                                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                                        <span className="text-sm text-gray-500">
                                             {item.attributes.kcal} &nbsp;
                                             {t("kcal")}
                                         </span>
@@ -355,15 +355,15 @@ const Navbar = () => {
                 <div
                     id="mega-menu-full-dropdown-about-us"
                     ref={dropdownAboutUsRef}
-                    className="border-gray-200 shadow-sm bg-gray-50 md:bg-white border-y dark:bg-gray-800 dark:border-gray-600"
+                    className="border-gray-200 shadow-sm bg-gray-50 md:bg-white border-y"
                 >
                     <div
-                        className="grid max-w-screen-xl px-4 py-1 mx-auto text-gray-900 dark:text-white sm:grid-cols-2 md:px-6">
+                        className="grid max-w-screen-xl px-4 py-1 mx-auto text-gray-900 sm:grid-cols-2 md:px-6">
                         <ul>
                             <li>
                                 <NavLink
                                     to={ROUTES.ABOUTUS}
-                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100"
                                     onClick={handleAboutUsLinkClick}
                                 >
                                     <div className="font-semibold">{t("aboutCompany")}</div>
@@ -372,7 +372,7 @@ const Navbar = () => {
                             <li>
                                 <NavLink
                                     to={ROUTES.REVIEWS}
-                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100"
                                     onClick={handleAboutUsLinkClick}
                                 >
                                     <div className="font-semibold">{t("reviews")}</div>
@@ -381,7 +381,7 @@ const Navbar = () => {
                             <li>
                                 <NavLink
                                     to={ROUTES.FAQ}
-                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100"
                                     onClick={handleAboutUsLinkClick}
                                 >
                                     <div className="font-semibold">{t("FAQ")}</div>
@@ -392,7 +392,7 @@ const Navbar = () => {
                             <li>
                                 <NavLink
                                     to={ROUTES.CONTACTS}
-                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100"
                                     onClick={handleAboutUsLinkClick}
                                 >
                                     <div className="font-semibold">{t("contacts")}</div>
@@ -406,16 +406,16 @@ const Navbar = () => {
                 <div
                     id="mega-menu-user-dropdown"
                     ref={dropdownUserRef}
-                    className="border-gray-200 shadow-sm bg-gray-50 md:bg-white border-y dark:bg-gray-800 dark:border-gray-600"
+                    className="border-gray-200 shadow-sm bg-gray-50 md:bg-white border-y"
                 >
                     <div
-                        className="grid max-w-screen-xl px-4 py-1 mx-auto text-gray-900 dark:text-white sm:grid-cols-2 md:px-6">
+                        className="grid max-w-screen-xl px-4 py-1 mx-auto text-gray-900 sm:grid-cols-2 md:px-6">
                         <ul>
                             {role === 'admin' ? (
                                 <li>
                                     <NavLink
                                         to={ROUTES.ALL_ORDER}
-                                        className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100"
                                         onClick={handleUserInfoLinkClick}
                                     >
                                         <div className="font-semibold">{t("all_orders")}</div>
@@ -425,7 +425,7 @@ const Navbar = () => {
                                 <li>
                                     <NavLink
                                         to={ROUTES.MY_ORDER}
-                                        className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100"
                                         onClick={handleUserInfoLinkClick}
                                     >
                                         <div className="font-semibold">{t("my_orders")}</div>
@@ -436,7 +436,7 @@ const Navbar = () => {
                             <li onClick={handleLogout}>
                                 <NavLink
                                     to={ROUTES.HOME}
-                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    className="text-[var(--green)] block p-1.5 rounded-lg hover:bg-gray-100"
                                     onClick={handleUserInfoLinkClick}
                                 >
                                     <div className="font-semibold">{t("logout")}</div>
@@ -453,7 +453,7 @@ const Navbar = () => {
                     className="border-gray-200 shadow-sm bg-gray-50 md:bg-white border-y"
                 >
                     <div
-                        className="grid max-w-screen-xl px-4 py-1 mx-auto text-gray-900 dark:text-white sm:grid-cols-2 md:px-6"
+                        className="grid max-w-screen-xl px-4 py-1 mx-auto text-gray-900 sm:grid-cols-2 md:px-6"
                     >
                         <ul>
                             <li onClick={() => setLanguageDropdownVisible(false)}>
@@ -464,7 +464,7 @@ const Navbar = () => {
                                     }}
                                     className={`flex items-center space-x-2 ${
                                         currentLanguage === 'be' ? 'font-bold' : ''
-                                    } text-[var(--green)] block w-full p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700`}
+                                    } text-[var(--green)] block w-full p-1.5 rounded-lg hover:bg-gray-100`}
                                 >
                                     {t("BE")}
                                 </button>
@@ -477,7 +477,7 @@ const Navbar = () => {
                                     }}
                                     className={`flex items-center space-x-2 ${
                                         currentLanguage === 'us' ? 'font-bold' : ''
-                                    } text-[var(--green)] block w-full p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700`}
+                                    } text-[var(--green)] block w-full p-1.5 rounded-lg hover:bg-gray-100`}
                                 >
                                     {t("EN")}
                                 </button>
@@ -490,7 +490,7 @@ const Navbar = () => {
                                     }}
                                     className={`flex items-center space-x-2 ${
                                         currentLanguage === 'ru' ? 'font-bold' : ''
-                                    } text-[var(--green)] block w-full p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700`}
+                                    } text-[var(--green)] block w-full p-1.5 rounded-lg hover:bg-gray-100`}
                                 >
                                     {t("RU")}
                                 </button>

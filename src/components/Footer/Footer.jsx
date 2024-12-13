@@ -1,18 +1,18 @@
 import React from 'react';
-import { NavLink } from "react-router-dom";
-import { ROUTES } from "../../config/routes.js";
+import {NavLink} from "react-router-dom";
+import {ROUTES} from "../../config/routes.js";
 import dayjs from "dayjs";
 import useFetchAllData from "../../api/useFetchAllData.js";
-import { animateScroll as scroll } from "react-scroll";
-import { useTranslation } from "react-i18next";
-import { useAuth } from "../../context/AuthContext.jsx";
+import {animateScroll as scroll} from "react-scroll";
+import {useTranslation} from "react-i18next";
+import {useAuth} from "../../context/AuthContext.jsx";
 import {FaPhone} from "react-icons/fa6";
 
 const Footer = () => {
-    const { locale } = useAuth();
+    const {locale} = useAuth();
     const currentYear = dayjs().year();
-    const { t } = useTranslation();
-    const { data, loading, error } = useFetchAllData(`/programs?locale=${locale}&populate=*`);
+    const {t} = useTranslation();
+    const {data, loading, error} = useFetchAllData(`/programs?locale=${locale}&populate=*`);
 
     const handleClick = () => {
         // Smooth scroll to top using react-scroll
@@ -26,7 +26,8 @@ const Footer = () => {
         <footer className='bg-[var(--footer-bg)]'>
 
             {/* Company Information Section */}
-            <div className='mx-auto w-full max-w-7xl pt-20 md:pb-10 p-3 flex md:flex-row xs:flex-col md:justify-between items-start'>
+            <div
+                className='mx-auto w-full max-w-7xl pt-20 md:pb-10 p-3 flex md:flex-row xs:flex-col md:justify-between items-start'>
                 <div className='flex flex-col justify-start items-start text-gray-400 gap-2 text-left text-sm'>
                     <a href="tel:+375259108473"
                        className='flex items-center gap-4 md:text-2xl mb-4 text-white font-bold'>
@@ -34,10 +35,12 @@ const Footer = () => {
                     </a>
                     <p>{t("working_hours")}</p>
                     <h2>{t("company_name")}, {t("UNP")}</h2>
+                    <h2>{t("register_in_reestr")}</h2>
                 </div>
 
                 <div className='flex flex-col justify-start md:items-end text-gray-400 gap-2 text-right ml-auto'>
-                    <a href="mailto:asalodafood@gmail.com" className='flex items-center md:text-2xl md:pt-0 xs:pt-5 gap-4 mb-4 text-[var(--green)] font-bold'>
+                    <a href="mailto:asalodafood@gmail.com"
+                       className='flex items-center md:text-2xl md:pt-0 xs:pt-5 gap-4 mb-4 text-[var(--green)] font-bold'>
                         asalodafood@gmail.com
                     </a>
                     <p className='w-full text-justify text-sm'>{t("address")}</p>
@@ -46,7 +49,7 @@ const Footer = () => {
 
             {/* Navigation Links Section */}
             <div className="mx-auto w-full max-w-7xl md:pt-20 xs:pt-10 pb-10 p-3">
-            <div className="flex md:flex-row xs:flex-col justify-between gap-8">
+                <div className="flex md:flex-row xs:flex-col justify-between gap-8">
                     {/* Programs List */}
                     <div>
                         <h2 className="mb-6 text-base tracking-wider font-semibold text-white text-left uppercase">
@@ -134,7 +137,8 @@ const Footer = () => {
                     <div className="text-sm text-gray-400 mt-5">
                         {t("developed_by")} &nbsp;
                         <a href='https://www.linkedin.com/in/ivan-bezniak-2634a11a0/'
-                           target='_blank' rel="noopener noreferrer" className="hover:text-white transition-colors duration-200">
+                           target='_blank' rel="noopener noreferrer"
+                           className="hover:text-white transition-colors duration-200">
                             {t("ivan_bezniak")}
                         </a>
                     </div>
