@@ -8,7 +8,7 @@ import api from "../../api/api.js";
 import {ROUTES} from "../../config/routes.js";
 import {customStyles} from "../../utils/customOrderFormStyles.jsx";
 import {useTranslation} from "react-i18next";
-import sha1 from 'crypto-js/sha1';
+import CryptoJS from 'crypto-js';
 
 import 'dayjs/locale/ru';
 import 'dayjs/locale/be';
@@ -113,14 +113,12 @@ const OrderForm = ({program, userChosenDishes}) => {
     };
 
     const onSubmit = async (data) => {
-        setIsSubmitting(true); // Disable the submit button
+        setIsSubmitting(true); // Отключение кнопки отправки для предотвращения повторной отправки
 
         try {
-            // Calculate the end date
+            // Расчет конечной даты и отфильтрованных блюд
             const endDate = dayjs(data.startDate.value).add(selectedDuration.value - 1, 'day');
             const endDateFormatted = endDate.format('YYYY-MM-DD');
-
-            // Filter dishes based on the startDate, duration, and excluded days
             const filteredDishes = filterDishesByDateAndDay(
                 userChosenDishes,
                 data.startDate.value,
@@ -128,93 +126,119 @@ const OrderForm = ({program, userChosenDishes}) => {
                 excludeSaturday,
                 excludeSunday
             );
+            const totalPrice = parseFloat(
+                calculateTotalPrice(
+                    data.startDate.value,
+                    data.duration.value,
+                    discount,
+                    excludeSaturday,
+                    excludeSunday
+                )
+            );
 
-            // Calculate the total price
-            const totalPrice = parseFloat(calculateTotalPrice(data.startDate.value, data.duration.value, discount, excludeSaturday, excludeSunday));
-
-            // Payment form data
-            const storeId = import.meta.env.VITE_STORE_ID; // ID магазина из .env
-            const secretKey = import.meta.env.VITE_SECRET_KEY; // Секретный ключ из .env
+            // Данные для подписи
+            const storeId = import.meta.env.VITE_STORE_ID; // ID магазина
             const orderNum = String(Date.now()); // Уникальный номер заказа
-            const currencyId = 'BYN'; // Код валюты
-            const testMode = 1; // Тестовый режим: 1 для тестов, 0 для реальной оплаты
-            const seed = String(Math.random()).substring(2); // Случайная строка для подписи
+            const seed = String(Date.now()); // Случайная последовательность
+            const testMode = '0'; // 0 — реальный платеж, 1 — тест
+            const currencyId = 'BYN'; // Валюта платежа
+            const secretKey = import.meta.env.VITE_SECRET_KEY; // Ваш секретный ключ
 
-            // Формируем строку для подписи
-            const signatureData = `${seed}${storeId}${orderNum}${testMode}${currencyId}${totalPrice}${secretKey}`;
-            const signature = sha1(signatureData).toString(); // Получаем SHA1 хэш
+            // Формирование строки подписи
+            const signatureString = `${seed}${storeId}${orderNum}${testMode}${currencyId}${totalPrice.toFixed(2)}${secretKey}`;
+            const signature = CryptoJS.MD5(signatureString).toString();
 
-            // Параметры платежа
+            // Создание данных для платежа
+            // const paymentPayload = {
+            //     scart: '', // Обязательно по документации
+            //     wsb_storeid: storeId,
+            //     wsb_order_num: orderNum,
+            //     wsb_currency_id: currencyId,
+            //     wsb_version: 2, // Используется версия 2
+            //     wsb_language_id: 'russian',
+            //     wsb_test: testMode,
+            //     wsb_seed: seed,
+            //     wsb_signature: signature,
+            //     wsb_total: totalPrice.toFixed(2),
+            //     wsb_invoice_item_name: filteredDishes.map((dish) => dish?.attributes?.dish_name), // Названия позиций
+            //     wsb_invoice_item_quantity: filteredDishes.map(() => '1'), // Количество позиций как строки
+            //     wsb_invoice_item_price: filteredDishes.map(() =>
+            //         parseFloat((totalPrice / filteredDishes.length).toFixed(2)).toString()
+            //     ), // Цена как строки
+            // };
+
             const paymentPayload = {
-                wsb_storeid: storeId,
-                wsb_order_num: orderNum,
-                wsb_currency_id: currencyId,
-                wsb_version: 2,
-                wsb_seed: seed,
-                wsb_test: testMode,
-                wsb_invoice_item_name: filteredDishes.map(dish => dish.name),
-                wsb_invoice_item_quantity: filteredDishes.map(() => 1), // Предполагаем количество каждого блюда = 1
-                wsb_invoice_item_price: filteredDishes.map(dish => dish.price),
-                wsb_total: totalPrice,
-                wsb_signature: signature
+                scart: '',
+                wsb_storeid: 695796847,
+                wsb_order_num: 12122212,
+                wsb_currency_id: 'BYN',
+                wsb_language_id: 'russian',
+                wsb_test: 0,
+                wsb_seed: '1991249174',
+                wsb_signature: 'cd5fadb6ec8bebd5ffd6785b1396592e',
+                wsb_total: 222,
+                wsb_invoice_item_name: ['Tovar 1'],
+                wsb_invoice_item_quantity: [1],
+                wsb_invoice_item_price: 222
             };
 
-            // Запрос на получение ссылки на платежную форму
-            const paymentResponse = await api.post(import.meta.env.VITE_PAYMENT_API_URL, paymentPayload);
+            console.log('Payment Payload:', paymentPayload); // Лог данных для отладки
 
-            if (paymentResponse.data?.redirectUrl) {
-                // Если URL платежной формы успешно получен, перенаправляем пользователя на платежную форму
-                window.location.href = paymentResponse.data.redirectUrl;
+            // Создание формы и отправка на сервер оплаты
+            const form = document.createElement('form');
+            form.action = 'https://payment.webpay.by'; // Реальный платежный URL
+            form.method = 'POST';
 
-                // Дождаться завершения платежа (например, использовать webhooks или callback от платежной системы)
+            Object.entries(paymentPayload).forEach(([key, value]) => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = Array.isArray(value) ? JSON.stringify(value) : value;
+                form.appendChild(input);
+            });
 
-                // После успешной оплаты создаем заказ в Strapi
-                const orderPayload = {
-                    data: {
-                        address: data.address,
-                        comment: data.comment || '',
-                        deliveryTime: data.deliveryTime?.value || '',
-                        duration: String(data.duration.value),
-                        excludeSaturday: excludeSaturday,
-                        excludeSunday: excludeSunday,
-                        programName: currentProgram?.attributes?.program_name,
-                        promoCode: showInputPromoCode ? promoCodeValue : '',
-                        startDate: data.startDate.value,
-                        endDate: endDateFormatted,
-                        totalPrice: totalPrice,
-                        user: user?.id || null,
-                        userName: data.userName,
-                        userEmail: data.email,
-                        userPhone: data.userPhone,
-                        dishes: filteredDishes.map(dish => dish.id), // Map filtered dishes to their IDs
-                        wsb_order_num: orderNum, // Уникальный идентификатор заказа
-                        wsb_total: totalPrice, // Общая сумма заказа
-                        wsb_currency_id: currencyId, // Код валюты
-                        wsb_test: testMode, // Флаг тестового платежа
-                        wsb_invoice_item_name: filteredDishes.map(dish => dish.name), // Наименование товара
-                        wsb_invoice_item_quantity: filteredDishes.map(() => 1), // Количество единиц товара
-                        wsb_invoice_item_price: filteredDishes.map(dish => dish.price), // Цена единицы товара
-                    }
-                };
+            document.body.appendChild(form); // Добавить форму в DOM
+            form.submit(); // Отправить форму
 
+            // Сохранение данных заказа в Strapi
+            const orderPayload = {
+                data: {
+                    address: data.address,
+                    comment: data.comment || '',
+                    deliveryTime: data.deliveryTime?.value || '',
+                    duration: String(data.duration.value),
+                    excludeSaturday,
+                    excludeSunday,
+                    programName: currentProgram?.attributes?.program_name,
+                    promoCode: showInputPromoCode ? promoCodeValue : '',
+                    startDate: data.startDate.value,
+                    endDate: endDateFormatted,
+                    totalPrice: totalPrice.toFixed(2),
+                    user: user?.id || null,
+                    userName: data.userName,
+                    userEmail: data.email,
+                    userPhone: data.userPhone,
+                    dishes: filteredDishes.map((dish) => dish.id),
+                    wsb_order_num: orderNum,
+                    wsb_total: totalPrice.toFixed(2),
+                    wsb_currency_id: currencyId,
+                    wsb_test: testMode,
+                    wsb_invoice_item_name: filteredDishes.map((dish) => dish?.attributes?.dish_name),
+                    wsb_invoice_item_quantity: filteredDishes.map(() => '1'),
+                    wsb_invoice_item_price: filteredDishes.map(() =>
+                        parseFloat((totalPrice / filteredDishes.length).toFixed(2)).toString()
+                    ),
+                },
+            };
 
-                // Сохраняем заказ в Strapi
-                await api.post(import.meta.env.VITE_API_URL + '/orders', orderPayload);
+            await api.post(`${import.meta.env.VITE_API_URL}/orders`, orderPayload);
 
-                setFormSubmitted(true);  // Mark form as submitted
-                setSubmissionMessage(t("order_accepted"));
-            } else {
-                throw new Error('Не удалось получить URL для оплаты');
-            }
+            setFormSubmitted(true);
+            setSubmissionMessage(t('order_accepted')); // Отображение успешного сообщения
         } catch (error) {
-            setIsSubmitting(false);  // Re-enable the submit button in case of an error
-            if (error.response) {
-                console.error('Error Response:', error.response.data);
-                setSubmissionMessage(`Ошибка: ${error.response.data.message}`);
-            } else {
-                console.error('Error:', error.message);
-                setSubmissionMessage(`Ошибка: ${error.message}`);
-            }
+            console.error('Error:', error);
+            setIsSubmitting(false); // Включение кнопки отправки
+            setSubmissionMessage(`Error: ${error.message || 'An unknown error occurred.'}`); // Отображение ошибки
         }
     };
 

@@ -39,6 +39,8 @@ const Home = ({ programName, userClickedProgram, setUserClickedProgram, changePr
         `/dishes?filters[program_type][$eq]=${userClickedProgram}&filters[date][$gte]=${today}&filters[changedDish][$eq]=false&locale=${locale}&populate=*`
     );
 
+    console.log('allDish', allDish)
+
     const { data: allChangeDish, loading: allChangeDishLoading } = useFetchAllData(
         `/dishes?filters[program_type][$eq]=${userClickedProgram}&filters[date][$gte]=${today}&filters[changedDish][$eq]=true&locale=${locale}&populate=*`
     );

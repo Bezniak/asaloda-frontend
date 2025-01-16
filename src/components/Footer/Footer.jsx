@@ -6,7 +6,6 @@ import useFetchAllData from "../../api/useFetchAllData.js";
 import {animateScroll as scroll} from "react-scroll";
 import {useTranslation} from "react-i18next";
 import {useAuth} from "../../context/AuthContext.jsx";
-import {FaPhone} from "react-icons/fa6";
 
 const Footer = () => {
     const {locale} = useAuth();
@@ -35,7 +34,7 @@ const Footer = () => {
                     </a>
                     <p>{t("working_hours")}</p>
                     <h2>{t("company_name")}, {t("UNP")}</h2>
-                    <h2>{t("register_in_reestr")}</h2>
+                    <div>{t("register_in_re``estr")}</div>
                 </div>
 
                 <div className='flex flex-col justify-start md:items-end text-gray-400 gap-2 text-right ml-auto'>

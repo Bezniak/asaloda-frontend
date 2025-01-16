@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {MdCircle} from "react-icons/md";
 import Map from "./Map.jsx";
 import Button from "../Button/Button.jsx";
 import {useTranslation} from "react-i18next";
@@ -19,7 +18,7 @@ const Delivery = () => {
                     <h2 className='md:text-4xl font-bold mb-10 md:text-left xs:text-center'>
                         {t("delivery")}
                     </h2>
-                    <p className='text-left mt-10 mb-10 text-gray-400 text-base'>
+                    <p className='text-left mt-10 mb-10 text-gray-400 text-base xs:text-justify'>
                         {t("healthy_food_delivery_in_Grodno")}
                     </p>
                     <div className='flex flex-row justify-start items-center mb-4'>
