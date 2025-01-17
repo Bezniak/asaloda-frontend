@@ -16,4 +16,6 @@ export const ROUTES = {
     ALL_ORDER: "/all-orders",
     PRIVACY_POLICY: "/privacy-policy",
     NOT_ALLOWED: "/forbidden",
+    CONFIRM: "/confirm",
+    CANSEL: "/cancel",
 };

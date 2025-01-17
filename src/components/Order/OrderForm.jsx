@@ -148,26 +148,6 @@ const OrderForm = ({program, userChosenDishes}) => {
             const signatureString = `${seed}${storeId}${orderNum}${testMode}${currencyId}${totalPrice.toFixed(0)}${secretKey}`;
             const signature = CryptoJS.SHA1(signatureString).toString();
 
-
-            // Создание данных для платежа
-            // const paymentPayload = {
-            //     scart: '', // Обязательно по документации
-            //     wsb_storeid: storeId,
-            //     wsb_order_num: orderNum,
-            //     wsb_currency_id: currencyId,
-            //     wsb_version: 2, // Используется версия 2
-            //     wsb_language_id: 'russian',
-            //     wsb_test: testMode,
-            //     wsb_seed: seed,
-            //     wsb_signature: signature,
-            //     wsb_total: totalPrice.toFixed(2),
-            //     wsb_invoice_item_name: filteredDishes.map((dish) => dish?.attributes?.dish_name), // Названия позиций
-            //     wsb_invoice_item_quantity: filteredDishes.map(() => '1'), // Количество позиций как строки
-            //     wsb_invoice_item_price: filteredDishes.map(() =>
-            //         parseFloat((totalPrice / filteredDishes.length).toFixed(2)).toString()
-            //     ), // Цена как строки
-            // };
-
             const paymentPayload = {
                 '*scart': '',
                 wsb_storeid: 695796847,
@@ -186,11 +166,7 @@ const OrderForm = ({program, userChosenDishes}) => {
                 'wsb_invoice_item_price[0]': currentProgram?.attributes?.one_day_price,
 
             };
-            // console.log(signature);
-            // alert(signature);
 
-
-            // console.log(filteredDishes);
             console.log('Payment Payload:', paymentPayload); // Лог данных для отладки
 
             // Создание формы и отправка на сервер оплаты
@@ -232,10 +208,7 @@ const OrderForm = ({program, userChosenDishes}) => {
                 },
             };
 
-            console.log(orderPayload);
-
             await api.post(`${import.meta.env.VITE_API_URL}/orders`, orderPayload);
-
 
             setFormSubmitted(true);
             setSubmissionMessage(t('order_accepted')); // Отображение успешного сообщения

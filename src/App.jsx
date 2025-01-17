@@ -21,6 +21,9 @@ import MyOrder from "./components/MyOrders/MyOrder.jsx";
 import PrivacyPolicy from "./components/PrivacyPolicy/PrivacyPolicy.jsx";
 import {useTranslation} from "react-i18next";
 import AboutUs from "./components/AboutUs/AboutUs.jsx";
+import ConfirmPage from "./components/Order/ConfirmPage.jsx";
+import {Cancel} from "axios";
+import CancelPage from "./components/Order/CancelPage.jsx";
 
 const Layout = ({programName, userClickedProgram, setUserClickedProgram, changeProgramName}) => {
     return (
@@ -125,6 +128,14 @@ const App = () => {
                 {
                     path: ROUTES.PRIVACY_POLICY,
                     element: <PrivacyPolicy/>
+                },
+                {
+                    path: ROUTES.CONFIRM,
+                    element: <ConfirmPage/>
+                },
+                {
+                    path: ROUTES.CANSEL,
+                    element: <CancelPage/>
                 },
             ]
         },
