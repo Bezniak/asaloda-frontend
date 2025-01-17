@@ -145,8 +145,9 @@ const OrderForm = ({program, userChosenDishes}) => {
             const secretKey = import.meta.env.VITE_SECRET_KEY; // Ваш секретный ключ
 
             // Формирование строки подписи
-            const signatureString = `${seed}${storeId}${orderNum}${testMode}${currencyId}${totalPrice.toFixed(2)}${secretKey}`;
-            const signature = CryptoJS.MD5(signatureString).toString();
+            const signatureString = `${seed}${storeId}${orderNum}${testMode}${currencyId}${totalPrice.toFixed(0)}${secretKey}`;
+            const signature = CryptoJS.SHA1(signatureString).toString();
+
 
             // Создание данных для платежа
             // const paymentPayload = {
@@ -168,20 +169,28 @@ const OrderForm = ({program, userChosenDishes}) => {
             // };
 
             const paymentPayload = {
-                scart: '',
+                '*scart': '',
                 wsb_storeid: 695796847,
-                wsb_order_num: 12122212,
+                wsb_store: 'AsalodaFood',
+                wsb_order_num: orderNum,
                 wsb_currency_id: 'BYN',
-                wsb_language_id: 'russian',
                 wsb_test: 0,
-                wsb_seed: '1991249174',
-                wsb_signature: 'cd5fadb6ec8bebd5ffd6785b1396592e',
-                wsb_total: 222,
-                wsb_invoice_item_name: ['Tovar 1'],
-                wsb_invoice_item_quantity: [1],
-                wsb_invoice_item_price: 222
-            };
+                wsb_version: "2",
+                wsb_seed: seed,
+                wsb_signature: signature,
+                wsb_total: totalPrice.toFixed(0),
+                wsb_return_url: 'https://asalodafood.by/conrifm',
+                wsb_cancel_return_url: 'https://asalodafood.by/cancel',
+                'wsb_invoice_item_name[0]': currentProgram?.attributes?.program_name,
+                'wsb_invoice_item_quantity[0]': data.duration.value,
+                'wsb_invoice_item_price[0]': currentProgram?.attributes?.one_day_price,
 
+            };
+            // console.log(signature);
+            // alert(signature);
+
+
+            // console.log(filteredDishes);
             console.log('Payment Payload:', paymentPayload); // Лог данных для отладки
 
             // Создание формы и отправка на сервер оплаты
@@ -206,32 +215,27 @@ const OrderForm = ({program, userChosenDishes}) => {
                     address: data.address,
                     comment: data.comment || '',
                     deliveryTime: data.deliveryTime?.value || '',
-                    duration: String(data.duration.value),
-                    excludeSaturday,
-                    excludeSunday,
+                    duration: data.duration.value.toString(),
+                    excludeSaturday: excludeSaturday,
+                    excludeSunday: excludeSunday,
                     programName: currentProgram?.attributes?.program_name,
                     promoCode: showInputPromoCode ? promoCodeValue : '',
                     startDate: data.startDate.value,
                     endDate: endDateFormatted,
-                    totalPrice: totalPrice.toFixed(2),
+                    totalPrice: Number(totalPrice.toFixed(2)),
                     user: user?.id || null,
                     userName: data.userName,
                     userEmail: data.email,
                     userPhone: data.userPhone,
                     dishes: filteredDishes.map((dish) => dish.id),
-                    wsb_order_num: orderNum,
-                    wsb_total: totalPrice.toFixed(2),
-                    wsb_currency_id: currencyId,
-                    wsb_test: testMode,
-                    wsb_invoice_item_name: filteredDishes.map((dish) => dish?.attributes?.dish_name),
-                    wsb_invoice_item_quantity: filteredDishes.map(() => '1'),
-                    wsb_invoice_item_price: filteredDishes.map(() =>
-                        parseFloat((totalPrice / filteredDishes.length).toFixed(2)).toString()
-                    ),
+                    order_num: orderNum,
                 },
             };
 
+            console.log(orderPayload);
+
             await api.post(`${import.meta.env.VITE_API_URL}/orders`, orderPayload);
+
 
             setFormSubmitted(true);
             setSubmissionMessage(t('order_accepted')); // Отображение успешного сообщения
