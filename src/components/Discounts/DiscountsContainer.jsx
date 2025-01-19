@@ -31,13 +31,13 @@ const DiscountsContainer = () => {
     return (
         <>
             <MetaTags page="discounts"/>
-            <div className='w-full max-w-7xl mx-auto '>
+            <div className='w-full max-w-7xl mx-auto mb-10'>
                 <h1 className='md:text-4xl xs:text-2xl mt-20 mb-10'>
                     {t("discount_title")}
                 </h1>
                 <p className='md:text-lg xs:text-sm mb-10'>{t("discount_desc")}</p>
                 <div
-                    className='flex flex-wrap gap-8 justify-center items-center h-80vh text-2xl p-4'>
+                    className='flex flex-wrap gap-8 justify-center items-center text-2xl p-4'>
                     {data?.map((item) => (
                         <div key={item.id}
                              className="md:w-1/3 xs:w-full p-6 bg-white border border-gray-200 rounded-lg shadow">
