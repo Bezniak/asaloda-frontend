@@ -27,8 +27,6 @@ const ProgramContainer = () => {
 
     const programType = encodeURIComponent(data?.attributes?.program_name || "");
 
-    console.log(data)
-
     const { data: allDish, loading: allDishLoading } = useFetchAllData(
         `/dishes?filters[program_type][$eq]=${programType}&filters[date][$gte]=${today}&filters[changedDish][$eq]=false&locale=${locale}&populate=*`
     );

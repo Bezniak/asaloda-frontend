@@ -461,6 +461,7 @@ const Navbar = () => {
                                     onClick={() => {
                                         changeLanguage('be');
                                         handleLanguageLinkClick();
+                                        window.location.reload();
                                     }}
                                     className={`flex items-center space-x-2 ${
                                         currentLanguage === 'be' ? 'font-bold' : ''
@@ -474,6 +475,7 @@ const Navbar = () => {
                                     onClick={() => {
                                         changeLanguage('en');
                                         handleLanguageLinkClick();
+                                        window.location.reload();
                                     }}
                                     className={`flex items-center space-x-2 ${
                                         currentLanguage === 'us' ? 'font-bold' : ''
@@ -487,6 +489,7 @@ const Navbar = () => {
                                     onClick={() => {
                                         changeLanguage('ru');
                                         handleLanguageLinkClick();
+                                        window.location.reload();
                                     }}
                                     className={`flex items-center space-x-2 ${
                                         currentLanguage === 'ru' ? 'font-bold' : ''

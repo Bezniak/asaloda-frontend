@@ -11,8 +11,8 @@ import {useTranslation} from "react-i18next";
 import CryptoJS from 'crypto-js';
 
 import 'dayjs/locale/ru';
-import 'dayjs/locale/be';
 import 'dayjs/locale/en';
+import 'dayjs/locale/be';
 
 
 const OrderForm = ({program, userChosenDishes}) => {
@@ -41,6 +41,8 @@ const OrderForm = ({program, userChosenDishes}) => {
         control,
         trigger,
     } = useForm();
+
+    dayjs.locale(locale);
 
 
 // Универсальная функция для получения программы по имени или массиву имен
@@ -159,15 +161,16 @@ const OrderForm = ({program, userChosenDishes}) => {
                 wsb_seed: seed,
                 wsb_signature: signature,
                 wsb_total: totalPrice.toFixed(0),
-                wsb_return_url: 'https://asalodafood.by/conrifm',
+                wsb_return_url: 'https://asalodafood.by/confirm',
                 wsb_cancel_return_url: 'https://asalodafood.by/cancel',
+                wsb_notify_url: 'https://asalodafood.by/confirm',
+                wsb_redirect: 1,
+                wsb_return_format: {},
                 'wsb_invoice_item_name[0]': currentProgram?.attributes?.program_name,
                 'wsb_invoice_item_quantity[0]': data.duration.value,
                 'wsb_invoice_item_price[0]': currentProgram?.attributes?.one_day_price,
 
             };
-
-            console.log('Payment Payload:', paymentPayload); // Лог данных для отладки
 
             // Создание формы и отправка на сервер оплаты
             const form = document.createElement('form');
@@ -222,11 +225,14 @@ const OrderForm = ({program, userChosenDishes}) => {
 
     const dateOptions = Array.from({length: 14}, (_, i) => {
         const date = today.add(2 + i, 'day');
-        return {value: date.format('YYYY-MM-DD'), label: date.format('DD MMMM')};
+        return {
+            value: date.format('YYYY-MM-DD'),
+            label: date.format('DD MMMM') // Формат с локализацией
+        };
     });
 
     const timeOptions = [
-        {value: '18:00 - 20:00', label: '18:00 - 20:00'},
+        {value: '19:00 - 21:00', label: '19:00 - 21:00'},
         {value: '21:00 - 23:00', label: '21:00 - 23:00'},
     ];
 
@@ -256,7 +262,7 @@ const OrderForm = ({program, userChosenDishes}) => {
                 setDiscount(null);
             } else {
                 setDiscount(data.data[0].attributes.discount); // Здесь устанавливается discount
-                setPromoCodeMessage(`${t("promoCode_applied_discount")} " " ${data.data[0].attributes.discount}%`);
+                setPromoCodeMessage(`${t("promoCode_applied_discount")} ${data.data[0].attributes.discount}%`);
 
             }
         } catch (error) {

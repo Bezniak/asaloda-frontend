@@ -1,3 +1,5 @@
+import {animateScroll as scroll} from "react-scroll";
+
 export function formatDate(dateString, locale) {
     const months = {
         ru: [
@@ -26,3 +28,12 @@ export function formatDate(dateString, locale) {
 export const calculator = (data) => {
     return data.reduce((sum, current) => sum + current, 0)
 }
+
+
+export const handleClick = () => {
+    // Smooth scroll to top using react-scroll
+    scroll.scrollToTop({
+        duration: 0, // Animation duration in milliseconds
+        smooth: 'easeInOutQuad', // Animation type
+    });
+};

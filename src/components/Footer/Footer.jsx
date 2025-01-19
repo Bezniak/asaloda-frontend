@@ -3,23 +3,15 @@ import {NavLink} from "react-router-dom";
 import {ROUTES} from "../../config/routes.js";
 import dayjs from "dayjs";
 import useFetchAllData from "../../api/useFetchAllData.js";
-import {animateScroll as scroll} from "react-scroll";
 import {useTranslation} from "react-i18next";
 import {useAuth} from "../../context/AuthContext.jsx";
+import {handleClick} from "../../utils/utils.js";
 
 const Footer = () => {
     const {locale} = useAuth();
     const currentYear = dayjs().year();
     const {t} = useTranslation();
     const {data, loading, error} = useFetchAllData(`/programs?locale=${locale}&populate=*`);
-
-    const handleClick = () => {
-        // Smooth scroll to top using react-scroll
-        scroll.scrollToTop({
-            duration: 0, // Animation duration in milliseconds
-            smooth: 'easeInOutQuad', // Animation type
-        });
-    };
 
     return (
         <footer className='bg-[var(--footer-bg)]'>
@@ -34,7 +26,7 @@ const Footer = () => {
                     </a>
                     <p>{t("working_hours")}</p>
                     <h2>{t("company_name")}, {t("UNP")}</h2>
-                    <div>{t("register_in_re``estr")}</div>
+                    <div>{t("register_in_reestr")}</div>
                 </div>
 
                 <div className='flex flex-col justify-start md:items-end text-gray-400 gap-2 text-right ml-auto'>
