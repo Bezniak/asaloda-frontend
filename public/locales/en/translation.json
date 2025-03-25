@@ -1,4 +1,8 @@
 {
+  "nikname": "Nickname",
+  "nikname_already_taken": "This nickname is already taken",
+  "error_checking_nikname": "Error checking nickname. Please use another nickname",
+  "email_already_registered": "A user with this email already exists!",
   "programs": "Programs",
   "discount": "Promotions",
   "payment_delivery": "Payment and delivery",

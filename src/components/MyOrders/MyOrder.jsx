@@ -37,7 +37,7 @@ const MyOrder = () => {
 
     const startDate = dayjs(data.attributes.startDate);
     const endDate = dayjs(data.attributes.endDate);
-    const userName = data.attributes.user.data.attributes.username;
+    const userName = data.attributes.user.data.attributes.name;
 
     const programName = data.attributes.programName;
 

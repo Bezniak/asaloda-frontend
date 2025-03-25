@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../context/AuthContext.jsx";
@@ -8,29 +8,78 @@ import api from "../../api/api.js";
 
 const Register = () => {
     const {t} = useTranslation();
-    const {register, handleSubmit, watch, formState: {errors}, trigger} = useForm();
+    const {register, handleSubmit, watch, clearErrors, formState: {errors}, trigger} = useForm();
     const password = watch('password');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
     const navigate = useNavigate();
     const {login, theme} = useAuth();
+    const [username, setUsername] = useState("");
+    const [emailError, setEmailError] = useState("");
+    const [error, setError] = useState("");
+
+    // Сохраняем username и проверяем его асинхронно
+    const checkUsername = async () => {
+        try {
+            const response = await fetch(import.meta.env.VITE_API_URL + `/users?filters[username][$eq]=${username}`);
+            const data = await response.json();
+            console.log('data', data);
+            if (data.length > 0) {
+                setError(t("nikname_already_taken"));
+            } else {
+                setError("");
+            }
+        } catch (err) {
+            console.error("Error checking username:", err);
+            setError(t("error_checking_nikname"));
+        }
+    };
+
+    useEffect(() => {
+        if (username) {
+            checkUsername();
+        }
+    }, [username]);  // Отслеживаем изменение username
+
+    // Проверяем email при потере фокуса
+    const checkEmail = async (email) => {
+        try {
+            const response = await fetch(import.meta.env.VITE_API_URL + `/users?filters[email][$eq]=${email}`);
+            const data = await response.json();
+            if (data.length > 0) {
+                setEmailError(t("email_already_registered"));
+            } else {
+                setEmailError("");
+            }
+        } catch (err) {
+            console.error("Error checking email:", err);
+            setEmailError(t("error_checking_email"));
+        }
+    };
+
 
     const onSubmit = async (data) => {
-        // Исключить повторный пароль из данных
         setIsSubmitting(true);
         const {repeat_password, ...formData} = data;
 
         try {
-            const response = await api.post('/auth/local/register', formData);
+            const response = await api.post('/auth/local/register', {
+                username: username,
+                password: data.password,
+                userphone: data.userphone,
+                name: data.name,
+                email: data.email,
+            });
             login(response);
             navigate('/');
+            if (response.status === 200 || response.status === 201) {
+                setErrorMessage("");
+                setUsername("");
+            }
         } catch (error) {
             console.error('Error submitting data:', error);
-
-            // Проверка статуса ошибки
             if (error.response && error.response.status === 400) {
                 const errorMessage = error.response.data?.error?.message;
-
                 if (errorMessage.includes('Email or Username are already taken')) {
                     setErrorMessage(t("user_already_exists"));
                 } else {
@@ -44,25 +93,50 @@ const Register = () => {
         }
     };
 
+
     return (
         <div className="h-100vh flex items-center justify-center">
             <form onSubmit={handleSubmit(onSubmit)} className="md:w-1/4 xs:w-full xs:px-4 mx-auto">
+
                 <div className="relative z-0 w-full mb-5 group">
                     <input
                         type="text"
                         name="username"
                         id="username"
-                        {...register('username', {required: true})}
-                        onBlur={() => trigger('username')}
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[var(--green)] peer"
                         placeholder=" "
                     />
-                    <label htmlFor="username"
+                    <label
+                        htmlFor="username"
+                        className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[var(--green)] peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                    >
+                        {t("nikname")}
+                    </label>
+                    {error && (
+                        <span className="text-red-500 text-sm">
+                            {error}
+                        </span>
+                    )}
+                </div>
+
+                <div className="relative z-0 w-full mb-5 group">
+                    <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        {...register('name', {required: true})}
+                        onBlur={() => trigger('name')}
+                        className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[var(--green)] peer"
+                        placeholder=" "
+                    />
+                    <label htmlFor="name"
                            className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[var(--green)] peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                     >
                         {t("name")}
                     </label>
-                    {errors.username && (
+                    {errors.name && (
                         <span className="text-red-500 text-sm">
                             {t("field_required")}
                         </span>
@@ -81,7 +155,10 @@ const Register = () => {
                                 message: t("valid_email_address"),
                             }
                         })}
-                        onBlur={() => trigger('email')}
+                        onBlur={(e) => {
+                            trigger('email');
+                            checkEmail(e.target.value); // Проверка email
+                        }}
                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[var(--green)] peer"
                         placeholder=" "
                     />
@@ -92,6 +169,9 @@ const Register = () => {
                     </label>
                     {errors.email && (
                         <span className="text-red-500 text-sm">{errors.email.message}</span>
+                    )}
+                    {emailError && (
+                        <span className="text-red-500 text-sm">{emailError}</span>
                     )}
                 </div>
 

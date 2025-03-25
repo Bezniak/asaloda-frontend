@@ -20,7 +20,13 @@ const OrderForm = ({program, userChosenDishes}) => {
     const {locale} = useAuth();
     const {userClickedProgram} = useOutletContext(); // Получаем контекст
     const [currentProgram, setCurrentProgram] = useState(null)
+
     const today = dayjs();
+    const now = dayjs();
+    const isAfterDeadline = now.hour() >= 14; // Проверяем, после 14:00 или нет
+    const startDate = isAfterDeadline ? now.add(2, 'day') : now.add(1, 'day'); // Если после 16:00, начинаем с +2 дней, иначе с завтрашнего дня
+
+
     const [isFocused, setIsFocused] = useState(false);
     const {user, role} = useAuth();
     const [showInputPromoCode, setShowInputPromoCode] = useState(false);
@@ -97,10 +103,6 @@ const OrderForm = ({program, userChosenDishes}) => {
         return discount ? ((basePrice * discount) / 100).toFixed(2) : 0;
     };
 
-    // const getBonuses = (duration) => {
-    //     return duration >= 14 ? bonusesForOrdering * (duration / 7) : 0;
-    // };
-
     const filterDishesByDateAndDay = (dishes, startDate, duration, excludeSaturday, excludeSunday) => {
         const start = dayjs(startDate);
         return dishes.filter(dish => {
@@ -147,46 +149,8 @@ const OrderForm = ({program, userChosenDishes}) => {
             const secretKey = import.meta.env.VITE_SECRET_KEY; // Ваш секретный ключ
 
             // Формирование строки подписи
-            const signatureString = `${seed}${storeId}${orderNum}${testMode}${currencyId}${totalPrice.toFixed(0)}${secretKey}`;
+            const signatureString = `${seed}${storeId}${orderNum}${testMode}${currencyId}${Number(totalPrice.toFixed(2))}${secretKey}`;
             const signature = CryptoJS.SHA1(signatureString).toString();
-
-            const paymentPayload = {
-                '*scart': '',
-                wsb_storeid: 695796847,
-                wsb_store: 'AsalodaFood',
-                wsb_order_num: orderNum,
-                wsb_currency_id: 'BYN',
-                wsb_test: 0,
-                wsb_version: "2",
-                wsb_seed: seed,
-                wsb_signature: signature,
-                wsb_total: totalPrice.toFixed(0),
-                wsb_return_url: 'https://asalodafood.by/confirm',
-                wsb_cancel_return_url: 'https://asalodafood.by/cancel',
-                wsb_notify_url: 'https://asalodafood.by/confirm',
-                wsb_redirect: 1,
-                wsb_return_format: {},
-                'wsb_invoice_item_name[0]': currentProgram?.attributes?.program_name,
-                'wsb_invoice_item_quantity[0]': data.duration.value,
-                'wsb_invoice_item_price[0]': currentProgram?.attributes?.one_day_price,
-
-            };
-
-            // Создание формы и отправка на сервер оплаты
-            const form = document.createElement('form');
-            form.action = 'https://payment.webpay.by'; // Реальный платежный URL
-            form.method = 'POST';
-
-            Object.entries(paymentPayload).forEach(([key, value]) => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = Array.isArray(value) ? JSON.stringify(value) : value;
-                form.appendChild(input);
-            });
-
-            document.body.appendChild(form); // Добавить форму в DOM
-            form.submit(); // Отправить форму
 
             // Сохранение данных заказа в Strapi
             const orderPayload = {
@@ -213,6 +177,45 @@ const OrderForm = ({program, userChosenDishes}) => {
 
             await api.post(`${import.meta.env.VITE_API_URL}/orders`, orderPayload);
 
+            const paymentPayload = {
+                '*scart': '',
+                wsb_storeid: 695796847,
+                wsb_store: 'AsalodaFood',
+                wsb_order_num: orderNum,
+                wsb_currency_id: 'BYN',
+                wsb_test: 0,
+                wsb_version: "2",
+                wsb_total: Number(totalPrice.toFixed(2)),
+                wsb_seed: seed,
+                wsb_signature: signature,
+                wsb_return_url: 'https://asalodafood.by/confirm',
+                wsb_cancel_return_url: 'https://asalodafood.by/cancel',
+                wsb_notify_url: 'https://asalodafood.by/confirm',
+                wsb_redirect: 1,
+                wsb_return_format: {},
+                'wsb_invoice_item_name[0]': currentProgram?.attributes?.program_name,
+                'wsb_invoice_item_quantity[0]': data.duration.value,
+                'wsb_invoice_item_price[0]': currentProgram?.attributes?.one_day_price,
+                wsb_discount_name: discount ? `Скидка по промокуду составила ${discount} %` : '',
+                wsb_discount_price: discount ? calculateDiscountAmount(selectedStartDate.value, selectedDuration.value, discount, excludeSaturday, excludeSunday) : '',
+            };
+
+            // Создание формы и отправка на сервер оплаты
+            const form = document.createElement('form');
+            form.action = 'https://payment.webpay.by'; // Реальный платежный URL
+            form.method = 'POST';
+
+            Object.entries(paymentPayload).forEach(([key, value]) => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = Array.isArray(value) ? JSON.stringify(value) : value;
+                form.appendChild(input);
+            });
+
+            document.body.appendChild(form); // Добавить форму в DOM
+            form.submit(); // Отправить форму
+
             setFormSubmitted(true);
             setSubmissionMessage(t('order_accepted')); // Отображение успешного сообщения
         } catch (error) {
@@ -224,12 +227,13 @@ const OrderForm = ({program, userChosenDishes}) => {
 
 
     const dateOptions = Array.from({length: 14}, (_, i) => {
-        const date = today.add(2 + i, 'day');
+        const date = startDate.add(i, 'day');
         return {
             value: date.format('YYYY-MM-DD'),
-            label: date.format('DD MMMM') // Формат с локализацией
+            label: date.format('DD MMMM')
         };
     });
+
 
     const timeOptions = [
         {value: '19:00 - 21:00', label: '19:00 - 21:00'},
@@ -636,15 +640,6 @@ const OrderForm = ({program, userChosenDishes}) => {
                             </div>
                         </>
                     )}
-
-                    {/*{getBonuses(selectedDuration.value) > 0 && (*/}
-                    {/*    <div className='flex justify-between items-center border-b border-dashed pb-3'>*/}
-                    {/*        <h2 className='text-gray-400 xs:text-base md:text-lg'>Будет начислено бонусов</h2>*/}
-                    {/*        <p className='font-medium xs:text-base md:text-lg'>*/}
-                    {/*            {getBonuses(selectedDuration.value)} Б*/}
-                    {/*        </p>*/}
-                    {/*    </div>*/}
-                    {/*)}*/}
 
                     <div className='flex justify-between items-center border-b border-dashed pb-3'>
                         <p className='font-extrabold xs:text-lg md:text-2xl'>{t("total_amount")}:</p>

@@ -223,9 +223,9 @@ const DateCalendar = ({
                             </h2>
 
                             <div className='mt-auto flex justify-between items-center'>
-                                <p className="text-base text-gray-700 text-left">
-                                    {dish?.attributes?.eating_type}
-                                </p>
+                                {/*<p className="text-base text-gray-700 text-left">*/}
+                                {/*    {dish?.attributes?.eating_type}*/}
+                                {/*</p>*/}
                                 {dayjs(dish.attributes.date).isAfter(today.add(1, 'day')) && (
                                     <button
                                         className='border-0 text-base text-[var(--oringe)]'
@@ -296,9 +296,7 @@ const DateCalendar = ({
                     {
                         programType.length > 1
                             ? (
-                                <p className="text-4xl font-bold mt-8 mb-10">
-                                    {t("form")}
-                                    &nbsp;
+                                <p className="text-3xl font-bold mt-8 mb-10">
                                     {findOneDayPriceByProgramName(allDish[0], programType)}
                                     &nbsp;
                                     {t("rub_per_day")}

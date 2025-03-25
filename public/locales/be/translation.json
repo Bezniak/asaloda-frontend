@@ -1,4 +1,8 @@
 {
+  "nikname": "Нікнэйм",
+  "nikname_already_taken": "Гэты нікнэйм ужо заняты",
+  "error_checking_nikname": "Памылка пры праверцы нікнэйма. Карыстайцеся іншым нікнэймам",
+  "email_already_registered": "Карыстальнік з такім email ужо існуе!",
   "programs": "Праграмы",
   "discount": "Акцыі",
   "payment_delivery": "Аплата і дастаўка",

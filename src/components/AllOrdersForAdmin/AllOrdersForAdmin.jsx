@@ -14,7 +14,7 @@ const AllOrdersForAdmin = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [openTables, setOpenTables] = useState([dayjs().format('DD.MM.YYYY')]); // Открыта таблица для сегодняшней даты
+    const [openTables, setOpenTables] = useState([dayjs().format('DD.MM.YYYY')]);
 
     const dishOrder = {
         'Первый завтрак': 1,
@@ -36,7 +36,7 @@ const AllOrdersForAdmin = () => {
                 const rawOrders = response.data.data;
 
                 const processedOrders = rawOrders.flatMap(order => {
-                    const {startDate, endDate, dishes, userEmail, userPhone} = order.attributes;
+                    const {startDate, endDate, dishes, userEmail, userPhone, payStatus} = order.attributes;
                     const start = parseISO(startDate);
                     const end = parseISO(endDate);
                     const dates = eachDayOfInterval({start, end});
@@ -64,6 +64,7 @@ const AllOrdersForAdmin = () => {
                             date: formattedDate,
                             username: order.attributes.user?.data?.attributes?.username || order.attributes.userName || 'Не указано',
                             userEmail,
+                            order_num: order.attributes.order_num || 'Не указано',
                             userPhone,
                             address: order.attributes.address,
                             programName: order.attributes.programName,
@@ -74,7 +75,8 @@ const AllOrdersForAdmin = () => {
                             promoCode: order.attributes.promoCodeValue,
                             totalPrice: order.attributes.totalPrice,
                             comment: order.attributes.comment,
-                            formattedDishes
+                            formattedDishes,
+                            payStatus
                         };
                     });
                 });
@@ -89,6 +91,23 @@ const AllOrdersForAdmin = () => {
 
         fetchOrders();
     }, [role, navigate]);
+
+    const updatePayStatus = async (orderId, newStatus) => {
+        const confirmChange = window.confirm("Вы действительно хотите изменить статус оплаты заказа?");
+        if (!confirmChange) return;
+
+        try {
+            await axios.put(`${import.meta.env.VITE_API_URL}/orders/${orderId}`, {
+                data: {payStatus: newStatus}
+            });
+
+            setOrders(prevOrders => prevOrders.map(order =>
+                order.id === orderId ? {...order, payStatus: newStatus} : order
+            ));
+        } catch (err) {
+            console.error('Failed to update pay status:', err);
+        }
+    };
 
     const groupedOrders = orders.reduce((acc, order) => {
         const {date} = order;
@@ -122,7 +141,9 @@ const AllOrdersForAdmin = () => {
 
     const columns = [
         {Header: '№', accessor: 'index'},
-        {Header: 'Номер заказа', accessor: 'id'},
+        {Header: 'ID заказа в Strapi', accessor: 'id'},
+        {Header: 'Номер заказа в WebPay', accessor: 'order_num'},
+        {Header: 'Статус оплаты', accessor: 'payStatus'},
         {Header: 'Имя пользователя', accessor: 'username'},
         {Header: 'Email пользователя', accessor: 'userEmail'},
         {Header: 'Телефон пользователя', accessor: 'userPhone'},
@@ -145,8 +166,6 @@ const AllOrdersForAdmin = () => {
 
     return (
         <div className="container mx-auto px-4">
-            <h1 className='text-3xl font-bold mt-10 mb-10'>Добро пожаловать в Мир финансового благополучия!</h1>
-            {/*<h1 className="text-2xl font-bold my-6 text-center">Все заказы</h1>*/}
             {Object.entries(sortedGroupedOrders).map(([date, orders]) => {
                 const programCount = countPrograms(orders);
                 return (
@@ -163,7 +182,7 @@ const AllOrdersForAdmin = () => {
                                 const {formattedDishes, ...rest} = order;
                                 return {
                                     ...rest,
-                                    formattedDishes: formattedDishes.replace(/<\/?strong>/g, '').replace('; ', '\n')
+                                    formattedDishes: formattedDishes.replace(/;<\/?.*?>/g, '\n')
                                 };
                             })}
                             headers={columns.map(col => ({label: col.Header, key: col.accessor}))}
@@ -172,17 +191,6 @@ const AllOrdersForAdmin = () => {
                         >
                             Скачать заказы на {date}
                         </CSVLink>
-
-                        {/* Отображение подсчета программ над таблицей */}
-                        {openTables.includes(date) && (
-                            <div className="flex gap-10 mt-5 mb-5">
-                                {Object.entries(programCount).map(([program, count]) => (
-                                    <div key={program} className='border-4 border-[var(--green)] py-2 px-5 rounded-2xl'>
-                                        <span className='font-bold'>{program}</span>: {count}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
 
                         {openTables.includes(date) && (
                             <div className="overflow-x-auto">
@@ -205,21 +213,30 @@ const AllOrdersForAdmin = () => {
                                         <tr key={order.id} className="hover:bg-gray-200">
                                             {columns.map(column => {
                                                 const cellValue = column.accessor === 'index' ? index + 1 : column.accessor.split('.').reduce((obj, key) => (obj ? obj[key] : null), order);
+                                                if (column.accessor === 'payStatus') {
+                                                    return (
+                                                        <td
+                                                            key={column.Header}
+                                                            className="border border-gray-300 px-2 py-1 break-words whitespace-pre-line"
+                                                        >
+                                                            <select
+                                                                value={order.payStatus}
+                                                                onChange={(e) => updatePayStatus(order.id, e.target.value)}
+                                                                className="border border-gray-300 rounded px-2 py-1"
+                                                            >
+                                                                <option value="created">created</option>
+                                                                <option value="paid">paid</option>
+                                                                <option value="not paid">not paid</option>
+                                                            </select>
+                                                        </td>
+                                                    );
+                                                }
                                                 return (
                                                     <td
                                                         key={column.Header}
                                                         className="border border-gray-300 px-2 py-1 break-words whitespace-pre-line"
-                                                        style={{minWidth: '100px', maxWidth: '200px'}}
                                                     >
-                                                        {column.accessor === 'formattedDishes'
-                                                            ? cellValue.split('; ').map((dish, index) => (
-                                                                <div
-                                                                    key={index}
-                                                                    dangerouslySetInnerHTML={{__html: dish}}
-                                                                    style={{color: dish.includes('(изменено)') ? 'red' : 'inherit'}}
-                                                                />
-                                                            ))
-                                                            : cellValue}
+                                                        {cellValue}
                                                     </td>
                                                 );
                                             })}
